@@ -9,7 +9,8 @@
       margin: 0;
       background: #0f0f0f;
       color: #ffffff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Noto Sans KR", sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -17,13 +18,15 @@
       padding: 24px;
       box-sizing: border-box;
     }
+
     .container {
       width: 100%;
       max-width: 520px;
       text-align: center;
     }
+
     h1 { font-size: 28px; margin: 0 0 8px; }
-    p { opacity: 0.85; margin: 0 0 18px; }
+    p  { opacity: 0.85; margin: 0 0 18px; }
 
     textarea {
       width: 100%;
@@ -52,6 +55,10 @@
       cursor: pointer;
     }
 
+    button:active {
+      transform: translateY(1px);
+    }
+
     .result {
       margin-top: 18px;
       text-align: left;
@@ -62,6 +69,12 @@
       white-space: pre-wrap;
       display: none; /* 처음엔 숨김 */
     }
+
+    .hint {
+      margin-top: 10px;
+      opacity: 0.6;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
@@ -69,12 +82,18 @@
     <h1>🎬 원라인 무비</h1>
     <p>한 줄로 영화를 상상해보세요</p>
 
-    <textarea id="input" placeholder="예: 우주에서 길 잃은 강아지"></textarea>
-    <button id="btn">영화 만들어줘</button>
+    <textarea
+      id="input"
+      placeholder="예: 우주에서 길 잃은 강아지"
+    ></textarea>
+
+    <button id="btn" type="button">영화 만들어줘</button>
 
     <div id="resultBox" class="result">
       <div id="result"></div>
     </div>
+
+    <div class="hint">Tip: Ctrl+Enter / Cmd+Enter 로도 실행 가능</div>
   </div>
 
   <script>
@@ -100,7 +119,7 @@
     // 버튼 클릭
     document.getElementById("btn").addEventListener("click", makeMovie);
 
-    // 엔터(모바일/PC)로도 실행: Ctrl+Enter 또는 Cmd+Enter
+    // Ctrl+Enter / Cmd+Enter 실행
     document.getElementById("input").addEventListener("keydown", (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
         makeMovie();
