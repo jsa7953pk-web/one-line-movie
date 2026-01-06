@@ -4,25 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>원라인 무비</title>
+
   <style>
     body {
       margin: 0;
       background: #0f0f0f;
       color: #ffffff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 24px;
     }
+
     .container {
       width: 100%;
       max-width: 520px;
       text-align: center;
     }
-    h1 { font-size: 28px; margin: 0 0 8px; }
-    p { opacity: 0.85; margin: 0 0 18px; }
+
+    h1 {
+      font-size: 28px;
+      margin: 0 0 8px;
+    }
+
+    p {
+      opacity: 0.85;
+      margin: 0 0 18px;
+    }
+
     textarea {
       width: 100%;
       height: 120px;
@@ -35,6 +47,7 @@
       color: #fff;
       box-sizing: border-box;
     }
+
     button {
       margin-top: 14px;
       width: 100%;
@@ -47,6 +60,7 @@
       font-weight: 700;
       cursor: pointer;
     }
+
     .result {
       margin-top: 18px;
       text-align: left;
@@ -59,13 +73,18 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>🎬 원라인 무비</h1>
     <p>한 줄로 영화를 상상해보세요</p>
 
-    <textarea id="input" placeholder="예: 우주에서 길 잃은 강아지"></textarea>
-    <button onclick="makeMovie()">영화 만들어줘</button> 
+    <textarea
+      id="input"
+      placeholder="예: 우주에서 길 잃은 강아지"
+    ></textarea>
+
+    <button onclick="makeMovie()">영화 만들어줘</button>
 
     <div id="resultBox" class="result">
       <div id="result"></div>
@@ -84,11 +103,10 @@
       }
 
       box.style.display = "block";
-      out.textContent =
-`🎬 원라인: ${text}
+      out.textContent = `🎬 원라인: ${text}
 
 어느 날, 이 한 줄에서 시작된 이야기가
-한 편의 영화가 되기 시작했다…
+한 편의 영화가 되기 시작했다...
 
 (다음 단계에서 진짜 자동 생성으로 업그레이드 가능 🎥)`;
     }
