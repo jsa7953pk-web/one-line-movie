@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>원라인 무비</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0f0f0f;
+      color: #ffffff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .container {
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+    }
+    h1 { font-size: 28px; margin: 0 0 8px; }
+    p { opacity: 0.85; margin: 0 0 18px; }
+    textarea {
+      width: 100%;
+      height: 120px;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      outline: none;
+      background: #2a2a2a;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 14px;
+      width: 100%;
+      height: 56px;
+      border: none;
+      border-radius: 14px;
+      background: #146a34;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 18px;
+      text-align: left;
+      background: #151515;
+      border-radius: 14px;
+      padding: 16px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 원라인 무비</h1>
+    <p>한 줄로 영화를 상상해보세요</p>
+
+    <textarea id="input" placeholder="예: 우주에서 길 잃은 강아지"></textarea>
+    <button onclick="makeMovie()">영화 만들어줘</button>
+
+    <div id="resultBox" class="result">
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    function makeMovie() {
+      const text = document.getElementById("input").value.trim();
+      const box = document.getElementById("resultBox");
+      const out = document.getElementById("result");
+
+      if (!text) {
+        alert("한 줄 써줘!");
+        return;
+      }
+
+      box.style.display = "block";
+      out.textContent =
+`🎬 원라인: ${text}
+
+어느 날, 이 한 줄에서 시작된 이야기가
+한 편의 영화가 되기 시작했다…
+
+(다음 단계에서 진짜 자동 생성으로 업그레이드 가능 🎥)`;
+    }
+  </script>
+</body>
+</html>
