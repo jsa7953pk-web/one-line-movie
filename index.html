@@ -4,150 +4,656 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>원라인 무비</title>
-
   <style>
-    body {
-      margin: 0;
-      background: #0f0f0f;
-      color: #ffffff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 24px;
-      box-sizing: border-box;
+    :root{
+      --bg:#0b0b0c;
+      --card:#131316;
+      --card2:#0f0f12;
+      --text:#f4f4f5;
+      --muted:#b2b2bb;
+      --line:#23232a;
+      --accent:#16a34a;
+      --accent2:#22c55e;
+      --danger:#ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
     }
-
-    .container {
-      width: 100%;
-      max-width: 520px;
-      text-align: center;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      background: radial-gradient(1200px 800px at 50% -200px, rgba(34,197,94,.18), transparent 60%),
+                  radial-gradient(900px 700px at 10% 10%, rgba(59,130,246,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      padding:22px;
+      display:flex;
+      justify-content:center;
     }
-
-    h1 {
-      font-size: 28px;
-      margin: 0 0 8px;
+    .wrap{width:100%; max-width:980px}
+    .top{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      margin-bottom:14px;
     }
-
-    p {
-      opacity: 0.85;
-      margin: 0 0 18px;
+    .brand{
+      display:flex; flex-direction:column; gap:6px;
     }
-
-    textarea {
-      width: 100%;
-      height: 120px;
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 16px;
-      border: none;
-      outline: none;
-      background: #2a2a2a;
-      color: #fff;
-      box-sizing: border-box;
+    .brand h1{margin:0; font-size:26px; letter-spacing:-.2px}
+    .brand p{margin:0; color:var(--muted); font-size:14px; line-height:1.4}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+    }
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding:14px 14px 0 14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .cardHeader h2{
+      margin:0; font-size:14px; color:var(--muted); font-weight:650;
+      letter-spacing:.2px;
+    }
+    .cardBody{padding:14px}
+    textarea{
+      width:100%;
+      min-height:120px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: #0f0f12;
+      color: var(--text);
+      padding:14px;
+      font-size:16px;
+      outline:none;
       resize: none;
+      line-height:1.5;
     }
-
-    button {
-      margin-top: 14px;
-      width: 100%;
-      height: 56px;
-      border: none;
-      border-radius: 14px;
-      background: #146a34;
-      color: white;
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
+    textarea::placeholder{color:#7b7b86}
+    .row{
+      display:flex; gap:10px; flex-wrap:wrap;
     }
-
-    button:active {
-      transform: translateY(1px);
+    .control{
+      flex: 1 1 160px;
+      min-width: 150px;
     }
-
-    .result {
-      margin-top: 18px;
-      text-align: left;
-      background: #151515;
-      border-radius: 14px;
-      padding: 16px;
-      line-height: 1.6;
+    select, input[type="text"]{
+      width:100%;
+      height:44px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0f0f12;
+      color:var(--text);
+      padding:0 12px;
+      outline:none;
+      font-size:14px;
+    }
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    button{
+      border:none;
+      border-radius:14px;
+      height:52px;
+      padding:0 16px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .06s ease, opacity .15s ease;
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      user-select:none;
+    }
+    button:active{transform: translateY(1px)}
+    .primary{background: linear-gradient(180deg, var(--accent2), var(--accent)); color:#07150b; flex: 1 1 220px;}
+    .ghost{background: rgba(255,255,255,.04); color:var(--text); border:1px solid var(--line); flex: 1 1 160px; font-weight:700; height:46px}
+    .danger{background: rgba(239,68,68,.12); color:#fecaca; border:1px solid rgba(239,68,68,.25); flex: 1 1 160px; font-weight:700; height:46px}
+    .hint{color:var(--muted); font-size:12px; line-height:1.5; margin-top:10px}
+    .badge{
+      font-size:12px; color:var(--muted);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding:6px 10px;
+      border-radius:999px;
+    }
+    .outTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .outTop .title{
+      display:flex; flex-direction:column; gap:4px;
+      min-width:0;
+    }
+    .outTop .title b{font-size:14px}
+    .outTop .title span{font-size:12px; color:var(--muted)}
+    .outActions{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+    .mini{
+      height:36px;
+      padding:0 10px;
+      border-radius:12px;
+      font-size:12px;
+      font-weight:800;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border:1px solid var(--line);
+    }
+    .mini.primary2{
+      background: rgba(34,197,94,.14);
+      border:1px solid rgba(34,197,94,.25);
+      color:#bbf7d0;
+    }
+    .out{
+      padding:14px;
+      display:grid;
+      gap:12px;
+    }
+    .scene{
+      background: #0f0f12;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+    .sceneHead{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      margin-bottom:10px;
+    }
+    .sceneHead .left{display:flex; flex-direction:column; gap:4px}
+    .sceneHead .left b{font-size:14px}
+    .sceneHead .left span{font-size:12px; color:var(--muted)}
+    .k{color: var(--muted); font-size:12px; margin:8px 0 6px}
+    .box{
       white-space: pre-wrap;
-      display: none;
+      line-height:1.55;
+      font-size:13px;
+      background: #0b0b0c;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px;
+      color: var(--text);
     }
-
-    .hint {
-      margin-top: 10px;
-      opacity: 0.6;
-      font-size: 13px;
+    .footerNote{
+      margin-top:12px;
+      color: var(--muted);
+      font-size:12px;
+      text-align:center;
+      opacity:.85;
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>🎬 원라인 무비</h1>
-    <p>한 줄로 영화를 상상해보세요</p>
-
-    <textarea
-      id="input"
-      placeholder="예: 우주에서 길 잃은 강아지"
-    ></textarea>
-
-    <button id="btn">영화 만들어줘</button>
-
-    <div id="resultBox" class="result">
-      <div id="result"></div>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <h1>🎬 원라인 무비</h1>
+        <p>한 줄만 입력하면 “이미지 9장 + 영상 프롬프트”까지 바로 제작 가능한 영화 설계를 뽑아줍니다.</p>
+      </div>
+      <div class="pill">✅ GitHub Pages 배포형 · 모바일 최적화</div>
     </div>
 
-    <div class="hint">
-      Tip: Ctrl+Enter / Cmd+Enter 로도 실행 가능
+    <div class="grid">
+      <!-- INPUT -->
+      <div class="card">
+        <div class="cardHeader">
+          <h2>입력</h2>
+          <span class="badge" id="status">대기중</span>
+        </div>
+        <div class="cardBody">
+          <textarea id="line" placeholder="예: 비 오는 밤, 말을 하지 않는 강아지 탐정"></textarea>
+
+          <div class="row" style="margin-top:10px">
+            <div class="control">
+              <div class="k">장르</div>
+              <select id="genre">
+                <option value="thriller">스릴러</option>
+                <option value="mystery" selected>미스터리</option>
+                <option value="horror">공포</option>
+                <option value="action">액션</option>
+                <option value="drama">드라마</option>
+                <option value="fantasy">판타지</option>
+                <option value="sf">SF</option>
+                <option value="comedy">코미디</option>
+              </select>
+            </div>
+            <div class="control">
+              <div class="k">길이</div>
+              <select id="length">
+                <option value="30">30초</option>
+                <option value="60" selected>60초</option>
+                <option value="180">3분</option>
+              </select>
+            </div>
+            <div class="control">
+              <div class="k">스타일(톤)</div>
+              <select id="tone">
+                <option value="serious" selected>건조·진지</option>
+                <option value="cinematic">시네마틱</option>
+                <option value="noir">느와르</option>
+                <option value="warm">따뜻한</option>
+                <option value="dark">어두운</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:8px">
+            <div class="control">
+              <div class="k">주인공(선택)</div>
+              <input id="hero" type="text" placeholder="예: 말 없는 강아지 탐정(시츄)" />
+            </div>
+            <div class="control">
+              <div class="k">배경(선택)</div>
+              <input id="setting" type="text" placeholder="예: 비 내리는 골목, 새벽, 네온 간판" />
+            </div>
+          </div>
+
+          <div class="btnRow">
+            <button class="primary" id="make">⚡ 영화 만들어줘</button>
+            <button class="ghost" id="share">🔗 공유 링크</button>
+            <button class="danger" id="reset">🧹 초기화</button>
+          </div>
+
+          <div class="hint">
+            Tip: <b>Ctrl+Enter / Cmd+Enter</b> 로도 실행 가능 · 결과에서 <b>Copy All</b> 눌러 제작툴에 바로 붙여넣기
+          </div>
+        </div>
+      </div>
+
+      <!-- OUTPUT -->
+      <div class="card" id="outCard" style="display:none">
+        <div class="outTop">
+          <div class="title">
+            <b id="outTitle">원라인</b>
+            <span id="outMeta">설계 생성 완료</span>
+          </div>
+          <div class="outActions">
+            <button class="mini primary2" id="copyAll">📋 Copy All</button>
+            <button class="mini" id="downloadJson">⬇️ JSON</button>
+            <button class="mini" id="scrollTop">⬆️ 위로</button>
+          </div>
+        </div>
+        <div class="out" id="out"></div>
+      </div>
     </div>
+
+    <div class="footerNote">© 원라인 무비 · “입력 → 설계 → 프롬프트” 제작 파이프라인</div>
   </div>
 
-  <script>
-    function makeMovie() {
-      const text = document.getElementById("input").value.trim();
-      const box = document.getElementById("resultBox");
-      const out = document.getElementById("result");
+<script>
+  // ---------- Utilities ----------
+  const $ = (id) => document.getElementById(id);
 
-      if (!text) {
-        alert("한 줄 써줘!");
-        return;
-      }
+  function setStatus(text){
+    $("status").textContent = text;
+  }
 
-      const scenes = [
-        "SCENE 1 (0–6s): 오프닝 훅 — 주인공과 상황을 한 방에 보여준다",
-        "SCENE 2 (6–13s): 이상한 단서 — 평범함이 깨지는 순간",
-        "SCENE 3 (13–20s): 위협 제시 — 왜 위험한지 드러난다",
-        "SCENE 4 (20–27s): 첫 행동 — 주인공의 선택",
-        "SCENE 5 (27–34s): 반전 단서 — 숨겨진 규칙",
-        "SCENE 6 (34–41s): 최대 위기 — 실패 직전",
-        "SCENE 7 (41–48s): 해결 실마리 — 작은 힌트",
-        "SCENE 8 (48–55s): 클라이맥스 — 결정적 행동",
-        "SCENE 9 (55–60s): 엔딩 — 여운과 떡밥"
-      ];
+  function safeTrim(v){ return (v || "").trim(); }
 
-      box.style.display = "block";
-      out.textContent =
-`🎬 원라인: ${text}
+  function genreLabel(key){
+    return {
+      thriller:"스릴러", mystery:"미스터리", horror:"공포", action:"액션",
+      drama:"드라마", fantasy:"판타지", sf:"SF", comedy:"코미디"
+    }[key] || key;
+  }
+  function toneLabel(key){
+    return {
+      serious:"건조·진지", cinematic:"시네마틱", noir:"느와르", warm:"따뜻한", dark:"어두운"
+    }[key] || key;
+  }
 
-[자동 60초 영화 설계 - 9장면]
+  function buildSceneCount(seconds){
+    if(seconds <= 30) return 7;      // 30초: 7장면
+    if(seconds <= 60) return 9;      // 60초: 9장면
+    return 12;                       // 3분: 12장면
+  }
 
-${scenes.join("\n\n")}
+  function beatsForGenre(genre){
+    // 장면 비트(구조)는 장르별로 살짝 바뀜
+    const base = [
+      "오프닝 훅 — 주인공/상황을 한 컷에",
+      "이상 징후 — 평범이 깨지는 순간",
+      "위협 제시 — 왜 위험한지 드러남",
+      "첫 행동 — 주인공의 선택",
+      "규칙/단서 — 숨겨진 조건 공개",
+      "최대 위기 — 실패 직전",
+      "실마리 — 작은 힌트",
+      "반전 — 진짜 원인/적",
+      "엔딩 — 여운/다음 떡밥"
+    ];
 
-✅ 다음 단계: 장면별 이미지 → 영상 자동 생성`;
+    const map = {
+      horror: [
+        "오프닝 훅 — 불길한 평온",
+        "금기/규칙 — 하면 안 되는 것",
+        "첫 징후 — 소리/그림자",
+        "확인 시도 — 더 나쁜 선택",
+        "공포 확장 — 공간이 변함",
+        "최대 위기 — 도망 불가",
+        "기만/반전 — 믿은 것이 함정",
+        "탈출 시도 — 대가",
+        "엔딩 — 끝나지 않음"
+      ],
+      comedy: [
+        "오프닝 훅 — 웃긴 상황",
+        "오해 발생 — 말이 안 통함",
+        "사건 확대 — 더 큰 소동",
+        "기발한 계획 — 허술한 작전",
+        "실패 — 더 웃긴 실패",
+        "뜻밖의 도움 — 예상 못한 조력자",
+        "반전 성공 — 운으로 해결",
+        "정리 — 깔끔한 마무리",
+        "엔딩 — 한 줄 농담"
+      ],
+      action: [
+        "오프닝 훅 — 추격/충돌",
+        "목표 제시 — 무엇을 지켜야 하는가",
+        "적 등장 — 위협의 얼굴",
+        "첫 교전 — 능력 과시",
+        "계획 — 침투/탈출 루트",
+        "함정 — 계획 붕괴",
+        "역습 — 판 뒤집기",
+        "클라이맥스 — 결전",
+        "엔딩 — 다음 미션"
+      ]
+    };
+    return map[genre] || base;
+  }
+
+  function cinematicStyle(tone){
+    const map = {
+      serious: "realistic, restrained, dry, minimal camera movement, documentary-like tension",
+      cinematic: "cinematic, dramatic lighting, shallow depth of field, film grain, high contrast",
+      noir: "neo-noir, wet streets, neon reflections, hard shadows, smoke, low-key lighting",
+      warm: "warm tone, soft light, cozy atmosphere, gentle camera, emotional close-ups",
+      dark: "dark tone, moody lighting, heavy shadows, desaturated colors, ominous ambience"
+    };
+    return map[tone] || map.serious;
+  }
+
+  function makePrompts({line, genre, tone, seconds, hero, setting, idx, beat}){
+    const style = cinematicStyle(tone);
+    const location = setting ? setting : "도시의 밤, 비에 젖은 골목";
+    const protagonist = hero ? hero : "말을 하지 않는 강아지 탐정";
+    const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
+
+    // 공통 제한(자막 방지)
+    const noText = "no subtitles, no captions, no text, no watermark, no logo";
+
+    // 이미지(나노바나나) 프롬프트
+    const imagePrompt =
+`Vertical 9:16, ${timeHint}, ${genreLabel(genre)} vibe,
+${beat},
+${protagonist}, ${location},
+${style},
+ultra realistic, sharp focus, detailed, high quality,
+${noText}`;
+
+    // 영상(VEO3) 프롬프트(이미지보다 동작/카메라를 더 넣음)
+    const videoPrompt =
+`Vertical 9:16, ${timeHint}, ${genreLabel(genre)}.
+Scene ${idx+1}: ${beat}.
+Setting: ${location}.
+Character: ${protagonist}.
+Camera: slow push-in then slight handheld tension, rack focus on clue.
+Lighting/SFX: ${toneLabel(tone)} mood, rain/ambient sound if applicable.
+Make it feel like a real movie shot. ${noText}`;
+
+    // 자막(쇼츠용)
+    const subtitle =
+      idx === 0 ? `“${line}”` :
+      idx === 1 ? "…뭔가 이상하다" :
+      idx === 2 ? "이건 단서다" :
+      idx === 3 ? "선택은 지금" :
+      idx === 4 ? "숨겨진 규칙" :
+      idx === 5 ? "실패 직전" :
+      idx === 6 ? "작은 힌트" :
+      idx === 7 ? "반전" :
+      "끝나지 않은 이야기";
+
+    return { imagePrompt, videoPrompt, subtitle };
+  }
+
+  function buildPlan(payload){
+    const { line, genre, tone, seconds, hero, setting } = payload;
+    const total = Number(seconds);
+    const n = buildSceneCount(total);
+    const beats = beatsForGenre(genre);
+
+    // 시간 분배(대충 균등 + 후반 조금 길게)
+    const base = Math.floor(total / n);
+    const times = [];
+    let t = 0;
+    for(let i=0;i<n;i++){
+      const extra = (i >= n-2) ? 1 : 0;
+      const dur = base + extra;
+      const from = t;
+      const to = Math.min(total, t + dur);
+      times.push([from, to]);
+      t = to;
     }
 
-    document.getElementById("btn").addEventListener("click", makeMovie);
+    const scenes = [];
+    for(let i=0;i<n;i++){
+      const beat = beats[i] || beats[beats.length-1];
+      const [from, to] = times[i];
+      const prompts = makePrompts({line, genre, tone, seconds: total, hero, setting, idx:i, beat});
+      scenes.push({
+        index: i+1,
+        time: `${from}–${to}s`,
+        beat,
+        subtitle: prompts.subtitle,
+        image_prompt: prompts.imagePrompt,
+        video_prompt: prompts.videoPrompt
+      });
+    }
 
-    document.getElementById("input").addEventListener("keydown", (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-        makeMovie();
-      }
+    return {
+      title: line,
+      meta: {
+        genre: genreLabel(genre),
+        tone: toneLabel(tone),
+        length_seconds: total,
+        scene_count: n,
+        hero: hero || null,
+        setting: setting || null,
+        created_at: new Date().toISOString()
+      },
+      scenes
+    };
+  }
+
+  function renderPlan(plan){
+    $("outCard").style.display = "block";
+    $("outTitle").textContent = `🎬 원라인: ${plan.title}`;
+    $("outMeta").textContent = `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes`;
+
+    const out = $("out");
+    out.innerHTML = "";
+
+    plan.scenes.forEach(s => {
+      const el = document.createElement("div");
+      el.className = "scene";
+      el.innerHTML = `
+        <div class="sceneHead">
+          <div class="left">
+            <b>SCENE ${s.index} <span style="color:#7ee7a6">(${s.time})</span></b>
+            <span>${s.beat}</span>
+          </div>
+          <span class="badge">자막</span>
+        </div>
+
+        <div class="box">${s.subtitle}</div>
+
+        <div class="k">🖼 이미지 프롬프트 (나노바나나용)</div>
+        <div class="box">${escapeHtml(s.image_prompt)}</div>
+
+        <div class="k">🎥 영상 프롬프트 (VEO3용)</div>
+        <div class="box">${escapeHtml(s.video_prompt)}</div>
+      `;
+      out.appendChild(el);
     });
-  </script>
+  }
+
+  function escapeHtml(str){
+    // 안전하게 표시만 (복사/다운로드는 원문 그대로)
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;");
+  }
+
+  function planToText(plan){
+    let txt = `🎬 원라인: ${plan.title}\n`;
+    txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes\n\n`;
+    plan.scenes.forEach(s=>{
+      txt += `SCENE ${s.index} (${s.time}) — ${s.beat}\n`;
+      txt += `자막: ${s.subtitle}\n\n`;
+      txt += `[이미지 프롬프트]\n${s.image_prompt}\n\n`;
+      txt += `[영상 프롬프트]\n${s.video_prompt}\n\n`;
+      txt += "----------------------------------------\n\n";
+    });
+    return txt;
+  }
+
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      setStatus("복사 완료");
+      setTimeout(()=>setStatus("완료"), 900);
+    }catch(e){
+      // fallback
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setStatus("복사 완료");
+      setTimeout(()=>setStatus("완료"), 900);
+    }
+  }
+
+  function download(filename, content, mime){
+    const blob = new Blob([content], {type: mime || "text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function setQueryFromInput(){
+    const params = new URLSearchParams(location.search);
+    if(params.get("q")){
+      $("line").value = params.get("q");
+    }
+    if(params.get("g")) $("genre").value = params.get("g");
+    if(params.get("t")) $("tone").value = params.get("t");
+    if(params.get("l")) $("length").value = params.get("l");
+    if(params.get("h")) $("hero").value = params.get("h");
+    if(params.get("s")) $("setting").value = params.get("s");
+  }
+
+  function makeShareLink(){
+    const q = safeTrim($("line").value);
+    if(!q){ alert("한 줄 먼저 입력해줘!"); return; }
+    const params = new URLSearchParams();
+    params.set("q", q);
+    params.set("g", $("genre").value);
+    params.set("t", $("tone").value);
+    params.set("l", $("length").value);
+    const h = safeTrim($("hero").value); if(h) params.set("h", h);
+    const s = safeTrim($("setting").value); if(s) params.set("s", s);
+
+    const link = `${location.origin}${location.pathname}?${params.toString()}`;
+    copyText(link);
+    alert("공유 링크를 복사했어!");
+  }
+
+  // ---------- Main ----------
+  let latestPlan = null;
+
+  function run(){
+    const line = safeTrim($("line").value);
+    if(!line){ alert("한 줄 써줘!"); return; }
+
+    setStatus("생성중…");
+
+    const payload = {
+      line,
+      genre: $("genre").value,
+      tone: $("tone").value,
+      seconds: $("length").value,
+      hero: safeTrim($("hero").value),
+      setting: safeTrim($("setting").value)
+    };
+
+    latestPlan = buildPlan(payload);
+    renderPlan(latestPlan);
+
+    setStatus("완료");
+    // 결과로 자동 스크롤
+    setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
+  }
+
+  $("make").addEventListener("click", run);
+  $("share").addEventListener("click", makeShareLink);
+
+  $("reset").addEventListener("click", () => {
+    $("line").value = "";
+    $("hero").value = "";
+    $("setting").value = "";
+    $("out").innerHTML = "";
+    $("outCard").style.display = "none";
+    latestPlan = null;
+    setStatus("대기중");
+    history.replaceState(null, "", location.pathname);
+  });
+
+  $("copyAll").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    copyText(planToText(latestPlan));
+  });
+
+  $("downloadJson").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    download("one-line-movie.json", JSON.stringify(latestPlan, null, 2), "application/json");
+  });
+
+  $("scrollTop").addEventListener("click", () => {
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  $("line").addEventListener("keydown", (e) => {
+    if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
+      run();
+    }
+  });
+
+  // init
+  setQueryFromInput();
+  // 쿼리로 들어왔으면 자동 실행 (q가 있으면)
+  const params = new URLSearchParams(location.search);
+  if(params.get("q")){
+    setTimeout(run, 120);
+  }
+</script>
 </body>
 </html>
