@@ -370,6 +370,41 @@
         "역습 — 판 뒤집기",
         "클라이맥스 — 결전",
         "엔딩 — 다음 미션"
+      ],
+
+      /* ✅ 추가됨: SF / 판타지 / 로맨스 */
+      sf: [
+        "오프닝 훅 — 미래 도시/우주에서 충격적 한 컷",
+        "규칙 소개 — 세계의 기술/법칙이 보인다",
+        "이상 징후 — 시스템 오류/신호 수신",
+        "선택 — 버튼을 누르거나, 문을 열거나",
+        "대가 — 기술의 부작용/추격 시작",
+        "붕괴 — 시간/중력/기억이 흔들린다",
+        "역전 — 숨겨진 장치/코드/좌표",
+        "도약 — 탈출 또는 접속 성공",
+        "엔딩 — 새로운 세계가 열린다"
+      ],
+      fantasy: [
+        "오프닝 훅 — 마법/유물/문이 열리는 순간",
+        "소환/계시 — 운명이 시작된다",
+        "적의 등장 — 괴물/저주/추적",
+        "동료/도구 — 힘을 얻는다",
+        "룰 공개 — 마법의 대가",
+        "최대 위기 — 저주가 발동",
+        "각성 — 진짜 능력/진짜 이름",
+        "결전 — 한 컷으로 승부",
+        "엔딩 — 다음 모험의 문"
+      ],
+      romance: [
+        "오프닝 훅 — 눈 마주치는 순간",
+        "거리감 — 가까운데 멀다",
+        "오해/비밀 — 말 못하는 이유",
+        "작은 친절 — 마음이 흔들림",
+        "사건 — 관계가 깨질 위기",
+        "후회 — 놓칠 뻔한 순간",
+        "고백 직전 — 숨 멎는 침묵",
+        "한마디 — 감정 폭발",
+        "엔딩 — 짧은 약속/여운"
       ]
     };
     return map[genre] || base;
@@ -395,7 +430,6 @@
     // 공통 제한(자막 방지)
     const noText = "no subtitles, no captions, no text, no watermark, no logo";
 
-    // 이미지(나노바나나) 프롬프트
     const imagePrompt =
 `Vertical 9:16, ${timeHint}, ${genreLabel(genre)} vibe,
 ${beat},
@@ -404,7 +438,6 @@ ${style},
 ultra realistic, sharp focus, detailed, high quality,
 ${noText}`;
 
-    // 영상(VEO3) 프롬프트(이미지보다 동작/카메라를 더 넣음)
     const videoPrompt =
 `Vertical 9:16, ${timeHint}, ${genreLabel(genre)}.
 Scene ${idx+1}: ${beat}.
@@ -414,7 +447,6 @@ Camera: slow push-in then slight handheld tension, rack focus on clue.
 Lighting/SFX: ${toneLabel(tone)} mood, rain/ambient sound if applicable.
 Make it feel like a real movie shot. ${noText}`;
 
-    // 자막(쇼츠용)
     const subtitle =
       idx === 0 ? `“${line}”` :
       idx === 1 ? "…뭔가 이상하다" :
@@ -435,7 +467,6 @@ Make it feel like a real movie shot. ${noText}`;
     const n = buildSceneCount(total);
     const beats = beatsForGenre(genre);
 
-    // 시간 분배(대충 균등 + 후반 조금 길게)
     const base = Math.floor(total / n);
     const times = [];
     let t = 0;
@@ -511,7 +542,6 @@ Make it feel like a real movie shot. ${noText}`;
   }
 
   function escapeHtml(str){
-    // 안전하게 표시만 (복사/다운로드는 원문 그대로)
     return String(str)
       .replaceAll("&","&amp;")
       .replaceAll("<","&lt;")
@@ -537,7 +567,6 @@ Make it feel like a real movie shot. ${noText}`;
       setStatus("복사 완료");
       setTimeout(()=>setStatus("완료"), 900);
     }catch(e){
-      // fallback
       const ta = document.createElement("textarea");
       ta.value = text;
       document.body.appendChild(ta);
@@ -587,7 +616,6 @@ Make it feel like a real movie shot. ${noText}`;
     alert("공유 링크를 복사했어!");
   }
 
-  // ---------- Main ----------
   let latestPlan = null;
 
   function run(){
@@ -609,7 +637,6 @@ Make it feel like a real movie shot. ${noText}`;
     renderPlan(latestPlan);
 
     setStatus("완료");
-    // 결과로 자동 스크롤
     setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
   }
 
@@ -647,9 +674,7 @@ Make it feel like a real movie shot. ${noText}`;
     }
   });
 
-  // init
   setQueryFromInput();
-  // 쿼리로 들어왔으면 자동 실행 (q가 있으면)
   const params = new URLSearchParams(location.search);
   if(params.get("q")){
     setTimeout(run, 120);
