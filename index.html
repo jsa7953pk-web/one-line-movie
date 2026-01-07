@@ -1,11 +1,9 @@
-V4
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>원라인 무비</title>
+  <title>원라인 무비 V4</title>
   <style>
     :root{
       --bg:#0b0b0c;
@@ -16,6 +14,7 @@ V4
       --accent:#16a34a;
       --accent2:#22c55e;
       --danger:#ef4444;
+      --warn:#f59e0b;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius:16px;
     }
@@ -23,16 +22,28 @@ V4
     body{
       margin:0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-      background: radial-gradient(1200px 800px at 50% -200px, rgba(34,197,94,.18), transparent 60%),
-                  radial-gradient(900px 700px at 10% 10%, rgba(59,130,246,.10), transparent 55%),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 800px at 50% -200px, rgba(34,197,94,.18), transparent 60%),
+        radial-gradient(900px 700px at 10% 10%, rgba(59,130,246,.10), transparent 55%),
+        var(--bg);
       color:var(--text);
       min-height:100vh;
       padding:22px;
       display:flex;
       justify-content:center;
     }
-    .wrap{width:100%; max-width:1080px}
+    .wrap{width:100%; max-width:1120px}
+
+    /* HERO LINE */
+    .hero-line{
+      font-size: 28px;
+      font-weight: 900;
+      text-align: center;
+      margin: 8px 0 18px;
+      letter-spacing: -0.03em;
+      color: #f4f4f5;
+    }
+
     .top{
       display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
       margin-bottom:14px;
@@ -40,6 +51,7 @@ V4
     .brand{display:flex; flex-direction:column; gap:6px}
     .brand h1{margin:0; font-size:26px; letter-spacing:-.2px}
     .brand p{margin:0; color:var(--muted); font-size:14px; line-height:1.4}
+
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:8px 10px;
@@ -50,6 +62,7 @@ V4
       font-size:12px;
       white-space:nowrap;
     }
+
     .grid{
       display:grid;
       grid-template-columns: 1.05fr .95fr;
@@ -75,6 +88,7 @@ V4
       letter-spacing:.2px;
     }
     .cardBody{padding:14px}
+
     textarea{
       width:100%;
       min-height:118px;
@@ -89,6 +103,7 @@ V4
       line-height:1.5;
     }
     textarea::placeholder{color:#7b7b86}
+
     .row{display:flex; gap:10px; flex-wrap:wrap}
     .control{flex: 1 1 160px; min-width: 150px}
     select, input[type="text"]{
@@ -102,6 +117,8 @@ V4
       outline:none;
       font-size:14px;
     }
+    .k{color: var(--muted); font-size:12px; margin:8px 0 6px}
+
     .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
     button{
       border:none;
@@ -109,17 +126,40 @@ V4
       height:52px;
       padding:0 16px;
       font-size:16px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       transition: transform .06s ease, opacity .15s ease;
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
       user-select:none;
+      white-space:nowrap;
     }
     button:active{transform: translateY(1px)}
-    .primary{background: linear-gradient(180deg, var(--accent2), var(--accent)); color:#07150b; flex: 1 1 220px;}
-    .ghost{background: rgba(255,255,255,.04); color:var(--text); border:1px solid var(--line); flex: 1 1 160px; font-weight:700; height:46px}
-    .danger{background: rgba(239,68,68,.12); color:#fecaca; border:1px solid rgba(239,68,68,.25); flex: 1 1 160px; font-weight:700; height:46px}
+    button:disabled{opacity:.55; cursor:not-allowed}
+
+    .primary{
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      color:#07150b;
+      flex: 1 1 240px;
+    }
+    .ghost{
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      border:1px solid var(--line);
+      flex: 1 1 160px;
+      font-weight:800;
+      height:46px
+    }
+    .danger{
+      background: rgba(239,68,68,.12);
+      color:#fecaca;
+      border:1px solid rgba(239,68,68,.25);
+      flex: 1 1 160px;
+      font-weight:800;
+      height:46px
+    }
+
     .hint{color:var(--muted); font-size:12px; line-height:1.5; margin-top:10px}
+
     .badge{
       font-size:12px; color:var(--muted);
       border:1px solid var(--line);
@@ -128,6 +168,31 @@ V4
       border-radius:999px;
       white-space:nowrap;
     }
+    .badge.ok{color:#bbf7d0; border-color:rgba(34,197,94,.25); background:rgba(34,197,94,.12)}
+    .badge.warn{color:#fde68a; border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.12)}
+    .badge.bad{color:#fecaca; border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.12)}
+
+    .meter{
+      margin-top:10px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:999px;
+      overflow:hidden;
+      height:12px;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(34,197,94,.55), rgba(34,197,94,.95));
+      transition: width .2s ease;
+    }
+    .meterRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
     .outTop{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       padding:12px 14px;
@@ -138,12 +203,13 @@ V4
     .outTop .title b{font-size:14px}
     .outTop .title span{font-size:12px; color:var(--muted)}
     .outActions{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+
     .mini{
       height:36px;
       padding:0 10px;
       border-radius:12px;
       font-size:12px;
-      font-weight:800;
+      font-weight:900;
       background: rgba(255,255,255,.04);
       color: var(--text);
       border:1px solid var(--line);
@@ -153,11 +219,12 @@ V4
       border:1px solid rgba(34,197,94,.25);
       color:#bbf7d0;
     }
-    .mini.danger2{
-      background: rgba(239,68,68,.12);
-      border:1px solid rgba(239,68,68,.25);
-      color:#fecaca;
+    .mini.warn2{
+      background: rgba(245,158,11,.14);
+      border:1px solid rgba(245,158,11,.25);
+      color:#fde68a;
     }
+
     .out{
       padding:14px;
       display:grid;
@@ -176,7 +243,6 @@ V4
     .sceneHead .left{display:flex; flex-direction:column; gap:4px}
     .sceneHead .left b{font-size:14px}
     .sceneHead .left span{font-size:12px; color:var(--muted)}
-    .k{color: var(--muted); font-size:12px; margin:8px 0 6px}
     .box{
       white-space: pre-wrap;
       line-height:1.55;
@@ -188,6 +254,25 @@ V4
       color: var(--text);
       overflow-wrap:anywhere;
     }
+
+    .videoCard{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      border-radius:14px;
+      padding:12px;
+      display:grid;
+      gap:10px;
+    }
+    .videoRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    video{
+      width:100%;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#000;
+    }
+
     .footerNote{
       margin-top:12px;
       color: var(--muted);
@@ -196,73 +281,40 @@ V4
       opacity:.85;
     }
 
-    /* Recent projects */
-    .recent{
-      margin-top:14px;
-      border-top:1px solid var(--line);
-      padding-top:12px;
+    /* Paywall modal */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center; justify-content:center;
+      padding:18px;
+      background:rgba(0,0,0,.55);
+      z-index:100;
     }
-    .recentHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom:10px;
-    }
-    .recentList{display:grid; gap:8px}
-    .recentItem{
+    .modal .panel{
+      width:min(520px, 100%);
       border:1px solid var(--line);
-      background: rgba(255,255,255,.02);
-      border-radius:12px;
-      padding:10px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      padding:14px;
     }
-    .recentItem .meta{
-      display:flex; flex-direction:column; gap:4px; min-width:0;
-    }
-    .recentItem .meta b{
-      font-size:13px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-      max-width: 520px;
-    }
-    .recentItem .meta span{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .recentBtns{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
-    .chip{
-      height:30px;
-      padding:0 10px;
-      border-radius:10px;
-      font-size:12px;
-      font-weight:800;
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      border:1px solid var(--line);
-      cursor:pointer;
-    }
-    .chip.primary{
-      background: rgba(34,197,94,.14);
-      border:1px solid rgba(34,197,94,.25);
-      color:#bbf7d0;
-    }
-    .chip.danger{
-      background: rgba(239,68,68,.12);
-      border:1px solid rgba(239,68,68,.25);
-      color:#fecaca;
-    }
+    .modal h3{margin:0 0 6px 0; font-size:16px}
+    .modal p{margin:0; color:var(--muted); font-size:13px; line-height:1.5}
+    .modal .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+    .modal .actions button{height:46px; font-size:14px}
   </style>
 </head>
 <body>
   <div class="wrap">
+
+    <div class="hero-line">한 줄을 쓰면, 그 순간 영화가 된다.</div>
+
     <div class="top">
       <div class="brand">
-        <h1>🎬 원라인 무비</h1>
-        <p>한 줄만 입력하면 “이미지 + 영상 + 자막(SRT) + ZIP”까지 바로 제작 가능한 영화 설계를 뽑아줍니다.</p>
+        <h1>🎬 원라인 무비 <span style="opacity:.7">V4</span></h1>
+        <p>한 줄 입력 → 설계(프롬프트/SRT/ZIP) + <b>샘플 영상 자동 생성</b>까지. (나중에 VEO3 자동 연결 준비)</p>
       </div>
-      <div class="pill">✅ GitHub Pages 배포형 · 서버 없이 최고버전(v3)</div>
+      <div class="pill">✅ GitHub Pages · 서버 없이 V4(자동진행/무료제한/영상샘플)</div>
     </div>
 
     <div class="grid">
@@ -270,10 +322,10 @@ V4
       <div class="card">
         <div class="cardHeader">
           <h2>입력</h2>
-          <span class="badge" id="status">대기중</span>
+          <span class="badge" id="statusBadge">대기중</span>
         </div>
         <div class="cardBody">
-          <textarea id="line" placeholder="예: 비 오는 밤, 말을 하지 않는 강아지 탐정"></textarea>
+          <textarea id="line" placeholder="예: 비 오는 밤, 기억을 잃은 남자"></textarea>
 
           <div class="row" style="margin-top:10px">
             <div class="control">
@@ -321,30 +373,25 @@ V4
             </div>
           </div>
 
+          <!-- Progress -->
+          <div class="meter" aria-label="progress">
+            <div class="bar" id="bar"></div>
+          </div>
+          <div class="meterRow">
+            <span id="stepText">0/4 단계</span>
+            <span id="quotaText">오늘 무료: -</span>
+          </div>
+
           <div class="btnRow">
-            <button class="primary" id="make">⚡ 영화 만들어줘</button>
+            <button class="primary" id="make">⚡ 설계 + 샘플 영상 만들기</button>
             <button class="ghost" id="share">🔗 공유 링크</button>
             <button class="ghost" id="save">💾 저장</button>
             <button class="danger" id="reset">🧹 초기화</button>
           </div>
 
           <div class="hint">
-            Tip: <b>Ctrl+Enter / Cmd+Enter</b> 로 실행 · 결과에서 <b>ZIP</b> 받으면 (JSON/SRT/TXT) 한 번에 정리됨
-          </div>
-
-          <!-- RECENT -->
-          <div class="recent">
-            <div class="recentHead">
-              <b style="font-size:13px">최근 프로젝트(최대 20개)</b>
-              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                <span class="badge" id="recentCount">0개</span>
-                <button class="mini danger2" id="clearRecent" title="최근 목록 전체 삭제">전체삭제</button>
-              </div>
-            </div>
-            <div class="recentList" id="recentList"></div>
-            <div class="hint" style="margin-top:8px">
-              공유 링크는 <b>입력값 재현</b>용 / 저장은 <b>결과(설계)까지 보존</b>해줘.
-            </div>
+            ✅ <b>V4 포인트</b>: 생성중 진행바 / 샘플 영상 자동 생성(WebM) / 오늘 무료 제한(유료 유도 UI) / 서버 연결 준비<br/>
+            Tip: <b>Ctrl+Enter / Cmd+Enter</b> 로 실행
           </div>
         </div>
       </div>
@@ -361,27 +408,75 @@ V4
             <button class="mini" id="downloadJson">⬇️ JSON</button>
             <button class="mini" id="downloadSrt">🧾 SRT</button>
             <button class="mini" id="downloadZip">🗂️ ZIP</button>
-            <button class="mini" id="scrollTop">⬆️ 위로</button>
+            <button class="mini warn2" id="downloadVideo">🎥 샘플영상(WebM)</button>
           </div>
         </div>
-        <div class="out" id="out"></div>
+
+        <div class="out" id="out">
+          <div class="videoCard" id="videoCard" style="display:none">
+            <div class="videoRow">
+              <b style="font-size:14px">🎥 자동 생성된 샘플 영상</b>
+              <span class="badge warn" id="videoNote">WebM (브라우저 생성)</span>
+            </div>
+            <video id="preview" controls playsinline></video>
+            <div class="hint">
+              ※ 이 샘플은 “자동 영상 생성 UX”를 보여주기 위한 데모야.<br/>
+              실제 VEO3/나노바나나 자동 호출은 서버(API 키) 붙이면 그대로 연결 가능.
+            </div>
+          </div>
+
+          <div id="planArea"></div>
+        </div>
       </div>
     </div>
 
-    <div class="footerNote">© 원라인 무비 v3 · 저장/ZIP/SRT/공유재현(서버 없이)</div>
+    <div class="footerNote">© 원라인 무비 V4 · 설계/ZIP/SRT + 샘플영상(서버 없이) · 다음 단계: 서버+자동영상(API)</div>
+  </div>
+
+  <!-- Paywall modal -->
+  <div class="modal" id="modal">
+    <div class="panel">
+      <h3>오늘 무료 사용 횟수를 다 썼어 😅</h3>
+      <p>
+        지금은 <b>무료 체험</b> 단계라서 하루 무료 횟수 제한이 있어.<br/>
+        유료 버전에서는 “영상 생성(외부 AI) 자동 연결”까지 한 번에 가능하게 만들 수 있어.
+      </p>
+      <div class="actions">
+        <button class="primary" id="closeModal">확인</button>
+        <button class="ghost" id="resetQuota">무료 횟수 초기화(테스트용)</button>
+      </div>
+      <div class="hint" style="margin-top:8px">
+        (테스트용 버튼은 나중에 삭제하면 돼)
+      </div>
+    </div>
   </div>
 
 <script>
   // =========================
+  // V4 Config (서버 붙일 때 여기만 바꾸면 됨)
+  // =========================
+  const MODE = "mock"; // "mock" or "api"
+  const API_URL = "https://YOUR_SERVER_DOMAIN/api/generate"; // 나중에 서버 붙이면 사용
+  const DAILY_FREE_LIMIT = 3; // 오늘 무료 횟수
+
+  // =========================
   // Utilities
   // =========================
   const $ = (id) => document.getElementById(id);
-  const LS_KEY = "olm_projects_v3";
 
-  function setStatus(text){
-    $("status").textContent = text;
-  }
   function safeTrim(v){ return (v || "").trim(); }
+  function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+
+  function setBadge(text, kind){
+    const el = $("statusBadge");
+    el.textContent = text;
+    el.className = "badge " + (kind || "");
+  }
+
+  function setProgress(pct, stepText){
+    $("bar").style.width = clamp(pct, 0, 100) + "%";
+    $("stepText").textContent = stepText || "";
+  }
 
   function genreLabel(key){
     return {
@@ -396,127 +491,60 @@ V4
   }
 
   function buildSceneCount(seconds){
-    if(seconds <= 30) return 7;      // 30초: 7장면
-    if(seconds <= 60) return 9;      // 60초: 9장면
-    return 12;                       // 3분: 12장면
+    if(seconds <= 30) return 7;
+    if(seconds <= 60) return 9;
+    return 12;
   }
 
   function beatsForGenre(genre){
-    // 기본(미스터리/스릴러/드라마용)
-    const base = [
-      "오프닝 훅 — 주인공/상황을 한 컷에",
-      "이상 징후 — 평범이 깨지는 순간",
-      "위협 제시 — 왜 위험한지 드러남",
-      "첫 행동 — 주인공의 선택",
-      "규칙/단서 — 숨겨진 조건 공개",
-      "최대 위기 — 실패 직전",
-      "실마리 — 작은 힌트",
-      "반전 — 진짜 원인/적",
-      "엔딩 — 여운/다음 떡밥"
-    ];
-
     const map = {
       thriller: [
-        "오프닝 훅 — 숨막히는 긴장 한 컷",
-        "추적 시작 — 누가 누구를 쫓나",
-        "위협 확대 — 점점 가까워진다",
-        "실수/노출 — 들켰다",
-        "룰/조건 — 도망칠 수 없는 이유",
-        "최대 위기 — 코앞에서 잡힘",
-        "미끼 — 판을 뒤집을 한 수",
-        "클라이맥스 — 도망/대치",
-        "엔딩 — 아직 끝나지 않음"
+        "오프닝 훅 — 숨막히는 긴장 한 컷","추적 시작 — 누가 누구를 쫓나","위협 확대 — 점점 가까워진다",
+        "실수/노출 — 들켰다","룰/조건 — 도망칠 수 없는 이유","최대 위기 — 코앞에서 잡힘",
+        "미끼 — 판을 뒤집을 한 수","클라이맥스 — 도망/대치","엔딩 — 아직 끝나지 않음"
       ],
       mystery: [
-        "오프닝 훅 — 수상한 단서 한 컷",
-        "이상 징후 — 말이 안 되는 점",
-        "의심 — 용의자/장소 등장",
-        "첫 조사 — 단서 확대",
-        "규칙/퍼즐 — 숨겨진 연결고리",
-        "최대 위기 — 오해/함정",
-        "실마리 — 결정적 힌트",
-        "반전 — 진범/진실",
-        "엔딩 — 여운/다음 사건"
+        "오프닝 훅 — 수상한 단서 한 컷","이상 징후 — 말이 안 되는 점","의심 — 용의자/장소 등장",
+        "첫 조사 — 단서 확대","규칙/퍼즐 — 숨겨진 연결고리","최대 위기 — 오해/함정",
+        "실마리 — 결정적 힌트","반전 — 진범/진실","엔딩 — 여운/다음 사건"
       ],
       drama: [
-        "오프닝 훅 — 감정이 담긴 한 컷",
-        "갈등 — 관계의 균열",
-        "압박 — 선택을 강요받음",
-        "결심 — 한 발 내딛는다",
-        "대가 — 잃는 것/버리는 것",
-        "최대 위기 — 무너질 뻔함",
-        "회복 — 작은 손 내밀기",
-        "전환 — 마음이 바뀐다",
-        "엔딩 — 조용한 여운"
+        "오프닝 훅 — 감정이 담긴 한 컷","갈등 — 관계의 균열","압박 — 선택을 강요받음",
+        "결심 — 한 발 내딛는다","대가 — 잃는 것/버리는 것","최대 위기 — 무너질 뻔함",
+        "회복 — 작은 손 내밀기","전환 — 마음이 바뀐다","엔딩 — 조용한 여운"
       ],
       romance: [
-        "오프닝 훅 — 눈 마주치는 순간",
-        "거리감 — 가까운데 멀다",
-        "오해/비밀 — 말 못하는 이유",
-        "작은 친절 — 마음이 흔들림",
-        "사건 — 관계가 깨질 위기",
-        "후회 — 놓칠 뻔한 순간",
-        "고백 직전 — 숨 멎는 침묵",
-        "한마디 — 감정 폭발",
-        "엔딩 — 짧은 약속/여운"
+        "오프닝 훅 — 눈 마주치는 순간","거리감 — 가까운데 멀다","오해/비밀 — 말 못하는 이유",
+        "작은 친절 — 마음이 흔들림","사건 — 관계가 깨질 위기","후회 — 놓칠 뻔한 순간",
+        "고백 직전 — 숨 멎는 침묵","한마디 — 감정 폭발","엔딩 — 짧은 약속/여운"
       ],
       horror: [
-        "오프닝 훅 — 불길한 평온",
-        "금기/규칙 — 하면 안 되는 것",
-        "첫 징후 — 소리/그림자",
-        "확인 시도 — 더 나쁜 선택",
-        "공포 확장 — 공간이 변함",
-        "최대 위기 — 도망 불가",
-        "기만/반전 — 믿은 것이 함정",
-        "탈출 시도 — 대가",
-        "엔딩 — 끝나지 않음"
+        "오프닝 훅 — 불길한 평온","금기/규칙 — 하면 안 되는 것","첫 징후 — 소리/그림자",
+        "확인 시도 — 더 나쁜 선택","공포 확장 — 공간이 변함","최대 위기 — 도망 불가",
+        "기만/반전 — 믿은 것이 함정","탈출 시도 — 대가","엔딩 — 끝나지 않음"
       ],
       comedy: [
-        "오프닝 훅 — 웃긴 상황",
-        "오해 발생 — 말이 안 통함",
-        "사건 확대 — 더 큰 소동",
-        "기발한 계획 — 허술한 작전",
-        "실패 — 더 웃긴 실패",
-        "뜻밖의 도움 — 예상 못한 조력자",
-        "반전 성공 — 운으로 해결",
-        "정리 — 깔끔한 마무리",
-        "엔딩 — 한 줄 농담"
+        "오프닝 훅 — 웃긴 상황","오해 발생 — 말이 안 통함","사건 확대 — 더 큰 소동",
+        "기발한 계획 — 허술한 작전","실패 — 더 웃긴 실패","뜻밖의 도움 — 예상 못한 조력자",
+        "반전 성공 — 운으로 해결","정리 — 깔끔한 마무리","엔딩 — 한 줄 농담"
       ],
       action: [
-        "오프닝 훅 — 추격/충돌",
-        "목표 제시 — 무엇을 지켜야 하는가",
-        "적 등장 — 위협의 얼굴",
-        "첫 교전 — 능력 과시",
-        "계획 — 침투/탈출 루트",
-        "함정 — 계획 붕괴",
-        "역습 — 판 뒤집기",
-        "클라이맥스 — 결전",
-        "엔딩 — 다음 미션"
+        "오프닝 훅 — 추격/충돌","목표 제시 — 무엇을 지켜야 하는가","적 등장 — 위협의 얼굴",
+        "첫 교전 — 능력 과시","계획 — 침투/탈출 루트","함정 — 계획 붕괴",
+        "역습 — 판 뒤집기","클라이맥스 — 결전","엔딩 — 다음 미션"
       ],
       sf: [
-        "오프닝 훅 — 미래 도시/우주에서 충격적 한 컷",
-        "규칙 소개 — 세계의 기술/법칙이 보인다",
-        "이상 징후 — 시스템 오류/신호 수신",
-        "선택 — 버튼을 누르거나, 문을 열거나",
-        "대가 — 기술의 부작용/추격 시작",
-        "붕괴 — 시간/중력/기억이 흔들린다",
-        "역전 — 숨겨진 장치/코드/좌표",
-        "도약 — 탈출 또는 접속 성공",
-        "엔딩 — 새로운 세계가 열린다"
+        "오프닝 훅 — 미래 도시/우주에서 충격적 한 컷","규칙 소개 — 세계의 기술/법칙이 보인다","이상 징후 — 시스템 오류/신호 수신",
+        "선택 — 버튼을 누르거나, 문을 열거나","대가 — 기술의 부작용/추격 시작","붕괴 — 시간/중력/기억이 흔들린다",
+        "역전 — 숨겨진 장치/코드/좌표","도약 — 탈출 또는 접속 성공","엔딩 — 새로운 세계가 열린다"
       ],
       fantasy: [
-        "오프닝 훅 — 마법/유물/문이 열리는 순간",
-        "소환/계시 — 운명이 시작된다",
-        "적의 등장 — 괴물/저주/추적",
-        "동료/도구 — 힘을 얻는다",
-        "룰 공개 — 마법의 대가",
-        "최대 위기 — 저주가 발동",
-        "각성 — 진짜 능력/진짜 이름",
-        "결전 — 한 컷으로 승부",
-        "엔딩 — 다음 모험의 문"
+        "오프닝 훅 — 마법/유물/문이 열리는 순간","소환/계시 — 운명이 시작된다","적의 등장 — 괴물/저주/추적",
+        "동료/도구 — 힘을 얻는다","룰 공개 — 마법의 대가","최대 위기 — 저주가 발동",
+        "각성 — 진짜 능력/진짜 이름","결전 — 한 컷으로 승부","엔딩 — 다음 모험의 문"
       ]
     };
-    return map[genre] || base;
+    return map[genre] || map.mystery;
   }
 
   function cinematicStyle(tone){
@@ -547,27 +575,62 @@ V4
     return `${pad2(h)}:${pad2(m)}:${pad2(s)},${String(milli).padStart(3,"0")}`;
   }
 
-  function stableIdFromPayload(p){
-    // 간단한 안정 ID(공유재현/저장용): payload 문자열을 해시
-    const str = JSON.stringify(p);
-    let h = 2166136261;
-    for(let i=0;i<str.length;i++){
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    // unsigned
-    return "p_" + (h >>> 0).toString(16);
+  // =========================
+  // Free quota (today)
+  // =========================
+  const QUOTA_KEY = "olm_v4_quota";
+
+  function todayKey(){
+    const d = new Date();
+    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
   }
 
+  function getQuota(){
+    try{
+      const raw = localStorage.getItem(QUOTA_KEY);
+      const v = raw ? JSON.parse(raw) : null;
+      if(!v || v.day !== todayKey()){
+        return { day: todayKey(), used: 0 };
+      }
+      return v;
+    }catch(e){
+      return { day: todayKey(), used: 0 };
+    }
+  }
+
+  function setQuota(q){
+    localStorage.setItem(QUOTA_KEY, JSON.stringify(q));
+    renderQuota();
+  }
+
+  function renderQuota(){
+    const q = getQuota();
+    const left = Math.max(0, DAILY_FREE_LIMIT - q.used);
+    $("quotaText").textContent = `오늘 무료: ${left}/${DAILY_FREE_LIMIT}`;
+  }
+
+  function consumeQuotaOrBlock(){
+    const q = getQuota();
+    if(q.used >= DAILY_FREE_LIMIT){
+      openModal();
+      return false;
+    }
+    q.used += 1;
+    setQuota(q);
+    return true;
+  }
+
+  function openModal(){ $("modal").style.display = "flex"; }
+  function closeModal(){ $("modal").style.display = "none"; }
+
   // =========================
-  // Prompt Builder
+  // Prompt Builder + Plan
   // =========================
   function makePrompts({line, genre, tone, seconds, hero, setting, idx, beat}){
     const style = cinematicStyle(tone);
     const location = setting ? setting : "도시의 밤, 비에 젖은 골목";
-    const protagonist = hero ? hero : "말을 하지 않는 강아지 탐정";
+    const protagonist = hero ? hero : "말을 하지 않는 주인공";
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
-
     const noText = "no subtitles, no captions, no text, no watermark, no logo";
 
     const imagePrompt =
@@ -607,7 +670,7 @@ Make it feel like a real movie shot. ${noText}`;
     const n = buildSceneCount(total);
     const beats = beatsForGenre(genre);
 
-    // 시간 분배: 균등 + 마지막 2개는 약간 길게
+    // 시간 분배: 균등 + 마지막 2개 조금 길게
     const base = Math.floor(total / n);
     const times = [];
     let t = 0;
@@ -619,10 +682,7 @@ Make it feel like a real movie shot. ${noText}`;
       times.push({start: from, end: to});
       t = to;
     }
-    // 혹시 마지막이 total보다 작으면 보정
-    if(times.length){
-      times[times.length-1].end = total;
-    }
+    if(times.length) times[times.length-1].end = total;
 
     const scenes = [];
     for(let i=0;i<n;i++){
@@ -641,8 +701,7 @@ Make it feel like a real movie shot. ${noText}`;
       });
     }
 
-    // 공유재현을 위해 created_at은 결과에 넣되, 생성 내용 자체는 deterministic
-    const plan = {
+    return {
       title: line,
       meta: {
         genre: genreLabel(genre),
@@ -655,7 +714,6 @@ Make it feel like a real movie shot. ${noText}`;
       payload: {...payload},
       scenes
     };
-    return plan;
   }
 
   // =========================
@@ -666,8 +724,8 @@ Make it feel like a real movie shot. ${noText}`;
     $("outTitle").textContent = `🎬 원라인: ${plan.title}`;
     $("outMeta").textContent = `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes`;
 
-    const out = $("out");
-    out.innerHTML = "";
+    const root = $("planArea");
+    root.innerHTML = "";
 
     plan.scenes.forEach(s => {
       const el = document.createElement("div");
@@ -689,7 +747,7 @@ Make it feel like a real movie shot. ${noText}`;
         <div class="k">🎥 영상 프롬프트 (VEO3용)</div>
         <div class="box">${escapeHtml(s.video_prompt)}</div>
       `;
-      out.appendChild(el);
+      root.appendChild(el);
     });
   }
 
@@ -707,11 +765,9 @@ Make it feel like a real movie shot. ${noText}`;
   }
 
   function planToSrt(plan){
-    // 1장면=1큐, start/end 기반
     let srt = "";
     for(const s of plan.scenes){
       const start = srtTime(s.start);
-      // end가 start와 같아지는 경우 방지
       const endSec = Math.max(s.end, s.start + 0.2);
       const end = srtTime(endSec);
       const text = String(s.subtitle || "").replace(/\r?\n/g, " ").trim();
@@ -723,8 +779,8 @@ Make it feel like a real movie shot. ${noText}`;
   async function copyText(text){
     try{
       await navigator.clipboard.writeText(text);
-      setStatus("복사 완료");
-      setTimeout(()=>setStatus("완료"), 900);
+      setBadge("복사 완료", "ok");
+      setTimeout(()=>setBadge("완료", "ok"), 900);
     }catch(e){
       const ta = document.createElement("textarea");
       ta.value = text;
@@ -732,8 +788,8 @@ Make it feel like a real movie shot. ${noText}`;
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      setStatus("복사 완료");
-      setTimeout(()=>setStatus("완료"), 900);
+      setBadge("복사 완료", "ok");
+      setTimeout(()=>setBadge("완료", "ok"), 900);
     }
   }
 
@@ -745,6 +801,99 @@ Make it feel like a real movie shot. ${noText}`;
     a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  function stableIdFromPayload(p){
+    const str = JSON.stringify(p);
+    let h = 2166136261;
+    for(let i=0;i<str.length;i++){
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return "p_" + (h >>> 0).toString(16);
+  }
+
+  // =========================
+  // ZIP (STORE)
+  // =========================
+  const CRC_TABLE = (() => {
+    const table = new Uint32Array(256);
+    for(let i=0;i<256;i++){
+      let c = i;
+      for(let k=0;k<8;k++){
+        c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      }
+      table[i] = c >>> 0;
+    }
+    return table;
+  })();
+
+  function crc32(u8){
+    let c = 0xFFFFFFFF;
+    for(let i=0;i<u8.length;i++){
+      c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+    }
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function u32le(n){ return new Uint8Array([n & 255, (n>>>8)&255, (n>>>16)&255, (n>>>24)&255]); }
+  function u16le(n){ return new Uint8Array([n & 255, (n>>>8)&255]); }
+  function strToU8(str){ return new TextEncoder().encode(str); }
+  function concatU8(chunks){
+    let len = 0;
+    for(const c of chunks) len += c.length;
+    const out = new Uint8Array(len);
+    let o = 0;
+    for(const c of chunks){ out.set(c, o); o += c.length; }
+    return out;
+  }
+
+  function makeZip(files){
+    const localParts = [];
+    const centralParts = [];
+    let offset = 0;
+
+    for(const f of files){
+      const nameU8 = strToU8(f.name);
+      const dataU8 = f.dataU8;
+      const crc = crc32(dataU8);
+      const size = dataU8.length;
+
+      const localHeader = concatU8([
+        u32le(0x04034b50), u16le(20), u16le(0), u16le(0),
+        u16le(0), u16le(0),
+        u32le(crc), u32le(size), u32le(size),
+        u16le(nameU8.length), u16le(0), nameU8
+      ]);
+      localParts.push(localHeader, dataU8);
+
+      const centralHeader = concatU8([
+        u32le(0x02014b50),
+        u16le(20), u16le(20), u16le(0), u16le(0),
+        u16le(0), u16le(0),
+        u32le(crc), u32le(size), u32le(size),
+        u16le(nameU8.length), u16le(0), u16le(0),
+        u16le(0), u16le(0),
+        u32le(0), u32le(offset), nameU8
+      ]);
+      centralParts.push(centralHeader);
+
+      offset += localHeader.length + dataU8.length;
+    }
+
+    const centralDir = concatU8(centralParts);
+    const localData = concatU8(localParts);
+
+    const end = concatU8([
+      u32le(0x06054b50),
+      u16le(0), u16le(0),
+      u16le(files.length), u16le(files.length),
+      u32le(centralDir.length),
+      u32le(localData.length),
+      u16le(0)
+    ]);
+
+    return concatU8([localData, centralDir, end]);
   }
 
   // =========================
@@ -770,7 +919,7 @@ Make it feel like a real movie shot. ${noText}`;
     params.set("l", $("length").value);
     const h = safeTrim($("hero").value); if(h) params.set("h", h);
     const s = safeTrim($("setting").value); if(s) params.set("s", s);
-    params.set("run", "1"); // 공유로 들어오면 자동 실행
+    params.set("autorun", "1");
 
     const link = `${location.origin}${location.pathname}?${params.toString()}`;
     copyText(link);
@@ -778,247 +927,142 @@ Make it feel like a real movie shot. ${noText}`;
   }
 
   // =========================
-  // Local Save / Load (Recent 20)
+  // Mock video generator (Canvas -> WebM)
   // =========================
-  function readRecent(){
-    try{
-      const raw = localStorage.getItem(LS_KEY);
-      const arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : [];
-    }catch(e){
-      return [];
-    }
-  }
-  function writeRecent(list){
-    localStorage.setItem(LS_KEY, JSON.stringify(list));
-  }
-  function upsertRecent(item){
-    const list = readRecent();
-    const idx = list.findIndex(x => x.id === item.id);
-    if(idx >= 0) list.splice(idx, 1);
-    list.unshift(item);
-    const trimmed = list.slice(0, 20);
-    writeRecent(trimmed);
-    renderRecent();
-  }
-  function removeRecent(id){
-    const list = readRecent().filter(x => x.id !== id);
-    writeRecent(list);
-    renderRecent();
-  }
-  function clearRecent(){
-    if(!confirm("최근 프로젝트를 전부 삭제할까?")) return;
-    localStorage.removeItem(LS_KEY);
-    renderRecent();
-  }
-  function fmtTs(ts){
-    const d = new Date(ts);
-    const mm = pad2(d.getMonth()+1);
-    const dd = pad2(d.getDate());
-    const hh = pad2(d.getHours());
-    const mi = pad2(d.getMinutes());
-    return `${mm}/${dd} ${hh}:${mi}`;
-  }
+  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
-  function renderRecent(){
-    const list = readRecent();
-    $("recentCount").textContent = `${list.length}개`;
-    const root = $("recentList");
-    root.innerHTML = "";
-    if(list.length === 0){
-      const empty = document.createElement("div");
-      empty.className = "hint";
-      empty.textContent = "아직 저장된 프로젝트가 없어. 만들고 ‘저장’ 눌러줘!";
-      root.appendChild(empty);
-      return;
-    }
+  async function generateMockVideoWebM({title, seconds=6}){
+    const dur = clamp(Number(seconds || 6), 3, 8);
 
-    list.forEach(item => {
-      const el = document.createElement("div");
-      el.className = "recentItem";
-      el.innerHTML = `
-        <div class="meta">
-          <b>${escapeHtml(item.title || "(제목 없음)")}</b>
-          <span>${escapeHtml(item.metaLine || "")} · ${fmtTs(item.ts)}</span>
-        </div>
-        <div class="recentBtns">
-          <button class="chip primary" data-act="load" data-id="${item.id}">불러오기</button>
-          <button class="chip" data-act="run" data-id="${item.id}">바로실행</button>
-          <button class="chip danger" data-act="del" data-id="${item.id}">삭제</button>
-        </div>
-      `;
-      root.appendChild(el);
-    });
+    const canvas = document.createElement("canvas");
+    canvas.width = 720;
+    canvas.height = 1280;
+    const ctx = canvas.getContext("2d");
 
-    root.querySelectorAll("button[data-act]").forEach(btn=>{
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-id");
-        const act = btn.getAttribute("data-act");
-        const item = readRecent().find(x => x.id === id);
-        if(!item) return;
+    const stream = canvas.captureStream(30);
+    const chunks = [];
 
-        if(act === "del"){
-          removeRecent(id);
-          return;
-        }
-        if(act === "load"){
-          // 입력만 채우고 끝
-          const p = item.payload;
-          $("line").value = p.line || "";
-          $("genre").value = p.genre || "mystery";
-          $("tone").value = p.tone || "serious";
-          $("length").value = String(p.seconds || "60");
-          $("hero").value = p.hero || "";
-          $("setting").value = p.setting || "";
-          setStatus("불러옴");
-          window.scrollTo({top:0, behavior:"smooth"});
-          return;
-        }
-        if(act === "run"){
-          // plan까지 렌더(저장된 plan 사용)
-          if(item.plan){
-            latestPlan = item.plan;
-            renderPlan(latestPlan);
-            setStatus("완료");
-            setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
-          }else{
-            // fallback: payload로 생성
-            const p = item.payload;
-            latestPlan = buildPlan(p);
-            renderPlan(latestPlan);
-            setStatus("완료");
-            setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
-          }
-        }
-      });
-    });
-  }
-
-  // =========================
-  // ZIP (no external libs)
-  // - STORE method, CRC32 included
-  // =========================
-  const CRC_TABLE = (() => {
-    const table = new Uint32Array(256);
-    for(let i=0;i<256;i++){
-      let c = i;
-      for(let k=0;k<8;k++){
-        c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    // ✅ GitHub Pages / 모바일 브라우저 호환성을 위해 mimeType fallback
+    let rec;
+    const prefer = [
+      "video/webm;codecs=vp9",
+      "video/webm;codecs=vp8",
+      "video/webm"
+    ];
+    let chosen = "";
+    for(const mt of prefer){
+      if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(mt)){
+        chosen = mt; break;
       }
-      table[i] = c >>> 0;
     }
-    return table;
-  })();
-
-  function crc32(u8){
-    let c = 0xFFFFFFFF;
-    for(let i=0;i<u8.length;i++){
-      c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
-    }
-    return (c ^ 0xFFFFFFFF) >>> 0;
-  }
-
-  function u32le(n){
-    return new Uint8Array([n & 255, (n>>>8)&255, (n>>>16)&255, (n>>>24)&255]);
-  }
-  function u16le(n){
-    return new Uint8Array([n & 255, (n>>>8)&255]);
-  }
-  function strToU8(str){
-    return new TextEncoder().encode(str);
-  }
-  function concatU8(chunks){
-    let len = 0;
-    for(const c of chunks) len += c.length;
-    const out = new Uint8Array(len);
-    let o = 0;
-    for(const c of chunks){
-      out.set(c, o);
-      o += c.length;
-    }
-    return out;
-  }
-
-  function makeZip(files){
-    // files: [{name, dataU8}]
-    // ZIP spec: local headers + data + central dir + end
-    const localParts = [];
-    const centralParts = [];
-    let offset = 0;
-
-    for(const f of files){
-      const nameU8 = strToU8(f.name);
-      const dataU8 = f.dataU8;
-      const crc = crc32(dataU8);
-      const compSize = dataU8.length;
-      const uncompSize = dataU8.length;
-
-      // Local file header
-      const localHeader = concatU8([
-        u32le(0x04034b50),     // signature
-        u16le(20),             // version needed
-        u16le(0),              // flags
-        u16le(0),              // compression 0=store
-        u16le(0),              // mod time
-        u16le(0),              // mod date
-        u32le(crc),
-        u32le(compSize),
-        u32le(uncompSize),
-        u16le(nameU8.length),
-        u16le(0),              // extra len
-        nameU8
-      ]);
-
-      localParts.push(localHeader);
-      localParts.push(dataU8);
-
-      // Central directory header
-      const centralHeader = concatU8([
-        u32le(0x02014b50),     // signature
-        u16le(20),             // version made by
-        u16le(20),             // version needed
-        u16le(0),              // flags
-        u16le(0),              // compression
-        u16le(0),              // mod time
-        u16le(0),              // mod date
-        u32le(crc),
-        u32le(compSize),
-        u32le(uncompSize),
-        u16le(nameU8.length),
-        u16le(0),              // extra
-        u16le(0),              // comment
-        u16le(0),              // disk start
-        u16le(0),              // internal attrs
-        u32le(0),              // external attrs
-        u32le(offset),         // local header offset
-        nameU8
-      ]);
-
-      centralParts.push(centralHeader);
-
-      offset += localHeader.length + dataU8.length;
+    try{
+      rec = new MediaRecorder(stream, chosen ? { mimeType: chosen } : undefined);
+    }catch(e){
+      // 최후 fallback: 옵션 없이 시도
+      rec = new MediaRecorder(stream);
     }
 
-    const centralDir = concatU8(centralParts);
-    const localData = concatU8(localParts);
+    rec.ondataavailable = (e) => { if(e.data && e.data.size) chunks.push(e.data); };
+    rec.start(200);
 
-    const end = concatU8([
-      u32le(0x06054b50),            // end signature
-      u16le(0), u16le(0),           // disk numbers
-      u16le(files.length),          // entries on disk
-      u16le(files.length),          // total entries
-      u32le(centralDir.length),     // central size
-      u32le(localData.length),      // central offset
-      u16le(0)                      // comment length
-    ]);
+    const start = performance.now();
+    const totalMs = dur * 1000;
 
-    return concatU8([localData, centralDir, end]);
+    while(performance.now() - start < totalMs){
+      const t = (performance.now() - start) / 1000;
+
+      ctx.fillStyle = "#0b0b0c";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      const g = ctx.createRadialGradient(360, 180, 10, 360, 180, 800);
+      g.addColorStop(0, "rgba(34,197,94,0.22)");
+      g.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      const x = (Math.sin(t*1.6)+1)/2;
+      ctx.fillStyle = "rgba(34,197,94,0.18)";
+      ctx.fillRect(0, 820, canvas.width * x, 14);
+
+      ctx.fillStyle = "#f4f4f5";
+      ctx.font = "900 54px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, sans-serif";
+      ctx.fillText("ONE-LINE MOVIE", 52, 180);
+
+      ctx.fillStyle = "rgba(244,244,245,0.86)";
+      ctx.font = "700 44px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, sans-serif";
+      const lines = wrapText(ctx, title || "샘플 영상", canvas.width - 104);
+      let y = 280;
+      for(const ln of lines.slice(0,4)){
+        ctx.fillText(ln, 52, y);
+        y += 58;
+      }
+
+      ctx.fillStyle = "rgba(178,178,187,0.9)";
+      ctx.font = "700 28px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, sans-serif";
+      ctx.fillText("자동 영상 생성 UX 데모 (WebM)", 52, 1200);
+
+      await sleep(33);
+    }
+
+    await new Promise((resolve) => {
+      rec.onstop = resolve;
+      rec.stop();
+    });
+
+    const type = (chosen && chosen.startsWith("video/webm")) ? "video/webm" : (chunks[0]?.type || "video/webm");
+    return new Blob(chunks, { type });
+  }
+
+  function wrapText(ctx, text, maxWidth){
+    const words = String(text).split(/\s+/);
+    const lines = [];
+    let line = "";
+    for(const w of words){
+      const test = line ? line + " " + w : w;
+      if(ctx.measureText(test).width > maxWidth){
+        if(line) lines.push(line);
+        line = w;
+      }else{
+        line = test;
+      }
+    }
+    if(line) lines.push(line);
+
+    // 한국어(공백 적음) 대비 강제 분할
+    if(lines.length === 1 && ctx.measureText(lines[0]).width > maxWidth){
+      const s = lines[0];
+      lines.length = 0;
+      let buf = "";
+      for(const ch of s){
+        const test = buf + ch;
+        if(ctx.measureText(test).width > maxWidth){
+          lines.push(buf);
+          buf = ch;
+        }else buf = test;
+      }
+      if(buf) lines.push(buf);
+    }
+    return lines;
+  }
+
+  // =========================
+  // API mode (future)
+  // =========================
+  async function generateViaApi(payload){
+    const res = await fetch(API_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error("API failed");
+    return await res.json();
   }
 
   // =========================
   // Main
   // =========================
   let latestPlan = null;
+  let latestVideoBlob = null;
 
   function getPayloadFromInputs(){
     return {
@@ -1031,60 +1075,174 @@ Make it feel like a real movie shot. ${noText}`;
     };
   }
 
-  function run(){
+  async function runV4(){
     const payload = getPayloadFromInputs();
     if(!payload.line){ alert("한 줄 써줘!"); return; }
 
-    setStatus("생성중…");
-    latestPlan = buildPlan(payload);
-    renderPlan(latestPlan);
-    setStatus("완료");
+    // quota check
+    if(!consumeQuotaOrBlock()) return;
 
-    setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
+    // UI lock
+    $("make").disabled = true;
+    $("downloadVideo").disabled = true;
+    latestVideoBlob = null;
+    $("videoCard").style.display = "none";
+    $("preview").src = "";
+
+    try{
+      setBadge("생성중…", "warn");
+      setProgress(5, "1/4 입력 분석");
+
+      await sleep(220);
+      setProgress(28, "2/4 설계 생성");
+
+      // plan
+      latestPlan = buildPlan(payload);
+      renderPlan(latestPlan);
+
+      await sleep(220);
+      setProgress(55, "3/4 샘플 영상 생성");
+
+      if(MODE === "api"){
+        // 미래: 서버에서 영상/파일까지 받아오도록 확장 가능
+        // const apiResult = await generateViaApi(payload);
+        // ...
+      }
+
+      // 샘플 영상 생성(브라우저 webm) - 데모는 6초
+      latestVideoBlob = await generateMockVideoWebM({ title: payload.line, seconds: 6 });
+
+      const url = URL.createObjectURL(latestVideoBlob);
+      $("preview").src = url;
+      $("videoCard").style.display = "grid";
+      $("downloadVideo").disabled = false;
+
+      setProgress(100, "4/4 완료");
+      setBadge("완료", "ok");
+
+      setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 120);
+    }catch(e){
+      console.error(e);
+      setBadge("실패", "bad");
+      alert("생성 중 오류가 났어. 새로고침 후 다시 시도해줘!");
+    }finally{
+      $("make").disabled = false;
+      setTimeout(()=>setProgress(0, "0/4 단계"), 1200);
+      renderQuota();
+    }
   }
 
-  function saveCurrent(){
-    // latestPlan이 없으면 먼저 생성
+  // Buttons
+  $("make").addEventListener("click", runV4);
+  $("share").addEventListener("click", makeShareLink);
+
+  $("reset").addEventListener("click", () => {
+    $("line").value = "";
+    $("hero").value = "";
+    $("setting").value = "";
+    $("planArea").innerHTML = "";
+    $("outCard").style.display = "none";
+    $("videoCard").style.display = "none";
+    $("preview").src = "";
+    latestPlan = null;
+    latestVideoBlob = null;
+    setBadge("대기중", "");
+    setProgress(0, "0/4 단계");
+    history.replaceState(null, "", location.pathname);
+  });
+
+  $("copyAll").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    copyText(planToText(latestPlan));
+  });
+
+  $("downloadJson").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    const payloadId = stableIdFromPayload(latestPlan.payload || getPayloadFromInputs());
+    download(`one-line-movie_${payloadId}.json`, JSON.stringify(latestPlan, null, 2), "application/json");
+  });
+
+  $("downloadSrt").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    const payloadId = stableIdFromPayload(latestPlan.payload || getPayloadFromInputs());
+    download(`one-line-movie_${payloadId}.srt`, planToSrt(latestPlan), "text/plain;charset=utf-8");
+  });
+
+  $("downloadZip").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    const payloadId = stableIdFromPayload(latestPlan.payload || getPayloadFromInputs());
+
+    const jsonStr = JSON.stringify(latestPlan, null, 2);
+    const srtStr = planToSrt(latestPlan);
+    const txtStr = planToText(latestPlan);
+
+    const zipU8 = makeZip([
+      { name: `one-line-movie_${payloadId}.json`, dataU8: strToU8(jsonStr) },
+      { name: `one-line-movie_${payloadId}.srt`,  dataU8: strToU8(srtStr)  },
+      { name: `one-line-movie_${payloadId}.txt`,  dataU8: strToU8(txtStr)  }
+    ]);
+
+    const blob = new Blob([zipU8], {type:"application/zip"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `one-line-movie_${payloadId}.zip`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  $("downloadVideo").addEventListener("click", () => {
+    if(!latestVideoBlob){ alert("샘플 영상이 아직 없어!"); return; }
+    const payload = latestPlan?.payload || getPayloadFromInputs();
+    const payloadId = stableIdFromPayload(payload);
+    const url = URL.createObjectURL(latestVideoBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `one-line-movie_${payloadId}_sample.webm`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Save (payload + plan)
+  const SAVE_KEY = "olm_v4_saved";
+  $("save").addEventListener("click", () => {
     const payload = getPayloadFromInputs();
     if(!payload.line){ alert("한 줄 써줘!"); return; }
     if(!latestPlan){
       latestPlan = buildPlan(payload);
       renderPlan(latestPlan);
     }
-
-    const id = stableIdFromPayload(payload);
-    const metaLine = `${genreLabel(payload.genre)} · ${toneLabel(payload.tone)} · ${payload.seconds}s · ${buildSceneCount(Number(payload.seconds))} scenes`;
-
-    upsertRecent({
-      id,
-      title: payload.line,
-      metaLine,
-      payload,
-      plan: latestPlan,
-      ts: Date.now()
-    });
-
-    setStatus("저장됨");
-    setTimeout(()=>setStatus("완료"), 900);
-  }
-
-  // Buttons
-  $("make").addEventListener("click", run);
-  $("share").addEventListener("click", makeShareLink);
-  $("save").addEventListener("click", saveCurrent);
-  $("clearRecent").addEventListener("click", clearRecent);
-
-  $("reset").addEventListener("click", () => {
-    $("line").value = "";
-    $("hero").value = "";
-    $("setting").value = "";
-    $("out").innerHTML = "";
-    $("outCard").style.display = "none";
-    latestPlan = null;
-    setStatus("대기중");
-    history.replaceState(null, "", location.pathname);
-
+    const data = { ts: Date.now(), payload, plan: latestPlan };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    setBadge("저장됨", "ok");
+    setTimeout(()=>setBadge("완료", "ok"), 900);
   });
 
-  $("copyAll").addEventListener("click", () => {
-    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+  // Shortcut
+  $("line").addEventListener("keydown", (e) => {
+    if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
+      runV4();
+    }
+  });
+
+  // Modal
+  $("closeModal").addEventListener("click", closeModal);
+  $("resetQuota").addEventListener("click", () => {
+    setQuota({day: todayKey(), used: 0});
+    closeModal();
+  });
+
+  // init
+  setQueryFromInput();
+  renderQuota();
+  setBadge("대기중", "");
+  setProgress(0, "0/4 단계");
+
+  // autorun
+  const params = new URLSearchParams(location.search);
+  if(params.get("q") && params.get("autorun") === "1"){
+    setTimeout(runV4, 250);
+  }
+</script>
+</body>
+</html>
