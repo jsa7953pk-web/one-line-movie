@@ -8,7 +8,6 @@
     :root{
       --bg:#0b0b0c;
       --card:#131316;
-      --card2:#0f0f12;
       --text:#f4f4f5;
       --muted:#b2b2bb;
       --line:#23232a;
@@ -31,14 +30,12 @@
       display:flex;
       justify-content:center;
     }
-    .wrap{width:100%; max-width:980px}
+    .wrap{width:100%; max-width:1080px}
     .top{
       display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
       margin-bottom:14px;
     }
-    .brand{
-      display:flex; flex-direction:column; gap:6px;
-    }
+    .brand{display:flex; flex-direction:column; gap:6px}
     .brand h1{margin:0; font-size:26px; letter-spacing:-.2px}
     .brand p{margin:0; color:var(--muted); font-size:14px; line-height:1.4}
     .pill{
@@ -53,10 +50,11 @@
     }
     .grid{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
+      grid-template-columns: 1.05fr .95fr;
       gap:14px;
+      align-items:start;
     }
-    @media (max-width: 900px){
+    @media (max-width: 980px){
       .grid{grid-template-columns:1fr}
     }
     .card{
@@ -77,7 +75,7 @@
     .cardBody{padding:14px}
     textarea{
       width:100%;
-      min-height:120px;
+      min-height:118px;
       border-radius:14px;
       border:1px solid var(--line);
       background: #0f0f12;
@@ -89,13 +87,8 @@
       line-height:1.5;
     }
     textarea::placeholder{color:#7b7b86}
-    .row{
-      display:flex; gap:10px; flex-wrap:wrap;
-    }
-    .control{
-      flex: 1 1 160px;
-      min-width: 150px;
-    }
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .control{flex: 1 1 160px; min-width: 150px}
     select, input[type="text"]{
       width:100%;
       height:44px;
@@ -131,6 +124,7 @@
       background: rgba(255,255,255,.03);
       padding:6px 10px;
       border-radius:999px;
+      white-space:nowrap;
     }
     .outTop{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -138,10 +132,7 @@
       border-bottom:1px solid var(--line);
       background: rgba(255,255,255,.02);
     }
-    .outTop .title{
-      display:flex; flex-direction:column; gap:4px;
-      min-width:0;
-    }
+    .outTop .title{display:flex; flex-direction:column; gap:4px; min-width:0}
     .outTop .title b{font-size:14px}
     .outTop .title span{font-size:12px; color:var(--muted)}
     .outActions{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
@@ -159,6 +150,11 @@
       background: rgba(34,197,94,.14);
       border:1px solid rgba(34,197,94,.25);
       color:#bbf7d0;
+    }
+    .mini.danger2{
+      background: rgba(239,68,68,.12);
+      border:1px solid rgba(239,68,68,.25);
+      color:#fecaca;
     }
     .out{
       padding:14px;
@@ -188,6 +184,7 @@
       border-radius:12px;
       padding:10px;
       color: var(--text);
+      overflow-wrap:anywhere;
     }
     .footerNote{
       margin-top:12px;
@@ -196,6 +193,64 @@
       text-align:center;
       opacity:.85;
     }
+
+    /* Recent projects */
+    .recent{
+      margin-top:14px;
+      border-top:1px solid var(--line);
+      padding-top:12px;
+    }
+    .recentHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:10px;
+    }
+    .recentList{display:grid; gap:8px}
+    .recentItem{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      border-radius:12px;
+      padding:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .recentItem .meta{
+      display:flex; flex-direction:column; gap:4px; min-width:0;
+    }
+    .recentItem .meta b{
+      font-size:13px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 520px;
+    }
+    .recentItem .meta span{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .recentBtns{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
+    .chip{
+      height:30px;
+      padding:0 10px;
+      border-radius:10px;
+      font-size:12px;
+      font-weight:800;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border:1px solid var(--line);
+      cursor:pointer;
+    }
+    .chip.primary{
+      background: rgba(34,197,94,.14);
+      border:1px solid rgba(34,197,94,.25);
+      color:#bbf7d0;
+    }
+    .chip.danger{
+      background: rgba(239,68,68,.12);
+      border:1px solid rgba(239,68,68,.25);
+      color:#fecaca;
+    }
   </style>
 </head>
 <body>
@@ -203,9 +258,9 @@
     <div class="top">
       <div class="brand">
         <h1>🎬 원라인 무비</h1>
-        <p>한 줄만 입력하면 “이미지 9장 + 영상 프롬프트”까지 바로 제작 가능한 영화 설계를 뽑아줍니다.</p>
+        <p>한 줄만 입력하면 “이미지 + 영상 + 자막(SRT) + ZIP”까지 바로 제작 가능한 영화 설계를 뽑아줍니다.</p>
       </div>
-      <div class="pill">✅ GitHub Pages 배포형 · 모바일 최적화</div>
+      <div class="pill">✅ GitHub Pages 배포형 · 서버 없이 최고버전(v3)</div>
     </div>
 
     <div class="grid">
@@ -227,6 +282,7 @@
                 <option value="horror">공포</option>
                 <option value="action">액션</option>
                 <option value="drama">드라마</option>
+                <option value="romance">로맨스</option>
                 <option value="fantasy">판타지</option>
                 <option value="sf">SF</option>
                 <option value="comedy">코미디</option>
@@ -266,11 +322,27 @@
           <div class="btnRow">
             <button class="primary" id="make">⚡ 영화 만들어줘</button>
             <button class="ghost" id="share">🔗 공유 링크</button>
+            <button class="ghost" id="save">💾 저장</button>
             <button class="danger" id="reset">🧹 초기화</button>
           </div>
 
           <div class="hint">
-            Tip: <b>Ctrl+Enter / Cmd+Enter</b> 로도 실행 가능 · 결과에서 <b>Copy All</b> 눌러 제작툴에 바로 붙여넣기
+            Tip: <b>Ctrl+Enter / Cmd+Enter</b> 로 실행 · 결과에서 <b>ZIP</b> 받으면 (JSON/SRT/TXT) 한 번에 정리됨
+          </div>
+
+          <!-- RECENT -->
+          <div class="recent">
+            <div class="recentHead">
+              <b style="font-size:13px">최근 프로젝트(최대 20개)</b>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span class="badge" id="recentCount">0개</span>
+                <button class="mini danger2" id="clearRecent" title="최근 목록 전체 삭제">전체삭제</button>
+              </div>
+            </div>
+            <div class="recentList" id="recentList"></div>
+            <div class="hint" style="margin-top:8px">
+              공유 링크는 <b>입력값 재현</b>용 / 저장은 <b>결과(설계)까지 보존</b>해줘.
+            </div>
           </div>
         </div>
       </div>
@@ -285,6 +357,8 @@
           <div class="outActions">
             <button class="mini primary2" id="copyAll">📋 Copy All</button>
             <button class="mini" id="downloadJson">⬇️ JSON</button>
+            <button class="mini" id="downloadSrt">🧾 SRT</button>
+            <button class="mini" id="downloadZip">🗂️ ZIP</button>
             <button class="mini" id="scrollTop">⬆️ 위로</button>
           </div>
         </div>
@@ -292,23 +366,25 @@
       </div>
     </div>
 
-    <div class="footerNote">© 원라인 무비 · “입력 → 설계 → 프롬프트” 제작 파이프라인</div>
+    <div class="footerNote">© 원라인 무비 v3 · 저장/ZIP/SRT/공유재현(서버 없이)</div>
   </div>
 
 <script>
-  // ---------- Utilities ----------
+  // =========================
+  // Utilities
+  // =========================
   const $ = (id) => document.getElementById(id);
+  const LS_KEY = "olm_projects_v3";
 
   function setStatus(text){
     $("status").textContent = text;
   }
-
   function safeTrim(v){ return (v || "").trim(); }
 
   function genreLabel(key){
     return {
       thriller:"스릴러", mystery:"미스터리", horror:"공포", action:"액션",
-      drama:"드라마", fantasy:"판타지", sf:"SF", comedy:"코미디"
+      drama:"드라마", romance:"로맨스", fantasy:"판타지", sf:"SF", comedy:"코미디"
     }[key] || key;
   }
   function toneLabel(key){
@@ -324,7 +400,7 @@
   }
 
   function beatsForGenre(genre){
-    // 장면 비트(구조)는 장르별로 살짝 바뀜
+    // 기본(미스터리/스릴러/드라마용)
     const base = [
       "오프닝 훅 — 주인공/상황을 한 컷에",
       "이상 징후 — 평범이 깨지는 순간",
@@ -338,6 +414,50 @@
     ];
 
     const map = {
+      thriller: [
+        "오프닝 훅 — 숨막히는 긴장 한 컷",
+        "추적 시작 — 누가 누구를 쫓나",
+        "위협 확대 — 점점 가까워진다",
+        "실수/노출 — 들켰다",
+        "룰/조건 — 도망칠 수 없는 이유",
+        "최대 위기 — 코앞에서 잡힘",
+        "미끼 — 판을 뒤집을 한 수",
+        "클라이맥스 — 도망/대치",
+        "엔딩 — 아직 끝나지 않음"
+      ],
+      mystery: [
+        "오프닝 훅 — 수상한 단서 한 컷",
+        "이상 징후 — 말이 안 되는 점",
+        "의심 — 용의자/장소 등장",
+        "첫 조사 — 단서 확대",
+        "규칙/퍼즐 — 숨겨진 연결고리",
+        "최대 위기 — 오해/함정",
+        "실마리 — 결정적 힌트",
+        "반전 — 진범/진실",
+        "엔딩 — 여운/다음 사건"
+      ],
+      drama: [
+        "오프닝 훅 — 감정이 담긴 한 컷",
+        "갈등 — 관계의 균열",
+        "압박 — 선택을 강요받음",
+        "결심 — 한 발 내딛는다",
+        "대가 — 잃는 것/버리는 것",
+        "최대 위기 — 무너질 뻔함",
+        "회복 — 작은 손 내밀기",
+        "전환 — 마음이 바뀐다",
+        "엔딩 — 조용한 여운"
+      ],
+      romance: [
+        "오프닝 훅 — 눈 마주치는 순간",
+        "거리감 — 가까운데 멀다",
+        "오해/비밀 — 말 못하는 이유",
+        "작은 친절 — 마음이 흔들림",
+        "사건 — 관계가 깨질 위기",
+        "후회 — 놓칠 뻔한 순간",
+        "고백 직전 — 숨 멎는 침묵",
+        "한마디 — 감정 폭발",
+        "엔딩 — 짧은 약속/여운"
+      ],
       horror: [
         "오프닝 훅 — 불길한 평온",
         "금기/규칙 — 하면 안 되는 것",
@@ -371,8 +491,6 @@
         "클라이맥스 — 결전",
         "엔딩 — 다음 미션"
       ],
-
-      /* ✅ 추가됨: SF / 판타지 / 로맨스 */
       sf: [
         "오프닝 훅 — 미래 도시/우주에서 충격적 한 컷",
         "규칙 소개 — 세계의 기술/법칙이 보인다",
@@ -394,17 +512,6 @@
         "각성 — 진짜 능력/진짜 이름",
         "결전 — 한 컷으로 승부",
         "엔딩 — 다음 모험의 문"
-      ],
-      romance: [
-        "오프닝 훅 — 눈 마주치는 순간",
-        "거리감 — 가까운데 멀다",
-        "오해/비밀 — 말 못하는 이유",
-        "작은 친절 — 마음이 흔들림",
-        "사건 — 관계가 깨질 위기",
-        "후회 — 놓칠 뻔한 순간",
-        "고백 직전 — 숨 멎는 침묵",
-        "한마디 — 감정 폭발",
-        "엔딩 — 짧은 약속/여운"
       ]
     };
     return map[genre] || base;
@@ -421,13 +528,44 @@
     return map[tone] || map.serious;
   }
 
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;");
+  }
+
+  function pad2(n){ return String(n).padStart(2,"0"); }
+  function srtTime(seconds){
+    const ms = Math.max(0, Math.floor(seconds * 1000));
+    const h = Math.floor(ms / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    const milli = ms % 1000;
+    return `${pad2(h)}:${pad2(m)}:${pad2(s)},${String(milli).padStart(3,"0")}`;
+  }
+
+  function stableIdFromPayload(p){
+    // 간단한 안정 ID(공유재현/저장용): payload 문자열을 해시
+    const str = JSON.stringify(p);
+    let h = 2166136261;
+    for(let i=0;i<str.length;i++){
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    // unsigned
+    return "p_" + (h >>> 0).toString(16);
+  }
+
+  // =========================
+  // Prompt Builder
+  // =========================
   function makePrompts({line, genre, tone, seconds, hero, setting, idx, beat}){
     const style = cinematicStyle(tone);
     const location = setting ? setting : "도시의 밤, 비에 젖은 골목";
     const protagonist = hero ? hero : "말을 하지 않는 강아지 탐정";
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
 
-    // 공통 제한(자막 방지)
     const noText = "no subtitles, no captions, no text, no watermark, no logo";
 
     const imagePrompt =
@@ -467,6 +605,7 @@ Make it feel like a real movie shot. ${noText}`;
     const n = buildSceneCount(total);
     const beats = beatsForGenre(genre);
 
+    // 시간 분배: 균등 + 마지막 2개는 약간 길게
     const base = Math.floor(total / n);
     const times = [];
     let t = 0;
@@ -475,18 +614,24 @@ Make it feel like a real movie shot. ${noText}`;
       const dur = base + extra;
       const from = t;
       const to = Math.min(total, t + dur);
-      times.push([from, to]);
+      times.push({start: from, end: to});
       t = to;
+    }
+    // 혹시 마지막이 total보다 작으면 보정
+    if(times.length){
+      times[times.length-1].end = total;
     }
 
     const scenes = [];
     for(let i=0;i<n;i++){
       const beat = beats[i] || beats[beats.length-1];
-      const [from, to] = times[i];
+      const {start, end} = times[i];
       const prompts = makePrompts({line, genre, tone, seconds: total, hero, setting, idx:i, beat});
       scenes.push({
         index: i+1,
-        time: `${from}–${to}s`,
+        start,
+        end,
+        time: `${start}–${end}s`,
         beat,
         subtitle: prompts.subtitle,
         image_prompt: prompts.imagePrompt,
@@ -494,7 +639,8 @@ Make it feel like a real movie shot. ${noText}`;
       });
     }
 
-    return {
+    // 공유재현을 위해 created_at은 결과에 넣되, 생성 내용 자체는 deterministic
+    const plan = {
       title: line,
       meta: {
         genre: genreLabel(genre),
@@ -502,13 +648,17 @@ Make it feel like a real movie shot. ${noText}`;
         length_seconds: total,
         scene_count: n,
         hero: hero || null,
-        setting: setting || null,
-        created_at: new Date().toISOString()
+        setting: setting || null
       },
+      payload: {...payload},
       scenes
     };
+    return plan;
   }
 
+  // =========================
+  // Render
+  // =========================
   function renderPlan(plan){
     $("outCard").style.display = "block";
     $("outTitle").textContent = `🎬 원라인: ${plan.title}`;
@@ -524,12 +674,12 @@ Make it feel like a real movie shot. ${noText}`;
         <div class="sceneHead">
           <div class="left">
             <b>SCENE ${s.index} <span style="color:#7ee7a6">(${s.time})</span></b>
-            <span>${s.beat}</span>
+            <span>${escapeHtml(s.beat)}</span>
           </div>
           <span class="badge">자막</span>
         </div>
 
-        <div class="box">${s.subtitle}</div>
+        <div class="box">${escapeHtml(s.subtitle)}</div>
 
         <div class="k">🖼 이미지 프롬프트 (나노바나나용)</div>
         <div class="box">${escapeHtml(s.image_prompt)}</div>
@@ -539,13 +689,6 @@ Make it feel like a real movie shot. ${noText}`;
       `;
       out.appendChild(el);
     });
-  }
-
-  function escapeHtml(str){
-    return String(str)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;");
   }
 
   function planToText(plan){
@@ -559,6 +702,20 @@ Make it feel like a real movie shot. ${noText}`;
       txt += "----------------------------------------\n\n";
     });
     return txt;
+  }
+
+  function planToSrt(plan){
+    // 1장면=1큐, start/end 기반
+    let srt = "";
+    for(const s of plan.scenes){
+      const start = srtTime(s.start);
+      // end가 start와 같아지는 경우 방지
+      const endSec = Math.max(s.end, s.start + 0.2);
+      const end = srtTime(endSec);
+      const text = String(s.subtitle || "").replace(/\r?\n/g, " ").trim();
+      srt += `${s.index}\n${start} --> ${end}\n${text}\n\n`;
+    }
+    return srt.trim() + "\n";
   }
 
   async function copyText(text){
@@ -588,11 +745,12 @@ Make it feel like a real movie shot. ${noText}`;
     URL.revokeObjectURL(url);
   }
 
+  // =========================
+  // Share link (input reproduction)
+  // =========================
   function setQueryFromInput(){
     const params = new URLSearchParams(location.search);
-    if(params.get("q")){
-      $("line").value = params.get("q");
-    }
+    if(params.get("q")) $("line").value = params.get("q");
     if(params.get("g")) $("genre").value = params.get("g");
     if(params.get("t")) $("tone").value = params.get("t");
     if(params.get("l")) $("length").value = params.get("l");
@@ -610,38 +768,309 @@ Make it feel like a real movie shot. ${noText}`;
     params.set("l", $("length").value);
     const h = safeTrim($("hero").value); if(h) params.set("h", h);
     const s = safeTrim($("setting").value); if(s) params.set("s", s);
+    params.set("run", "1"); // 공유로 들어오면 자동 실행
 
     const link = `${location.origin}${location.pathname}?${params.toString()}`;
     copyText(link);
-    alert("공유 링크를 복사했어!");
+    alert("공유 링크를 복사했어! (열면 자동 실행)");
   }
 
+  // =========================
+  // Local Save / Load (Recent 20)
+  // =========================
+  function readRecent(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){
+      return [];
+    }
+  }
+  function writeRecent(list){
+    localStorage.setItem(LS_KEY, JSON.stringify(list));
+  }
+  function upsertRecent(item){
+    const list = readRecent();
+    const idx = list.findIndex(x => x.id === item.id);
+    if(idx >= 0) list.splice(idx, 1);
+    list.unshift(item);
+    const trimmed = list.slice(0, 20);
+    writeRecent(trimmed);
+    renderRecent();
+  }
+  function removeRecent(id){
+    const list = readRecent().filter(x => x.id !== id);
+    writeRecent(list);
+    renderRecent();
+  }
+  function clearRecent(){
+    if(!confirm("최근 프로젝트를 전부 삭제할까?")) return;
+    localStorage.removeItem(LS_KEY);
+    renderRecent();
+  }
+  function fmtTs(ts){
+    const d = new Date(ts);
+    const mm = pad2(d.getMonth()+1);
+    const dd = pad2(d.getDate());
+    const hh = pad2(d.getHours());
+    const mi = pad2(d.getMinutes());
+    return `${mm}/${dd} ${hh}:${mi}`;
+  }
+
+  function renderRecent(){
+    const list = readRecent();
+    $("recentCount").textContent = `${list.length}개`;
+    const root = $("recentList");
+    root.innerHTML = "";
+    if(list.length === 0){
+      const empty = document.createElement("div");
+      empty.className = "hint";
+      empty.textContent = "아직 저장된 프로젝트가 없어. 만들고 ‘저장’ 눌러줘!";
+      root.appendChild(empty);
+      return;
+    }
+
+    list.forEach(item => {
+      const el = document.createElement("div");
+      el.className = "recentItem";
+      el.innerHTML = `
+        <div class="meta">
+          <b>${escapeHtml(item.title || "(제목 없음)")}</b>
+          <span>${escapeHtml(item.metaLine || "")} · ${fmtTs(item.ts)}</span>
+        </div>
+        <div class="recentBtns">
+          <button class="chip primary" data-act="load" data-id="${item.id}">불러오기</button>
+          <button class="chip" data-act="run" data-id="${item.id}">바로실행</button>
+          <button class="chip danger" data-act="del" data-id="${item.id}">삭제</button>
+        </div>
+      `;
+      root.appendChild(el);
+    });
+
+    root.querySelectorAll("button[data-act]").forEach(btn=>{
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        const act = btn.getAttribute("data-act");
+        const item = readRecent().find(x => x.id === id);
+        if(!item) return;
+
+        if(act === "del"){
+          removeRecent(id);
+          return;
+        }
+        if(act === "load"){
+          // 입력만 채우고 끝
+          const p = item.payload;
+          $("line").value = p.line || "";
+          $("genre").value = p.genre || "mystery";
+          $("tone").value = p.tone || "serious";
+          $("length").value = String(p.seconds || "60");
+          $("hero").value = p.hero || "";
+          $("setting").value = p.setting || "";
+          setStatus("불러옴");
+          window.scrollTo({top:0, behavior:"smooth"});
+          return;
+        }
+        if(act === "run"){
+          // plan까지 렌더(저장된 plan 사용)
+          if(item.plan){
+            latestPlan = item.plan;
+            renderPlan(latestPlan);
+            setStatus("완료");
+            setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
+          }else{
+            // fallback: payload로 생성
+            const p = item.payload;
+            latestPlan = buildPlan(p);
+            renderPlan(latestPlan);
+            setStatus("완료");
+            setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
+          }
+        }
+      });
+    });
+  }
+
+  // =========================
+  // ZIP (no external libs)
+  // - STORE method, CRC32 included
+  // =========================
+  const CRC_TABLE = (() => {
+    const table = new Uint32Array(256);
+    for(let i=0;i<256;i++){
+      let c = i;
+      for(let k=0;k<8;k++){
+        c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      }
+      table[i] = c >>> 0;
+    }
+    return table;
+  })();
+
+  function crc32(u8){
+    let c = 0xFFFFFFFF;
+    for(let i=0;i<u8.length;i++){
+      c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+    }
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function u32le(n){
+    return new Uint8Array([n & 255, (n>>>8)&255, (n>>>16)&255, (n>>>24)&255]);
+  }
+  function u16le(n){
+    return new Uint8Array([n & 255, (n>>>8)&255]);
+  }
+  function strToU8(str){
+    return new TextEncoder().encode(str);
+  }
+  function concatU8(chunks){
+    let len = 0;
+    for(const c of chunks) len += c.length;
+    const out = new Uint8Array(len);
+    let o = 0;
+    for(const c of chunks){
+      out.set(c, o);
+      o += c.length;
+    }
+    return out;
+  }
+
+  function makeZip(files){
+    // files: [{name, dataU8}]
+    // ZIP spec: local headers + data + central dir + end
+    const localParts = [];
+    const centralParts = [];
+    let offset = 0;
+
+    for(const f of files){
+      const nameU8 = strToU8(f.name);
+      const dataU8 = f.dataU8;
+      const crc = crc32(dataU8);
+      const compSize = dataU8.length;
+      const uncompSize = dataU8.length;
+
+      // Local file header
+      const localHeader = concatU8([
+        u32le(0x04034b50),     // signature
+        u16le(20),             // version needed
+        u16le(0),              // flags
+        u16le(0),              // compression 0=store
+        u16le(0),              // mod time
+        u16le(0),              // mod date
+        u32le(crc),
+        u32le(compSize),
+        u32le(uncompSize),
+        u16le(nameU8.length),
+        u16le(0),              // extra len
+        nameU8
+      ]);
+
+      localParts.push(localHeader);
+      localParts.push(dataU8);
+
+      // Central directory header
+      const centralHeader = concatU8([
+        u32le(0x02014b50),     // signature
+        u16le(20),             // version made by
+        u16le(20),             // version needed
+        u16le(0),              // flags
+        u16le(0),              // compression
+        u16le(0),              // mod time
+        u16le(0),              // mod date
+        u32le(crc),
+        u32le(compSize),
+        u32le(uncompSize),
+        u16le(nameU8.length),
+        u16le(0),              // extra
+        u16le(0),              // comment
+        u16le(0),              // disk start
+        u16le(0),              // internal attrs
+        u32le(0),              // external attrs
+        u32le(offset),         // local header offset
+        nameU8
+      ]);
+
+      centralParts.push(centralHeader);
+
+      offset += localHeader.length + dataU8.length;
+    }
+
+    const centralDir = concatU8(centralParts);
+    const localData = concatU8(localParts);
+
+    const end = concatU8([
+      u32le(0x06054b50),            // end signature
+      u16le(0), u16le(0),           // disk numbers
+      u16le(files.length),          // entries on disk
+      u16le(files.length),          // total entries
+      u32le(centralDir.length),     // central size
+      u32le(localData.length),      // central offset
+      u16le(0)                      // comment length
+    ]);
+
+    return concatU8([localData, centralDir, end]);
+  }
+
+  // =========================
+  // Main
+  // =========================
   let latestPlan = null;
 
-  function run(){
-    const line = safeTrim($("line").value);
-    if(!line){ alert("한 줄 써줘!"); return; }
-
-    setStatus("생성중…");
-
-    const payload = {
-      line,
+  function getPayloadFromInputs(){
+    return {
+      line: safeTrim($("line").value),
       genre: $("genre").value,
       tone: $("tone").value,
       seconds: $("length").value,
       hero: safeTrim($("hero").value),
       setting: safeTrim($("setting").value)
     };
+  }
 
+  function run(){
+    const payload = getPayloadFromInputs();
+    if(!payload.line){ alert("한 줄 써줘!"); return; }
+
+    setStatus("생성중…");
     latestPlan = buildPlan(payload);
     renderPlan(latestPlan);
-
     setStatus("완료");
+
     setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
   }
 
+  function saveCurrent(){
+    // latestPlan이 없으면 먼저 생성
+    const payload = getPayloadFromInputs();
+    if(!payload.line){ alert("한 줄 써줘!"); return; }
+    if(!latestPlan){
+      latestPlan = buildPlan(payload);
+      renderPlan(latestPlan);
+    }
+
+    const id = stableIdFromPayload(payload);
+    const metaLine = `${genreLabel(payload.genre)} · ${toneLabel(payload.tone)} · ${payload.seconds}s · ${buildSceneCount(Number(payload.seconds))} scenes`;
+
+    upsertRecent({
+      id,
+      title: payload.line,
+      metaLine,
+      payload,
+      plan: latestPlan,
+      ts: Date.now()
+    });
+
+    setStatus("저장됨");
+    setTimeout(()=>setStatus("완료"), 900);
+  }
+
+  // Buttons
   $("make").addEventListener("click", run);
   $("share").addEventListener("click", makeShareLink);
+  $("save").addEventListener("click", saveCurrent);
+  $("clearRecent").addEventListener("click", clearRecent);
 
   $("reset").addEventListener("click", () => {
     $("line").value = "";
@@ -661,7 +1090,37 @@ Make it feel like a real movie shot. ${noText}`;
 
   $("downloadJson").addEventListener("click", () => {
     if(!latestPlan){ alert("먼저 생성해줘!"); return; }
-    download("one-line-movie.json", JSON.stringify(latestPlan, null, 2), "application/json");
+    const payloadId = stableIdFromPayload(latestPlan.payload || getPayloadFromInputs());
+    download(`one-line-movie_${payloadId}.json`, JSON.stringify(latestPlan, null, 2), "application/json");
+  });
+
+  $("downloadSrt").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    const payloadId = stableIdFromPayload(latestPlan.payload || getPayloadFromInputs());
+    download(`one-line-movie_${payloadId}.srt`, planToSrt(latestPlan), "text/plain;charset=utf-8");
+  });
+
+  $("downloadZip").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    const payloadId = stableIdFromPayload(latestPlan.payload || getPayloadFromInputs());
+
+    const jsonStr = JSON.stringify(latestPlan, null, 2);
+    const srtStr = planToSrt(latestPlan);
+    const txtStr = planToText(latestPlan);
+
+    const zipU8 = makeZip([
+      { name: `one-line-movie_${payloadId}.json`, dataU8: strToU8(jsonStr) },
+      { name: `one-line-movie_${payloadId}.srt`,  dataU8: strToU8(srtStr)  },
+      { name: `one-line-movie_${payloadId}.txt`,  dataU8: strToU8(txtStr)  }
+    ]);
+
+    const blob = new Blob([zipU8], {type:"application/zip"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `one-line-movie_${payloadId}.zip`;
+    a.click();
+    URL.revokeObjectURL(url);
   });
 
   $("scrollTop").addEventListener("click", () => {
@@ -674,10 +1133,17 @@ Make it feel like a real movie shot. ${noText}`;
     }
   });
 
+  // init
   setQueryFromInput();
+  renderRecent();
+
+  // 쿼리로 들어왔으면 자동 실행 (run=1 또는 q 존재)
   const params = new URLSearchParams(location.search);
-  if(params.get("q")){
+  if(params.get("q") && (params.get("run") === "1" || params.get("autorun") === "1")){
     setTimeout(run, 120);
+  } else if(params.get("q") && params.get("run") === null){
+    // q만 있어도 자동 실행 원하면 아래 주석 해제
+    // setTimeout(run, 120);
   }
 </script>
 </body>
