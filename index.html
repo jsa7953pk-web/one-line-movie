@@ -39,7 +39,7 @@
       font-size: 28px;
       font-weight: 900;
       text-align: center;
-      margin: 8px 0 18px;
+      margin: 18px 0 22px;
       letter-spacing: -0.03em;
       color: #f4f4f5;
     }
@@ -307,14 +307,16 @@
 <body>
   <div class="wrap">
 
-    <div class="hero-line">한 줄을 쓰면, 그 순간 영화가 된다.</div>
+    <div class="hero-line">
+      한 줄을 쓰면, 그 순간 영화가 된다.
+    </div>
 
     <div class="top">
       <div class="brand">
         <h1>🎬 원라인 무비 <span style="opacity:.7">V4</span></h1>
         <p>한 줄 입력 → 설계(프롬프트/SRT/ZIP) + <b>샘플 영상 자동 생성</b>까지. (나중에 VEO3 자동 연결 준비)</p>
       </div>
-      <div class="pill">✅ GitHub Pages · 서버 없이 V4(자동진행/무료제한/영상샘플)</div>
+      <div class="pill" id="pillText">✅ GitHub Pages · 서버 없이 V4(자동진행/무료제한/영상샘플)</div>
     </div>
 
     <div class="grid">
@@ -419,7 +421,7 @@
               <span class="badge warn" id="videoNote">WebM (브라우저 생성)</span>
             </div>
             <video id="preview" controls playsinline></video>
-            <div class="hint">
+            <div class="hint" id="videoHint">
               ※ 이 샘플은 “자동 영상 생성 UX”를 보여주기 위한 데모야.<br/>
               실제 VEO3/나노바나나 자동 호출은 서버(API 키) 붙이면 그대로 연결 가능.
             </div>
@@ -430,7 +432,7 @@
       </div>
     </div>
 
-    <div class="footerNote">© 원라인 무비 V4 · 설계/ZIP/SRT + 샘플영상(서버 없이) · 다음 단계: 서버+자동영상(API)</div>
+    <div class="footerNote" id="footerText">© 원라인 무비 V4 · 설계/ZIP/SRT + 샘플영상(서버 없이) · 다음 단계: 서버+자동영상(API)</div>
   </div>
 
   <!-- Paywall modal -->
@@ -458,6 +460,33 @@
   const MODE = "mock"; // "mock" or "api"
   const API_URL = "https://YOUR_SERVER_DOMAIN/api/generate"; // 나중에 서버 붙이면 사용
   const DAILY_FREE_LIMIT = 3; // 오늘 무료 횟수
+
+  // =========================
+  // DEV Mode (개발자 무제한 스위치)
+  // - URL: ?dev=1  => 무제한 ON
+  // - URL: ?dev=0  => 무제한 OFF
+  // - localStorage로도 유지
+  // =========================
+  const DEV_KEY = "olm_v4_dev";
+  const DEV_DEFAULT = false; // 배포 기본값(개발중이면 true로)
+  function getDevMode(){
+    const params = new URLSearchParams(location.search);
+    if(params.has("dev")){
+      const v = params.get("dev");
+      if(v === "1" || v === "true") return true;
+      if(v === "0" || v === "false") return false;
+    }
+    try{
+      const raw = localStorage.getItem(DEV_KEY);
+      if(raw === "1") return true;
+      if(raw === "0") return false;
+    }catch(e){}
+    return DEV_DEFAULT;
+  }
+  function setDevMode(on){
+    try{ localStorage.setItem(DEV_KEY, on ? "1" : "0"); }catch(e){}
+  }
+  const DEV_MODE = getDevMode();
 
   // =========================
   // Utilities
@@ -604,12 +633,19 @@
   }
 
   function renderQuota(){
+    if(DEV_MODE){
+      $("quotaText").textContent = `오늘 무료: ∞ (DEV)`;
+      return;
+    }
     const q = getQuota();
     const left = Math.max(0, DAILY_FREE_LIMIT - q.used);
     $("quotaText").textContent = `오늘 무료: ${left}/${DAILY_FREE_LIMIT}`;
   }
 
   function consumeQuotaOrBlock(){
+    // ✅ 개발자는 무제한(페이월/횟수 차단 없음)
+    if(DEV_MODE) return true;
+
     const q = getQuota();
     if(q.used >= DAILY_FREE_LIMIT){
       openModal();
@@ -921,6 +957,9 @@ Make it feel like a real movie shot. ${noText}`;
     const s = safeTrim($("setting").value); if(s) params.set("s", s);
     params.set("autorun", "1");
 
+    // ✅ 개발자 모드면 공유 링크에도 dev=1 유지(원하면 빼도 됨)
+    if(DEV_MODE) params.set("dev", "1");
+
     const link = `${location.origin}${location.pathname}?${params.toString()}`;
     copyText(link);
     alert("공유 링크를 복사했어! (열면 자동 실행)");
@@ -928,10 +967,29 @@ Make it feel like a real movie shot. ${noText}`;
 
   // =========================
   // Mock video generator (Canvas -> WebM)
+  // - 모바일/브라우저마다 codec 지원이 달라서 자동 선택
   // =========================
   function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
+  function pickSupportedMime(){
+    if(!("MediaRecorder" in window)) return null;
+    const candidates = [
+      "video/webm;codecs=vp9",
+      "video/webm;codecs=vp8",
+      "video/webm"
+    ];
+    for(const m of candidates){
+      try{
+        if(MediaRecorder.isTypeSupported(m)) return m;
+      }catch(e){}
+    }
+    return null;
+  }
+
   async function generateMockVideoWebM({title, seconds=6}){
+    const mime = pickSupportedMime();
+    if(!mime) throw new Error("MediaRecorder not supported or no webm codec");
+
     const dur = clamp(Number(seconds || 6), 3, 8);
 
     const canvas = document.createElement("canvas");
@@ -941,28 +999,10 @@ Make it feel like a real movie shot. ${noText}`;
 
     const stream = canvas.captureStream(30);
     const chunks = [];
-
-    // ✅ GitHub Pages / 모바일 브라우저 호환성을 위해 mimeType fallback
-    let rec;
-    const prefer = [
-      "video/webm;codecs=vp9",
-      "video/webm;codecs=vp8",
-      "video/webm"
-    ];
-    let chosen = "";
-    for(const mt of prefer){
-      if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(mt)){
-        chosen = mt; break;
-      }
-    }
-    try{
-      rec = new MediaRecorder(stream, chosen ? { mimeType: chosen } : undefined);
-    }catch(e){
-      // 최후 fallback: 옵션 없이 시도
-      rec = new MediaRecorder(stream);
-    }
+    const rec = new MediaRecorder(stream, { mimeType: mime });
 
     rec.ondataavailable = (e) => { if(e.data && e.data.size) chunks.push(e.data); };
+
     rec.start(200);
 
     const start = performance.now();
@@ -990,7 +1030,7 @@ Make it feel like a real movie shot. ${noText}`;
 
       ctx.fillStyle = "rgba(244,244,245,0.86)";
       ctx.font = "700 44px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, sans-serif";
-      const lines = wrapText(ctx, title || "샘플 영상", canvas.width - 104);
+      const lines = wrapText(ctx, title || "샘플 영상", 52, 0, canvas.width - 104);
       let y = 280;
       for(const ln of lines.slice(0,4)){
         ctx.fillText(ln, 52, y);
@@ -1009,11 +1049,10 @@ Make it feel like a real movie shot. ${noText}`;
       rec.stop();
     });
 
-    const type = (chosen && chosen.startsWith("video/webm")) ? "video/webm" : (chunks[0]?.type || "video/webm");
-    return new Blob(chunks, { type });
+    return { blob: new Blob(chunks, { type: mime.split(";")[0] || "video/webm" }), mime };
   }
 
-  function wrapText(ctx, text, maxWidth){
+  function wrapText(ctx, text, x, y, maxWidth){
     const words = String(text).split(/\s+/);
     const lines = [];
     let line = "";
@@ -1028,7 +1067,6 @@ Make it feel like a real movie shot. ${noText}`;
     }
     if(line) lines.push(line);
 
-    // 한국어(공백 적음) 대비 강제 분할
     if(lines.length === 1 && ctx.measureText(lines[0]).width > maxWidth){
       const s = lines[0];
       lines.length = 0;
@@ -1063,6 +1101,7 @@ Make it feel like a real movie shot. ${noText}`;
   // =========================
   let latestPlan = null;
   let latestVideoBlob = null;
+  let latestVideoMime = null;
 
   function getPayloadFromInputs(){
     return {
@@ -1079,47 +1118,61 @@ Make it feel like a real movie shot. ${noText}`;
     const payload = getPayloadFromInputs();
     if(!payload.line){ alert("한 줄 써줘!"); return; }
 
-    // quota check
+    // quota check (DEV면 무제한)
     if(!consumeQuotaOrBlock()) return;
 
-    // UI lock
     $("make").disabled = true;
     $("downloadVideo").disabled = true;
     latestVideoBlob = null;
+    latestVideoMime = null;
     $("videoCard").style.display = "none";
     $("preview").src = "";
+    $("videoNote").textContent = "WebM (브라우저 생성)";
+    $("videoHint").style.display = "block";
 
     try{
       setBadge("생성중…", "warn");
       setProgress(5, "1/4 입력 분석");
+      await sleep(240);
 
-      await sleep(220);
       setProgress(28, "2/4 설계 생성");
-
-      // plan
       latestPlan = buildPlan(payload);
       renderPlan(latestPlan);
+      await sleep(240);
 
-      await sleep(220);
       setProgress(55, "3/4 샘플 영상 생성");
 
       if(MODE === "api"){
-        // 미래: 서버에서 영상/파일까지 받아오도록 확장 가능
+        // 미래: 서버 연결
         // const apiResult = await generateViaApi(payload);
-        // ...
       }
 
-      // 샘플 영상 생성(브라우저 webm) - 데모는 6초
-      latestVideoBlob = await generateMockVideoWebM({ title: payload.line, seconds: 6 });
+      // 샘플 영상 생성(브라우저 webm) — 지원 안 되면 안내
+      try{
+        const r = await generateMockVideoWebM({ title: payload.line, seconds: 6 });
+        latestVideoBlob = r.blob;
+        latestVideoMime = r.mime;
 
-      const url = URL.createObjectURL(latestVideoBlob);
-      $("preview").src = url;
-      $("videoCard").style.display = "grid";
-      $("downloadVideo").disabled = false;
+        const url = URL.createObjectURL(latestVideoBlob);
+        $("preview").src = url;
+        $("videoCard").style.display = "grid";
+        $("downloadVideo").disabled = false;
+
+        $("videoNote").textContent = latestVideoMime || "WebM";
+      }catch(e){
+        // 영상 생성 불가(브라우저 지원 문제)
+        $("videoCard").style.display = "grid";
+        $("preview").removeAttribute("src");
+        $("preview").load();
+        $("downloadVideo").disabled = true;
+        $("videoNote").textContent = "이 브라우저는 샘플영상 미지원";
+        $("videoHint").innerHTML =
+          "※ 현재 브라우저에서 <b>MediaRecorder(WebM)</b>가 지원되지 않아 샘플 영상을 만들 수 없어.<br/>" +
+          "대신 <b>설계/프롬프트/SRT/ZIP</b>은 정상 생성돼. (크롬/엣지에서 테스트 추천)";
+      }
 
       setProgress(100, "4/4 완료");
       setBadge("완료", "ok");
-
       setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 120);
     }catch(e){
       console.error(e);
@@ -1146,6 +1199,7 @@ Make it feel like a real movie shot. ${noText}`;
     $("preview").src = "";
     latestPlan = null;
     latestVideoBlob = null;
+    latestVideoMime = null;
     setBadge("대기중", "");
     setProgress(0, "0/4 단계");
     history.replaceState(null, "", location.pathname);
@@ -1192,7 +1246,7 @@ Make it feel like a real movie shot. ${noText}`;
   });
 
   $("downloadVideo").addEventListener("click", () => {
-    if(!latestVideoBlob){ alert("샘플 영상이 아직 없어!"); return; }
+    if(!latestVideoBlob){ alert("샘플 영상이 아직 없거나, 브라우저가 미지원이야!"); return; }
     const payload = latestPlan?.payload || getPayloadFromInputs();
     const payloadId = stableIdFromPayload(payload);
     const url = URL.createObjectURL(latestVideoBlob);
@@ -1203,7 +1257,7 @@ Make it feel like a real movie shot. ${noText}`;
     URL.revokeObjectURL(url);
   });
 
-  // Save (payload + plan)
+  // Save (간단 저장: payload + plan)
   const SAVE_KEY = "olm_v4_saved";
   $("save").addEventListener("click", () => {
     const payload = getPayloadFromInputs();
@@ -1212,7 +1266,11 @@ Make it feel like a real movie shot. ${noText}`;
       latestPlan = buildPlan(payload);
       renderPlan(latestPlan);
     }
-    const data = { ts: Date.now(), payload, plan: latestPlan };
+    const data = {
+      ts: Date.now(),
+      payload,
+      plan: latestPlan
+    };
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
     setBadge("저장됨", "ok");
     setTimeout(()=>setBadge("완료", "ok"), 900);
@@ -1237,6 +1295,12 @@ Make it feel like a real movie shot. ${noText}`;
   renderQuota();
   setBadge("대기중", "");
   setProgress(0, "0/4 단계");
+
+  // DEV 표시(살짝)
+  if(DEV_MODE){
+    $("pillText").textContent = "🛠 DEV MODE · 무제한 · 서버 없이 V4";
+    $("footerText").textContent = "© 원라인 무비 V4 · DEV MODE(무제한) · 설계/ZIP/SRT + 샘플영상";
+  }
 
   // autorun
   const params = new URLSearchParams(location.search);
