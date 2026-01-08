@@ -1,286 +1,102 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>원라인 무비 V4</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>원라인 무비 V4 - Free Engine</title>
   <style>
     :root{
-      --bg:#0b0b0c;
-      --card:#131316;
-      --text:#f4f4f5;
-      --muted:#b2b2bb;
-      --line:#23232a;
-      --accent:#16a34a;
-      --accent2:#22c55e;
-      --danger:#ef4444;
-      --warn:#f59e0b;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius:16px;
+      --bg:#0b0b0c; --card:#131316; --text:#f4f4f5; --muted:#b2b2bb; --line:#23232a;
+      --accent:#22c55e; --accent2:#16a34a; --danger:#ef4444; --warn:#f59e0b;
+      --shadow:0 10px 30px rgba(0,0,0,.35); --radius:16px;
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      margin:0; padding:22px; min-height:100vh;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
       background:
         radial-gradient(1200px 800px at 50% -200px, rgba(34,197,94,.18), transparent 60%),
         radial-gradient(900px 700px at 10% 10%, rgba(59,130,246,.10), transparent 55%),
         var(--bg);
       color:var(--text);
-      min-height:100vh;
-      padding:22px;
-      display:flex;
-      justify-content:center;
+      display:flex; justify-content:center;
     }
     .wrap{width:100%; max-width:1120px}
-
-    .hero-line{
-      font-size:28px;
-      font-weight:900;
-      text-align:center;
-      margin:10px 0 22px;
-      letter-spacing:-0.03em;
-      color:#f4f4f5;
-    }
-
-    .top{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
-      margin-bottom:14px;
-    }
-    .brand{display:flex; flex-direction:column; gap:6px}
-    .brand h1{margin:0; font-size:26px}
-    .brand p{margin:0; color:var(--muted); font-size:14px; line-height:1.4}
+    .hero-line{font-size:28px;font-weight:900;text-align:center;margin:10px 0 18px;letter-spacing:-0.03em}
+    .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    .brand{display:flex;flex-direction:column;gap:6px}
+    .brand h1{margin:0;font-size:26px}
+    .brand p{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
     .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;white-space:nowrap;
     }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap:14px;
-      align-items:start;
-    }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
-
+    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;align-items:start}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow);overflow:hidden;
     }
-    .cardHeader{
-      padding:14px 14px 0 14px;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
-    .cardHeader h2{
-      margin:0; font-size:14px; color:var(--muted); font-weight:750;
-      letter-spacing:.2px;
-    }
+    .cardHeader{padding:14px 14px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .cardHeader h2{margin:0;font-size:14px;color:var(--muted);font-weight:750;letter-spacing:.2px}
     .cardBody{padding:14px}
-
     textarea{
-      width:100%;
-      min-height:118px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background: #0f0f12;
-      color: var(--text);
-      padding:14px;
-      font-size:16px;
-      outline:none;
-      resize: none;
-      line-height:1.5;
+      width:100%;min-height:118px;border-radius:14px;border:1px solid var(--line);
+      background:#0f0f12;color:var(--text);padding:14px;font-size:16px;outline:none;resize:none;line-height:1.5;
     }
     textarea::placeholder{color:#7b7b86}
-
-    .row{display:flex; gap:10px; flex-wrap:wrap}
-    .control{flex: 1 1 160px; min-width: 150px}
-    select, input[type="text"]{
-      width:100%;
-      height:44px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#0f0f12;
-      color:var(--text);
-      padding:0 12px;
-      outline:none;
-      font-size:14px;
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .control{flex:1 1 160px;min-width:150px}
+    select,input[type="text"]{
+      width:100%;height:44px;border-radius:12px;border:1px solid var(--line);
+      background:#0f0f12;color:var(--text);padding:0 12px;outline:none;font-size:14px;
     }
-
-    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    .btnRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     button{
-      border:none;
-      border-radius:14px;
-      height:52px;
-      padding:0 16px;
-      font-size:16px;
-      font-weight:900;
-      cursor:pointer;
-      transition: transform .06s ease, opacity .15s ease;
-      display:inline-flex; align-items:center; justify-content:center; gap:10px;
-      user-select:none;
+      border:none;border-radius:14px;height:52px;padding:0 16px;font-size:16px;font-weight:900;cursor:pointer;
+      transition:transform .06s ease, opacity .15s ease;
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;user-select:none;
     }
-    button:active{transform: translateY(1px)}
-    .primary{background: linear-gradient(180deg, var(--accent2), var(--accent)); color:#07150b; flex: 1 1 220px;}
-    .ghost{background: rgba(255,255,255,.04); color:var(--text); border:1px solid var(--line); flex: 1 1 160px; height:46px; font-weight:800}
-    .danger{background: rgba(239,68,68,.12); color:#fecaca; border:1px solid rgba(239,68,68,.25); flex: 1 1 160px; height:46px; font-weight:800}
-    .hint{color:var(--muted); font-size:12px; line-height:1.5; margin-top:10px}
-    .badge{
-      font-size:12px; color:var(--muted);
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      padding:6px 10px;
-      border-radius:999px;
-      white-space:nowrap;
-    }
-
-    .outTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:12px 14px;
-      border-bottom:1px solid var(--line);
-      background: rgba(255,255,255,.02);
-    }
-    .outTop .title{display:flex; flex-direction:column; gap:4px; min-width:0}
+    button:active{transform:translateY(1px)}
+    .primary{background:linear-gradient(180deg,var(--accent),var(--accent2));color:#07150b;flex:1 1 240px}
+    .ghost{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line);flex:1 1 170px;height:46px;font-weight:800}
+    .danger{background:rgba(239,68,68,.12);color:#fecaca;border:1px solid rgba(239,68,68,.25);flex:1 1 170px;height:46px;font-weight:800}
+    .hint{color:var(--muted);font-size:12px;line-height:1.5;margin-top:10px}
+    .badge{font-size:12px;color:var(--muted);border:1px solid var(--line);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px;white-space:nowrap}
+    .outTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+    .outTop .title{display:flex;flex-direction:column;gap:4px;min-width:0}
     .outTop .title b{font-size:14px}
-    .outTop .title span{font-size:12px; color:var(--muted)}
-    .outActions{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+    .outTop .title span{font-size:12px;color:var(--muted)}
+    .outActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
     .mini{
-      height:36px;
-      padding:0 10px;
-      border-radius:12px;
-      font-size:12px;
-      font-weight:900;
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      border:1px solid var(--line);
-      cursor:pointer;
+      height:36px;padding:0 10px;border-radius:12px;font-size:12px;font-weight:900;
+      background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line);cursor:pointer;
     }
-    .mini.primary2{
-      background: rgba(34,197,94,.14);
-      border:1px solid rgba(34,197,94,.25);
-      color:#bbf7d0;
-    }
-    .mini.warn2{
-      background: rgba(245,158,11,.14);
-      border:1px solid rgba(245,158,11,.25);
-      color:#fde68a;
-    }
-
-    .out{
-      padding:14px;
-      display:grid;
-      gap:12px;
-    }
-
-    .serverCard{
-      background:#0f0f12;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px;
-    }
-    .serverHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom:10px;
-    }
+    .mini.primary2{background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.25);color:#bbf7d0}
+    .mini.warn2{background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.25);color:#fde68a}
+    .out{padding:14px;display:grid;gap:12px}
+    .serverCard{background:#0f0f12;border:1px solid var(--line);border-radius:14px;padding:12px}
+    .serverHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
     .serverHead b{font-size:14px}
-    .serverHead span{font-size:12px; color:var(--muted)}
-    .serverRow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin-top:8px;
-    }
+    .serverHead span{font-size:12px;color:var(--muted)}
+    .serverRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
     .serverUrl{
-      flex: 1 1 220px;
-      font-size:12px;
-      color:var(--muted);
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#0b0b0c;
-      overflow-wrap:anywhere;
+      flex:1 1 220px;font-size:12px;color:var(--muted);padding:8px 10px;border-radius:12px;
+      border:1px solid var(--line);background:#0b0b0c;overflow-wrap:anywhere;
     }
-
-    .scene{
-      background: #0f0f12;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px;
-    }
-    .sceneHead{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
-      margin-bottom:10px;
-    }
-    .sceneHead .left{display:flex; flex-direction:column; gap:4px}
+    .scene{background:#0f0f12;border:1px solid var(--line);border-radius:14px;padding:12px}
+    .sceneHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .sceneHead .left{display:flex;flex-direction:column;gap:4px}
     .sceneHead .left b{font-size:14px}
-    .sceneHead .left span{font-size:12px; color:var(--muted)}
-    .k{color: var(--muted); font-size:12px; margin:8px 0 6px}
+    .sceneHead .left span{font-size:12px;color:var(--muted)}
+    .k{color:var(--muted);font-size:12px;margin:8px 0 6px}
     .box{
-      white-space: pre-wrap;
-      line-height:1.55;
-      font-size:13px;
-      background: #0b0b0c;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px;
-      color: var(--text);
-      overflow-wrap:anywhere;
+      white-space:pre-wrap;line-height:1.55;font-size:13px;background:#0b0b0c;border:1px solid var(--line);
+      border-radius:12px;padding:10px;color:var(--text);overflow-wrap:anywhere;
     }
-
-    .footerNote{
-      margin-top:14px;
-      color: var(--muted);
-      font-size:12px;
-      text-align:center;
-      opacity:.85;
-    }
-
-    .modalBack{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.55);
-      display:none;
-      align-items:center; justify-content:center;
-      padding:18px;
-      z-index:9999;
-    }
-    .modal{
-      width:100%;
-      max-width:520px;
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:18px;
-      box-shadow:0 20px 60px rgba(0,0,0,.55);
-      padding:16px;
-    }
-    .modal h3{margin:0 0 8px; font-size:16px}
-    .modal p{margin:0 0 12px; color:var(--muted); font-size:13px; line-height:1.5}
-    .modal .rowBtn{display:flex; gap:10px; flex-wrap:wrap}
-    .modal .rowBtn button{flex:1; height:46px}
-
-    .devTag{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      font-size:12px;
-      color:var(--muted);
-      cursor:pointer;
-      user-select:none;
-    }
+    .footerNote{margin-top:14px;color:var(--muted);font-size:12px;text-align:center;opacity:.85}
   </style>
 </head>
 
@@ -290,14 +106,12 @@
 
     <div class="top">
       <div class="brand">
-        <h1>🎬 원라인 무비 <span style="opacity:.65">V4</span></h1>
-        <p>한 줄 입력 → 장면 설계 + 프롬프트 + SRT + ZIP + <b>서버 호출(연결 완료)</b></p>
+        <h1>🎬 원라인 무비 <span style="opacity:.65">V4 Free Engine</span></h1>
+        <p>한 줄 입력 → 장면 설계 + 프롬프트 + SRT + (선택)서버 호출</p>
       </div>
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end">
-        <div class="pill">✅ GitHub Pages · 서버 없이</div>
-        <div class="devTag" id="devToggle" title="개발자 모드 ON/OFF (무료제한/유도팝업 OFF)">
-          🧑‍💻 개발자: <b id="devState">OFF</b>
-        </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+        <div class="pill">✅ 0원 · GitHub Pages</div>
+        <div class="pill" id="modePill">🧠 모드: 오프라인(무료)</div>
       </div>
     </div>
 
@@ -314,8 +128,8 @@
             <div class="control">
               <div class="k">장르</div>
               <select id="genre">
-                <option value="thriller">스릴러</option>
                 <option value="mystery" selected>미스터리</option>
+                <option value="thriller">스릴러</option>
                 <option value="horror">공포</option>
                 <option value="action">액션</option>
                 <option value="drama">드라마</option>
@@ -356,19 +170,24 @@
             </div>
           </div>
 
+          <div class="row" style="margin-top:8px">
+            <div class="control" style="flex:1 1 100%">
+              <div class="k">서버 주소(선택 / 무료 Workers)</div>
+              <input id="worker" type="text" placeholder="비워두면 오프라인. 예: https://xxxxx.workers.dev" />
+              <div class="hint">✅ 비워두면 돈 0원으로 오프라인만 사용. 넣으면 “서버 응답 박스”도 같이 뜸.</div>
+            </div>
+          </div>
+
           <div class="btnRow">
-            <button class="primary" id="make">⚡ 설계 + 서버 호출(연결)</button>
+            <button class="primary" id="make">⚡ 생성하기</button>
             <button class="ghost" id="copyAll">📋 Copy All</button>
-            <button class="ghost" id="downloadZip">🗂 ZIP</button>
+            <button class="ghost" id="downloadAll">⬇️ 3개 파일</button>
             <button class="danger" id="reset">🧹 초기화</button>
           </div>
 
           <div class="hint">
-            ✅ 목표: <b>글 한 줄 → 서버(Workers)로 보내고 → 서버 응답이 화면에 뜨는지</b>
-          </div>
-
-          <div class="hint" id="freeHint" style="display:none; margin-top:10px">
-            오늘 무료: <b id="freeLeft">0</b>/<b id="freeMax">0</b> (개발자 모드면 무제한)
+            ✅ 사용법(유치원): <b>한 줄 쓰기 → ‘생성하기’ 누르기</b> 끝.<br/>
+            (이미지/영상 실제 생성은 “프롬프트”를 나노바나나/VEO3에 붙여넣는 방식이 무료 최적)
           </div>
         </div>
       </div>
@@ -382,106 +201,23 @@
           <div class="outActions">
             <button class="mini primary2" id="downloadJson">⬇️ JSON</button>
             <button class="mini" id="downloadSrt">🧾 SRT</button>
-            <button class="mini warn2" id="downloadText">📄 TXT</button>
+            <button class="mini warn2" id="downloadTxt">📄 TXT</button>
           </div>
         </div>
-
         <div class="out" id="out"></div>
       </div>
     </div>
 
-    <div class="footerNote">© 원라인 무비 V4 · 단일 파일 완성형 (서버 연결 테스트 포함)</div>
-  </div>
-
-  <div class="modalBack" id="modalBack">
-    <div class="modal">
-      <h3>오늘 무료 사용 횟수를 다 썼어 😅</h3>
-      <p>
-        지금은 무료 체험 단계라서 하루 무료 횟수 제한이 있어.<br/>
-        <b>개발자 모드</b>를 켜면 이 제한은 꺼져(테스트용).
-      </p>
-      <div class="rowBtn">
-        <button class="primary" id="modalOk">확인</button>
-        <button class="ghost" id="modalDev">개발자 모드 켜기</button>
-      </div>
-    </div>
+    <div class="footerNote">© One-Line Movie V4 Free Engine · 0원 완성형</div>
   </div>
 
 <script>
-  // ✅ 여기만 네 워커 주소로 유지하면 됨
-  const WORKER_BASE = "https://wandering-block-4130.jsa7953pk.workers.dev";
-
+  // =========================
+  // Utils
+  // =========================
   const $ = (id) => document.getElementById(id);
-  function setStatus(text){ $("status").textContent = text; }
-  function safeTrim(v){ return (v || "").trim(); }
-
-  function genreLabel(key){
-    return {
-      thriller:"스릴러", mystery:"미스터리", horror:"공포", action:"액션",
-      drama:"드라마", romance:"로맨스", fantasy:"판타지", sf:"SF", comedy:"코미디"
-    }[key] || key;
-  }
-  function toneLabel(key){
-    return {
-      serious:"건조·진지", cinematic:"시네마틱", noir:"느와르", warm:"따뜻한", dark:"어두운"
-    }[key] || key;
-  }
-
-  function buildSceneCount(seconds){
-    if(seconds <= 30) return 7;
-    if(seconds <= 60) return 9;
-    return 12;
-  }
-
-  function beatsForGenre(genre){
-    const base = [
-      "오프닝 훅 — 주인공/상황을 한 컷에",
-      "이상 징후 — 평범이 깨지는 순간",
-      "위협 제시 — 왜 위험한지 드러남",
-      "첫 행동 — 주인공의 선택",
-      "규칙/단서 — 숨겨진 조건 공개",
-      "최대 위기 — 실패 직전",
-      "실마리 — 작은 힌트",
-      "반전 — 진짜 원인/적",
-      "엔딩 — 여운/다음 떡밥"
-    ];
-    const map = {
-      mystery: [
-        "오프닝 훅 — 수상한 단서 한 컷",
-        "이상 징후 — 말이 안 되는 점",
-        "의심 — 용의자/장소 등장",
-        "첫 조사 — 단서 확대",
-        "규칙/퍼즐 — 숨겨진 연결고리",
-        "최대 위기 — 오해/함정",
-        "실마리 — 결정적 힌트",
-        "반전 — 진범/진실",
-        "엔딩 — 여운/다음 사건"
-      ],
-      thriller: [
-        "오프닝 훅 — 숨막히는 긴장 한 컷",
-        "추적 시작 — 누가 누구를 쫓나",
-        "위협 확대 — 점점 가까워진다",
-        "실수/노출 — 들켰다",
-        "룰/조건 — 도망칠 수 없는 이유",
-        "최대 위기 — 코앞에서 잡힘",
-        "미끼 — 판을 뒤집을 한 수",
-        "클라이맥스 — 도망/대치",
-        "엔딩 — 아직 끝나지 않음"
-      ]
-    };
-    return map[genre] || base;
-  }
-
-  function cinematicStyle(tone){
-    const map = {
-      serious: "realistic, restrained, dry, minimal camera movement, documentary-like tension",
-      cinematic: "cinematic, dramatic lighting, shallow depth of field, film grain, high contrast",
-      noir: "neo-noir, wet streets, neon reflections, hard shadows, smoke, low-key lighting",
-      warm: "warm tone, soft light, cozy atmosphere, gentle camera, emotional close-ups",
-      dark: "dark tone, moody lighting, heavy shadows, desaturated colors, ominous ambience"
-    };
-    return map[tone] || map.serious;
-  }
+  const safeTrim = (v) => (v || "").toString().trim();
+  const setStatus = (t) => ($("status").textContent = t);
 
   function escapeHtml(str){
     return String(str)
@@ -500,28 +236,143 @@
     return `${pad2(h)}:${pad2(m)}:${pad2(s)},${String(milli).padStart(3,"0")}`;
   }
 
+  function genreLabel(key){
+    return {
+      thriller:"스릴러", mystery:"미스터리", horror:"공포", action:"액션",
+      drama:"드라마", romance:"로맨스", fantasy:"판타지", sf:"SF", comedy:"코미디"
+    }[key] || key;
+  }
+  function toneLabel(key){
+    return {
+      serious:"건조·진지", cinematic:"시네마틱", noir:"느와르", warm:"따뜻한", dark:"어두운"
+    }[key] || key;
+  }
+
+  function cinematicStyle(tone){
+    const map = {
+      serious: "realistic, restrained, dry, minimal camera movement, documentary-like tension",
+      cinematic: "cinematic, dramatic lighting, shallow depth of field, film grain, high contrast",
+      noir: "neo-noir, wet streets, neon reflections, hard shadows, smoke, low-key lighting",
+      warm: "warm tone, soft light, cozy atmosphere, gentle camera, emotional close-ups",
+      dark: "dark tone, moody lighting, heavy shadows, desaturated colors, ominous ambience"
+    };
+    return map[tone] || map.serious;
+  }
+
+  function buildSceneCount(seconds){
+    const s = Number(seconds);
+    if(s <= 30) return 7;
+    if(s <= 60) return 9;
+    return 12;
+  }
+
+  // ✅ 무료 최고 효율: “장르별 비트(플롯 뼈대)”를 강하게 고정해서 결과 품질을 올림
+  function beatsForGenre(genre){
+    const base = [
+      "오프닝 훅 — 한 컷에 상황 박기",
+      "이상 징후 — 평범이 깨진다",
+      "위협 제시 — 위험이 보인다",
+      "첫 행동 — 주인공이 움직인다",
+      "규칙/단서 — 조건이 드러난다",
+      "최대 위기 — 실패 직전",
+      "실마리 — 작은 힌트",
+      "반전 — 진짜 원인/적",
+      "엔딩 — 여운/다음 떡밥"
+    ];
+    const map = {
+      mystery: [
+        "오프닝 훅 — 수상한 단서 한 컷",
+        "이상 징후 — 말이 안 되는 점",
+        "의심 — 용의자/장소 등장",
+        "첫 조사 — 단서 확대",
+        "규칙/퍼즐 — 숨은 연결고리",
+        "최대 위기 — 오해/함정",
+        "실마리 — 결정적 힌트",
+        "반전 — 진범/진실",
+        "엔딩 — 여운/다음 사건"
+      ],
+      thriller: [
+        "오프닝 훅 — 숨막히는 긴장 한 컷",
+        "추적 시작 — 누가 누구를 쫓나",
+        "위협 확대 — 점점 가까워진다",
+        "노출 — 들켰다",
+        "룰/조건 — 도망칠 수 없는 이유",
+        "최대 위기 — 코앞에서 잡힘",
+        "미끼 — 판을 뒤집는 한 수",
+        "클라이맥스 — 도망/대치",
+        "엔딩 — 아직 끝나지 않음"
+      ],
+      horror: [
+        "오프닝 훅 — 섬뜩한 전조",
+        "이상 징후 — 소리가 멈춘다",
+        "규칙 — 하면 안 되는 것",
+        "접근 — 금지구역 진입",
+        "징후 확대 — 존재가 드러남",
+        "최대 위기 — 바로 뒤",
+        "탈출 시도 — 문이 안 열린다",
+        "반전 — 진짜 공포",
+        "엔딩 — 남는 흔적"
+      ],
+      action: [
+        "오프닝 훅 — 폭발적 시작",
+        "목표 제시 — 무엇을 지켜야 하나",
+        "추격 — 속도감",
+        "전투 — 첫 충돌",
+        "전술 — 한 수",
+        "최대 위기 — 포위",
+        "역전 — 반격",
+        "결착 — 승부",
+        "엔딩 — 다음 미션"
+      ]
+    };
+    return map[genre] || base;
+  }
+
+  // ✅ “한 줄”에서 키워드 뽑기(무료 품질 상승 핵심)
+  function extractKeywords(line){
+    // 아주 단순하지만 효과 좋음: 장소/시간/날씨/감정/오브젝트 힌트를 잡아줌
+    const hints = [];
+    const L = line.toLowerCase();
+    if(L.includes("비") || L.includes("rain")) hints.push("rainy");
+    if(L.includes("밤") || L.includes("night")) hints.push("night");
+    if(L.includes("새벽")) hints.push("dawn");
+    if(L.includes("골목")) hints.push("alley");
+    if(L.includes("네온")) hints.push("neon");
+    if(L.includes("바다")) hints.push("sea");
+    if(L.includes("눈") || L.includes("snow")) hints.push("snowy");
+    if(L.includes("추격")) hints.push("chase");
+    if(L.includes("침묵")) hints.push("silence tension");
+    if(L.includes("비행기")) hints.push("airplane");
+    if(L.includes("강아지") || L.includes("dog")) hints.push("dog protagonist");
+    return hints.slice(0,6);
+  }
+
   function makePrompts({line, genre, tone, seconds, hero, setting, idx, beat}){
     const style = cinematicStyle(tone);
-    const location = setting ? setting : "도시의 밤, 비에 젖은 골목";
-    const protagonist = hero ? hero : "말을 하지 않는 강아지 탐정";
+    const location = setting || "도시의 밤, 비에 젖은 골목";
+    const protagonist = hero || "말을 하지 않는 강아지 탐정";
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
     const noText = "no subtitles, no captions, no text, no watermark, no logo";
+    const kw = extractKeywords(line).join(", ");
 
     const imagePrompt =
 `Vertical 9:16, ${timeHint}, ${genreLabel(genre)} vibe,
-${beat},
-${protagonist}, ${location},
-${style},
+Beat: ${beat},
+Protagonist: ${protagonist},
+Setting: ${location},
+Keywords: ${kw || "cinematic tension"},
+Style: ${style},
 ultra realistic, sharp focus, detailed, high quality,
 ${noText}`;
 
     const videoPrompt =
 `Vertical 9:16, ${timeHint}, ${genreLabel(genre)}.
-Scene ${idx+1}: ${beat}.
-Setting: ${location}.
-Character: ${protagonist}.
-Camera: slow push-in then slight handheld tension, rack focus on clue.
-Lighting/SFX: ${toneLabel(tone)} mood, rain/ambient sound if applicable.
+Scene ${idx+1}: ${beat}
+Input line: ${line}
+Character: ${protagonist}
+Setting: ${location}
+Camera: slow push-in, rack focus on clue/object, slight handheld tension
+Lighting/SFX: ${toneLabel(tone)} mood (ambient if applicable)
 Make it feel like a real movie shot. ${noText}`;
 
     const subtitle =
@@ -544,6 +395,7 @@ Make it feel like a real movie shot. ${noText}`;
     const n = buildSceneCount(total);
     const beats = beatsForGenre(genre);
 
+    // 시간 분배
     const base = Math.floor(total / n);
     const times = [];
     let t = 0;
@@ -564,8 +416,7 @@ Make it feel like a real movie shot. ${noText}`;
       const prompts = makePrompts({line, genre, tone, seconds: total, hero, setting, idx:i, beat});
       scenes.push({
         index: i+1,
-        start,
-        end,
+        start, end,
         time: `${start}–${end}s`,
         beat,
         subtitle: prompts.subtitle,
@@ -575,6 +426,8 @@ Make it feel like a real movie shot. ${noText}`;
     }
 
     return {
+      ok: true,
+      version: "v4-free",
       title: line,
       meta: {
         genre: genreLabel(genre),
@@ -587,23 +440,6 @@ Make it feel like a real movie shot. ${noText}`;
       payload: {...payload},
       scenes
     };
-  }
-
-  async function copyText(text){
-    try{
-      await navigator.clipboard.writeText(text);
-      setStatus("복사 완료");
-      setTimeout(()=>setStatus("완료"), 900);
-    }catch(e){
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      setStatus("복사 완료");
-      setTimeout(()=>setStatus("완료"), 900);
-    }
   }
 
   function planToText(plan){
@@ -631,6 +467,25 @@ Make it feel like a real movie shot. ${noText}`;
     return srt.trim() + "\n";
   }
 
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      setStatus("복사 완료");
+      setTimeout(()=>setStatus("완료"), 800);
+    }catch(e){
+      // 폰에서 clipboard 막힐 때 대비
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position="fixed"; ta.style.left="-9999px";
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setStatus("복사 완료");
+      setTimeout(()=>setStatus("완료"), 800);
+    }
+  }
+
   function download(filename, content, mime){
     const blob = new Blob([content], {type: mime || "text/plain;charset=utf-8"});
     const url = URL.createObjectURL(blob);
@@ -641,75 +496,24 @@ Make it feel like a real movie shot. ${noText}`;
     URL.revokeObjectURL(url);
   }
 
-  async function callWorker(msg){
-    if(!WORKER_BASE || WORKER_BASE.includes("YOUR-WORKER")){
-      throw new Error("WORKER_BASE 주소가 비었어!");
-    }
-    const base = WORKER_BASE.endsWith("/") ? WORKER_BASE : (WORKER_BASE + "/");
+  // =========================
+  // (선택) Worker 호출
+  // =========================
+  async function callWorker(workerBase, msg){
+    const base = workerBase.endsWith("/") ? workerBase : (workerBase + "/");
     const u = new URL(base);
+    // 네 worker는 msg 또는 text 둘 다 받게 만들어놨었지
     u.searchParams.set("msg", msg);
 
-    let res;
-    try{
-      res = await fetch(u.toString(), { method: "GET", cache: "no-store" });
-    }catch(e){
-      throw new Error("네트워크/브라우저 차단(CORS 등): " + (e?.message || e));
-    }
-
+    const res = await fetch(u.toString(), { method:"GET", cache:"no-store" });
     const text = await res.text().catch(()=> "");
-    if(!res.ok){
-      throw new Error(`서버 응답 오류: ${res.status} ${text}`);
-    }
+    if(!res.ok) throw new Error(`서버 오류 ${res.status}: ${text}`);
     return { text, url: u.toString() };
   }
 
-  const DEV_KEY = "olm_dev_mode_v4";
-  const FREE_KEY = "olm_free_counter_v4";
-
-  function isDev(){
-    const params = new URLSearchParams(location.search);
-    if(params.get("dev") === "1") return true;
-    return localStorage.getItem(DEV_KEY) === "1";
-  }
-  function setDev(on){
-    localStorage.setItem(DEV_KEY, on ? "1" : "0");
-    renderDevUI();
-  }
-  function todayKey(){
-    const d = new Date();
-    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-  }
-  function getFree(){
-    const max = 3;
-    try{
-      const raw = localStorage.getItem(FREE_KEY);
-      const obj = raw ? JSON.parse(raw) : {};
-      const k = todayKey();
-      const used = obj[k] || 0;
-      return { used, left: Math.max(0, max - used), max };
-    }catch(e){
-      return { used:0, left:3, max:3 };
-    }
-  }
-  function useFreeOne(){
-    const max = 3;
-    const k = todayKey();
-    const raw = localStorage.getItem(FREE_KEY);
-    const obj = raw ? JSON.parse(raw) : {};
-    obj[k] = (obj[k] || 0) + 1;
-    localStorage.setItem(FREE_KEY, JSON.stringify(obj));
-    return Math.max(0, max - obj[k]);
-  }
-  function renderDevUI(){
-    $("devState").textContent = isDev() ? "ON" : "OFF";
-    $("freeHint").style.display = "block";
-    const {left, max} = getFree();
-    $("freeLeft").textContent = isDev() ? "∞" : String(left);
-    $("freeMax").textContent = isDev() ? "∞" : String(max);
-  }
-  function showModal(){ $("modalBack").style.display = "flex"; }
-  function hideModal(){ $("modalBack").style.display = "none"; }
-
+  // =========================
+  // UI Render
+  // =========================
   let latestPlan = null;
 
   function renderPlan(plan, serverResult){
@@ -720,40 +524,36 @@ Make it feel like a real movie shot. ${noText}`;
     const out = $("out");
     out.innerHTML = "";
 
+    // 서버 카드(있으면)
     const srv = document.createElement("div");
     srv.className = "serverCard";
     srv.innerHTML = `
       <div class="serverHead">
-        <b>🔌 서버 응답(Workers)</b>
-        <span style="font-size:12px; color:#9ca3af;">(아래 박스에 응답/에러가 표시됨)</span>
+        <b>🔌 서버 응답(선택)</b>
+        <span>${escapeHtml(serverResult?.ok ? "연결됨" : "오프라인")}</span>
       </div>
-      <div class="box" id="serverBox">${escapeHtml(serverResult?.text || "")}</div>
+      <div class="box">${escapeHtml(serverResult?.text || "오프라인 모드: 서버 없이도 V4 설계는 정상 동작합니다.")}</div>
       <div class="serverRow">
-        <div class="serverUrl" id="serverUrl">${escapeHtml(serverResult?.url || "")}</div>
+        <div class="serverUrl">${escapeHtml(serverResult?.url || "")}</div>
         <button class="mini" id="copyServerUrl">📋 URL 복사</button>
-        <button class="mini primary2" id="openServerUrl">🔗 열기</button>
       </div>
     `;
     out.appendChild(srv);
 
     $("copyServerUrl").onclick = () => {
       const u = (serverResult?.url || "").trim();
-      if(!u) return alert("URL이 없어!");
+      if(!u) return alert("복사할 URL이 없어!");
       copyText(u);
     };
-    $("openServerUrl").onclick = () => {
-      const u = (serverResult?.url || "").trim();
-      if(!u) return alert("URL이 없어!");
-      window.open(u, "_blank");
-    };
 
-    plan.scenes.forEach(s => {
+    // 씬들
+    plan.scenes.forEach(s=>{
       const el = document.createElement("div");
       el.className = "scene";
       el.innerHTML = `
         <div class="sceneHead">
           <div class="left">
-            <b>SCENE ${s.index} <span style="color:#7ee7a6">(${s.time})</span></b>
+            <b>SCENE ${s.index} <span style="color:#7ee7a6">(${escapeHtml(s.time)})</span></b>
             <span>${escapeHtml(s.beat)}</span>
           </div>
           <span class="badge">자막</span>
@@ -778,38 +578,45 @@ Make it feel like a real movie shot. ${noText}`;
       tone: $("tone").value,
       seconds: $("length").value,
       hero: safeTrim($("hero").value),
-      setting: safeTrim($("setting").value)
+      setting: safeTrim($("setting").value),
     };
   }
+
+  function updateModePill(){
+    const w = safeTrim($("worker").value);
+    if(!w){
+      $("modePill").textContent = "🧠 모드: 오프라인(무료)";
+    }else{
+      $("modePill").textContent = "🧠 모드: 서버연결(무료)";
+    }
+  }
+  $("worker").addEventListener("input", updateModePill);
 
   async function run(){
     const payload = getPayloadFromInputs();
     if(!payload.line){ alert("한 줄 써줘!"); return; }
 
-    if(!isDev()){
-      const f = getFree();
-      if(f.left <= 0){
-        showModal();
-        renderDevUI();
-        return;
-      }
-      useFreeOne();
-    }
-    renderDevUI();
-
     setStatus("생성중…");
     latestPlan = buildPlan(payload);
 
+    // 서버는 “선택”
+    const workerBase = safeTrim($("worker").value);
+    let serverResult = { ok:false, text:"", url:"" };
+
     try{
-      setStatus("서버 호출중…");
-      const serverResult = await callWorker(payload.line);
+      if(workerBase){
+        setStatus("서버 호출중…");
+        const r = await callWorker(workerBase, payload.line);
+        serverResult = { ok:true, text:r.text, url:r.url };
+      }else{
+        serverResult = { ok:false, text:"", url:"" };
+      }
       renderPlan(latestPlan, serverResult);
       setStatus("완료");
     }catch(err){
-      console.error(err);
-      renderPlan(latestPlan, { text: `❌ 서버 호출 실패: ${err.message}`, url: "" });
+      renderPlan(latestPlan, { ok:false, text:`❌ 서버 실패: ${err.message}`, url:"" });
       setStatus("실패");
-      alert("서버 호출 실패! (Workers CORS/주소/배포 확인)");
+      alert("서버 호출 실패! (주소/CORS/배포 확인) — 오프라인 모드는 계속 정상입니다.");
     }
 
     setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
@@ -818,26 +625,31 @@ Make it feel like a real movie shot. ${noText}`;
   $("make").addEventListener("click", run);
 
   $("copyAll").addEventListener("click", () => {
-    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
     copyText(planToText(latestPlan));
   });
 
   $("downloadJson").addEventListener("click", () => {
-    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
     download("one-line-movie.json", JSON.stringify(latestPlan, null, 2), "application/json;charset=utf-8");
   });
+
   $("downloadSrt").addEventListener("click", () => {
-    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+    if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
     download("one-line-movie.srt", planToSrt(latestPlan), "text/plain;charset=utf-8");
   });
-  $("downloadText").addEventListener("click", () => {
-    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
+
+  $("downloadTxt").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
     download("one-line-movie.txt", planToText(latestPlan), "text/plain;charset=utf-8");
   });
 
-  $("downloadZip").addEventListener("click", () => {
-    if(!latestPlan){ alert("먼저 생성해줘!"); return; }
-    alert("지금 단계는 '연결 성공'이 먼저! ZIP은 다음 단계에서 다시 넣자.");
+  // ✅ “ZIP 대신” 3개 파일을 연속 다운로드 = 무료 최고 실용
+  $("downloadAll").addEventListener("click", () => {
+    if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
+    $("downloadJson").click();
+    setTimeout(()=> $("downloadSrt").click(), 200);
+    setTimeout(()=> $("downloadTxt").click(), 400);
   });
 
   $("reset").addEventListener("click", () => {
@@ -851,24 +663,11 @@ Make it feel like a real movie shot. ${noText}`;
   });
 
   document.addEventListener("keydown", (e) => {
-    if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
-      run();
-    }
+    if((e.ctrlKey || e.metaKey) && e.key === "Enter") run();
   });
 
-  $("devToggle").addEventListener("click", () => {
-    setDev(!isDev());
-  });
-
-  $("modalOk").addEventListener("click", hideModal);
-  $("modalDev").addEventListener("click", () => {
-    setDev(true);
-    hideModal();
-    renderDevUI();
-    alert("개발자 모드 ON ✅ 이제 무제한 테스트 가능");
-  });
-
-  renderDevUI();
+  // init
+  updateModePill();
 </script>
 </body>
 </html>
