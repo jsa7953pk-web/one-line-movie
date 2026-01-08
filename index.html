@@ -353,19 +353,18 @@
             <div class="control">
               <div class="k">배경(선택)</div>
               <input id="setting" type="text" placeholder="예: 비 내리는 골목, 새벽, 네온 간판" />
-            </div>
+            </divა
           </div>
 
           <div class="btnRow">
-            <button class="primary" id="make">⚡ 설계 + 서버 호출(연결) </button>
+            <button class="primary" id="make">⚡ 설계 + 서버 호출(연결)</button>
             <button class="ghost" id="copyAll">📋 Copy All</button>
             <button class="ghost" id="downloadZip">🗂 ZIP</button>
             <button class="danger" id="reset">🧹 초기화</button>
           </div>
 
           <div class="hint">
-            ✅ 지금 목표: <b>글 한 줄 → 서버(Workers)로 보내고 → 서버 응답이 화면에 뜨는지</b><br/>
-            (이게 되면 “영상 AI 연결”도 똑같이 붙이면 됨)
+            ✅ 목표: <b>글 한 줄 → 서버(Workers)로 보내고 → 서버 응답이 화면에 뜨는지</b>
           </div>
 
           <div class="hint" id="freeHint" style="display:none; margin-top:10px">
@@ -409,10 +408,7 @@
   </div>
 
 <script>
-  // =========================================================
-  // ✅ 딱 1곳만 수정하면 됨: 네 Cloudflare Workers "진짜 주소"
-  // 예) https://wandering-block-4130.XXXX.workers.dev
-  // =========================================================
+  // ✅✅✅ 너는 여기 1줄만 네 워커 주소로 바꾸면 끝
   const WORKER_BASE = "https://wandering-block-4130.jsa7953pk.workers.dev";
 
   const $ = (id) => document.getElementById(id);
@@ -647,14 +643,25 @@ Make it feel like a real movie shot. ${noText}`;
 
   async function callWorker(msg){
     if(!WORKER_BASE || WORKER_BASE.includes("YOUR-WORKER")){
-      throw new Error("WORKER_BASE 주소를 먼저 넣어줘!");
+      throw new Error("WORKER_BASE 주소가 비었어!");
     }
-    const u = new URL(WORKER_BASE);
+
+    // ✅ URL 파싱 안정화: 끝에 "/" 보장
+    const base = WORKER_BASE.endsWith("/") ? WORKER_BASE : (WORKER_BASE + "/");
+    const u = new URL(base);
     u.searchParams.set("msg", msg);
-    const res = await fetch(u.toString(), { method: "GET" });
-    const text = await res.text();
+
+    let res;
+    try{
+      res = await fetch(u.toString(), { method: "GET", cache: "no-store" });
+    }catch(e){
+      // 네가 보던 "Failed to fetch"가 여기에서 발생
+      throw new Error("네트워크/브라우저 차단(CORS 등): " + (e?.message || e));
+    }
+
+    const text = await res.text().catch(()=> "");
     if(!res.ok){
-      throw new Error(`서버 오류: ${res.status} ${text}`);
+      throw new Error(`서버 응답 오류: ${res.status} ${text}`);
     }
     return { text, url: u.toString() };
   }
@@ -721,16 +728,13 @@ Make it feel like a real movie shot. ${noText}`;
     srv.innerHTML = `
       <div class="serverHead">
         <b>🔌 서버 응답(Workers)</b>
-        <span id="serverNote">${escapeHtml(serverResult?.text || "대기중…")}</span>
+        <span style="font-size:12px; color:#9ca3af;">(아래 박스에 응답/에러가 그대로 표시됨)</span>
       </div>
       <div class="box" id="serverBox">${escapeHtml(serverResult?.text || "")}</div>
       <div class="serverRow">
         <div class="serverUrl" id="serverUrl">${escapeHtml(serverResult?.url || "")}</div>
         <button class="mini" id="copyServerUrl">📋 URL 복사</button>
         <button class="mini primary2" id="openServerUrl">🔗 열기</button>
-      </div>
-      <div class="hint" style="margin-top:10px">
-        ✅ 이 카드가 뜨면 “V4 ↔ 서버 연결” 성공. 다음은 이 서버가 “영상 링크”를 주게 만들면 끝!
       </div>
     `;
     out.appendChild(srv);
@@ -808,7 +812,7 @@ Make it feel like a real movie shot. ${noText}`;
       console.error(err);
       renderPlan(latestPlan, { text: `❌ 서버 호출 실패: ${err.message}`, url: "" });
       setStatus("실패");
-      alert("서버 호출 실패! (WORKER_BASE 주소/서버 상태 확인)");
+      alert("서버 호출 실패! (Workers CORS/주소/배포 확인)");
     }
 
     setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
@@ -836,7 +840,7 @@ Make it feel like a real movie shot. ${noText}`;
 
   $("downloadZip").addEventListener("click", () => {
     if(!latestPlan){ alert("먼저 생성해줘!"); return; }
-    alert("지금 단계는 '연결 성공'이 먼저! ZIP은 다음 단계에서 다시 넣어줄게.");
+    alert("ZIP은 다음 단계에서 넣자. 지금은 서버 연결부터 완성!");
   });
 
   $("reset").addEventListener("click", () => {
