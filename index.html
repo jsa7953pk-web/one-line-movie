@@ -353,7 +353,7 @@
             <div class="control">
               <div class="k">배경(선택)</div>
               <input id="setting" type="text" placeholder="예: 비 내리는 골목, 새벽, 네온 간판" />
-            </divა
+            </div>
           </div>
 
           <div class="btnRow">
@@ -408,7 +408,7 @@
   </div>
 
 <script>
-  // ✅✅✅ 너는 여기 1줄만 네 워커 주소로 바꾸면 끝
+  // ✅ 여기만 네 워커 주소로 유지하면 됨
   const WORKER_BASE = "https://wandering-block-4130.jsa7953pk.workers.dev";
 
   const $ = (id) => document.getElementById(id);
@@ -645,8 +645,6 @@ Make it feel like a real movie shot. ${noText}`;
     if(!WORKER_BASE || WORKER_BASE.includes("YOUR-WORKER")){
       throw new Error("WORKER_BASE 주소가 비었어!");
     }
-
-    // ✅ URL 파싱 안정화: 끝에 "/" 보장
     const base = WORKER_BASE.endsWith("/") ? WORKER_BASE : (WORKER_BASE + "/");
     const u = new URL(base);
     u.searchParams.set("msg", msg);
@@ -655,7 +653,6 @@ Make it feel like a real movie shot. ${noText}`;
     try{
       res = await fetch(u.toString(), { method: "GET", cache: "no-store" });
     }catch(e){
-      // 네가 보던 "Failed to fetch"가 여기에서 발생
       throw new Error("네트워크/브라우저 차단(CORS 등): " + (e?.message || e));
     }
 
@@ -728,7 +725,7 @@ Make it feel like a real movie shot. ${noText}`;
     srv.innerHTML = `
       <div class="serverHead">
         <b>🔌 서버 응답(Workers)</b>
-        <span style="font-size:12px; color:#9ca3af;">(아래 박스에 응답/에러가 그대로 표시됨)</span>
+        <span style="font-size:12px; color:#9ca3af;">(아래 박스에 응답/에러가 표시됨)</span>
       </div>
       <div class="box" id="serverBox">${escapeHtml(serverResult?.text || "")}</div>
       <div class="serverRow">
@@ -840,7 +837,7 @@ Make it feel like a real movie shot. ${noText}`;
 
   $("downloadZip").addEventListener("click", () => {
     if(!latestPlan){ alert("먼저 생성해줘!"); return; }
-    alert("ZIP은 다음 단계에서 넣자. 지금은 서버 연결부터 완성!");
+    alert("지금 단계는 '연결 성공'이 먼저! ZIP은 다음 단계에서 다시 넣자.");
   });
 
   $("reset").addEventListener("click", () => {
