@@ -182,28 +182,6 @@
       gap:12px;
     }
 
-    .videoCard{
-      background:#0f0f12;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px;
-    }
-    .videoHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom:10px;
-    }
-    .videoHead b{font-size:14px}
-    .videoHead span{font-size:12px; color:var(--muted)}
-    video{
-      width:100%;
-      max-width: 420px;
-      display:block;
-      margin:0 auto;
-      border-radius:16px;
-      background:#000;
-      border:1px solid rgba(255,255,255,.06);
-    }
-
     .serverCard{
       background:#0f0f12;
       border:1px solid var(--line);
@@ -268,7 +246,6 @@
       opacity:.85;
     }
 
-    /* Modal */
     .modalBack{
       position:fixed; inset:0;
       background:rgba(0,0,0,.55);
@@ -325,7 +302,6 @@
     </div>
 
     <div class="grid">
-      <!-- INPUT -->
       <div class="card">
         <div class="cardHeader">
           <h2>입력</h2>
@@ -398,7 +374,6 @@
         </div>
       </div>
 
-      <!-- OUTPUT -->
       <div class="card" id="outCard" style="display:none">
         <div class="outTop">
           <div class="title">
@@ -419,7 +394,6 @@
     <div class="footerNote">© 원라인 무비 V4 · 단일 파일 완성형 (서버 연결 테스트 포함)</div>
   </div>
 
-  <!-- Free-limit Modal -->
   <div class="modalBack" id="modalBack">
     <div class="modal">
       <h3>오늘 무료 사용 횟수를 다 썼어 😅</h3>
@@ -439,11 +413,8 @@
   // ✅ 딱 1곳만 수정하면 됨: 네 Cloudflare Workers "진짜 주소"
   // 예) https://wandering-block-4130.XXXX.workers.dev
   // =========================================================
-  const WORKER_BASE = "https://YOUR-WORKER.workers.dev";
+  const WORKER_BASE = "https://wandering-block-4130.jsa7953pk.workers.dev";
 
-  // =========================
-  // Utilities
-  // =========================
   const $ = (id) => document.getElementById(id);
   function setStatus(text){ $("status").textContent = text; }
   function safeTrim(v){ return (v || "").trim(); }
@@ -622,6 +593,23 @@ Make it feel like a real movie shot. ${noText}`;
     };
   }
 
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      setStatus("복사 완료");
+      setTimeout(()=>setStatus("완료"), 900);
+    }catch(e){
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setStatus("복사 완료");
+      setTimeout(()=>setStatus("완료"), 900);
+    }
+  }
+
   function planToText(plan){
     let txt = `🎬 원라인: ${plan.title}\n`;
     txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes\n\n`;
@@ -647,23 +635,6 @@ Make it feel like a real movie shot. ${noText}`;
     return srt.trim() + "\n";
   }
 
-  async function copyText(text){
-    try{
-      await navigator.clipboard.writeText(text);
-      setStatus("복사 완료");
-      setTimeout(()=>setStatus("완료"), 900);
-    }catch(e){
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      setStatus("복사 완료");
-      setTimeout(()=>setStatus("완료"), 900);
-    }
-  }
-
   function download(filename, content, mime){
     const blob = new Blob([content], {type: mime || "text/plain;charset=utf-8"});
     const url = URL.createObjectURL(blob);
@@ -674,9 +645,6 @@ Make it feel like a real movie shot. ${noText}`;
     URL.revokeObjectURL(url);
   }
 
-  // =========================
-  // ✅ 서버(Workers) 호출: msg=한줄
-  // =========================
   async function callWorker(msg){
     if(!WORKER_BASE || WORKER_BASE.includes("YOUR-WORKER")){
       throw new Error("WORKER_BASE 주소를 먼저 넣어줘!");
@@ -691,9 +659,6 @@ Make it feel like a real movie shot. ${noText}`;
     return { text, url: u.toString() };
   }
 
-  // =========================
-  // Developer mode + Free limit
-  // =========================
   const DEV_KEY = "olm_dev_mode_v4";
   const FREE_KEY = "olm_free_counter_v4";
 
@@ -741,9 +706,6 @@ Make it feel like a real movie shot. ${noText}`;
   function showModal(){ $("modalBack").style.display = "flex"; }
   function hideModal(){ $("modalBack").style.display = "none"; }
 
-  // =========================
-  // Render
-  // =========================
   let latestPlan = null;
 
   function renderPlan(plan, serverResult){
@@ -754,7 +716,6 @@ Make it feel like a real movie shot. ${noText}`;
     const out = $("out");
     out.innerHTML = "";
 
-    // ✅ 서버 결과 카드 (지금 가장 중요!)
     const srv = document.createElement("div");
     srv.className = "serverCard";
     srv.innerHTML = `
@@ -785,7 +746,6 @@ Make it feel like a real movie shot. ${noText}`;
       window.open(u, "_blank");
     };
 
-    // scenes
     plan.scenes.forEach(s => {
       const el = document.createElement("div");
       el.className = "scene";
@@ -825,7 +785,6 @@ Make it feel like a real movie shot. ${noText}`;
     const payload = getPayloadFromInputs();
     if(!payload.line){ alert("한 줄 써줘!"); return; }
 
-    // free limit (dev면 무시)
     if(!isDev()){
       const f = getFree();
       if(f.left <= 0){
@@ -840,7 +799,6 @@ Make it feel like a real movie shot. ${noText}`;
     setStatus("생성중…");
     latestPlan = buildPlan(payload);
 
-    // ✅ 여기서 서버 호출
     try{
       setStatus("서버 호출중…");
       const serverResult = await callWorker(payload.line);
@@ -856,9 +814,6 @@ Make it feel like a real movie shot. ${noText}`;
     setTimeout(()=> $("outCard").scrollIntoView({behavior:"smooth", block:"start"}), 80);
   }
 
-  // =========================
-  // Button bindings
-  // =========================
   $("make").addEventListener("click", run);
 
   $("copyAll").addEventListener("click", () => {
@@ -879,10 +834,8 @@ Make it feel like a real movie shot. ${noText}`;
     download("one-line-movie.txt", planToText(latestPlan), "text/plain;charset=utf-8");
   });
 
-  // ZIP (간단 버전: JSON/SRT/TXT를 각각 다운로드로 대체)
   $("downloadZip").addEventListener("click", () => {
     if(!latestPlan){ alert("먼저 생성해줘!"); return; }
-    // ZIP까지 넣으면 길어져서, 지금 단계(연결 확인)에서는 생략.
     alert("지금 단계는 '연결 성공'이 먼저! ZIP은 다음 단계에서 다시 넣어줄게.");
   });
 
@@ -896,19 +849,16 @@ Make it feel like a real movie shot. ${noText}`;
     setStatus("대기중");
   });
 
-  // Ctrl/Cmd + Enter
   document.addEventListener("keydown", (e) => {
     if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
       run();
     }
   });
 
-  // dev toggle
   $("devToggle").addEventListener("click", () => {
     setDev(!isDev());
   });
 
-  // modal buttons
   $("modalOk").addEventListener("click", hideModal);
   $("modalDev").addEventListener("click", () => {
     setDev(true);
@@ -917,7 +867,6 @@ Make it feel like a real movie shot. ${noText}`;
     alert("개발자 모드 ON ✅ 이제 무제한 테스트 가능");
   });
 
-  // init
   renderDevUI();
 </script>
 </body>
