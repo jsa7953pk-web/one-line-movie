@@ -285,6 +285,12 @@
 </head>
 
 <body>
+
+  <!-- ✅✅✅ 여기(= <body> 바로 아래)가 정확한 위치 -->
+  <script>
+    const WORKER_BASE = "https://wandering-block-4130.jsa7953pk.workers.dev";
+  </script>
+
   <div class="wrap">
     <div class="hero-line">한 줄을 쓰면, 그 순간 영화가 된다.</div>
 
@@ -410,10 +416,8 @@
 
 <script>
   // =========================================================
-  // ✅ 딱 1곳만 수정하면 됨: 네 Cloudflare Workers "진짜 주소"
-  // 예) https://wandering-block-4130.XXXX.workers.dev
+  // ✅ WORKER_BASE는 <body> 바로 아래에서 이미 선언됨
   // =========================================================
-  const WORKER_BASE = "https://wandering-block-4130.jsa7953pk.workers.dev";
 
   const $ = (id) => document.getElementById(id);
   function setStatus(text){ $("status").textContent = text; }
@@ -870,4 +874,4 @@ Make it feel like a real movie shot. ${noText}`;
   renderDevUI();
 </script>
 </body>
-          </html>
+</html>
