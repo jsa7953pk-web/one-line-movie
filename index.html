@@ -66,14 +66,12 @@
     .danger{background:rgba(239,68,68,.12);color:#fecaca;border:1px solid rgba(239,68,68,.25);flex:1 1 170px;height:46px;font-weight:800}
     .warn{background:rgba(245,158,11,.14);color:#fde68a;border:1px solid rgba(245,158,11,.25);flex:1 1 170px;height:46px;font-weight:800}
     .info{background:rgba(96,165,250,.14);color:#bfdbfe;border:1px solid rgba(96,165,250,.25);flex:1 1 170px;height:46px;font-weight:800}
-
     .hint{color:var(--muted);font-size:12px;line-height:1.5;margin-top:10px}
     .badge{font-size:12px;color:var(--muted);border:1px solid var(--line);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px;white-space:nowrap}
     .badge.good{border-color:rgba(34,197,94,.25); color:#bbf7d0; background:rgba(34,197,94,.10)}
     .badge.bad{border-color:rgba(239,68,68,.25); color:#fecaca; background:rgba(239,68,68,.10)}
     .badge.warn{border-color:rgba(245,158,11,.25); color:#fde68a; background:rgba(245,158,11,.10)}
     .badge.info{border-color:rgba(96,165,250,.25); color:#bfdbfe; background:rgba(96,165,250,.10)}
-
     .outTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
     .outTop .title{display:flex;flex-direction:column;gap:4px;min-width:0}
     .outTop .title b{font-size:14px}
@@ -121,13 +119,26 @@
       box-shadow:0 10px 30px rgba(0,0,0,.25);
     }
     .banner b{color:#fff}
+
+    /* Advanced Lock Box */
+    .advancedLock{
+      display:none;
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(96,165,250,.25);
+      background:rgba(96,165,250,.08);
+    }
+    .advancedLock .k{margin-top:0}
+    .advancedLock textarea{
+      min-height:92px;
+      font-size:13px;
+    }
   </style>
 </head>
-
 <body>
   <div class="wrap">
     <div class="hero-line">한 줄을 쓰면, 그 순간 영화가 된다.</div>
-
     <div class="banner" id="banner"></div>
 
     <div class="top">
@@ -223,6 +234,16 @@
             🎛 캐릭터를 고르면: 훅/카메라/자막/행동 규칙이 자동으로 바뀝니다.
           </div>
 
+          <!-- ✅ 아랑 초강력 룩락(선택): 실물 디테일을 더 잠그는 문장(사용자가 직접 붙여넣기) -->
+          <div class="advancedLock" id="arangLockBox">
+            <div class="k">🔒 아랑 “초강력 룩락 문장”(선택 / 실물 디테일 잠금)</div>
+            <textarea id="arangDetailLock" placeholder="예) ARANG REAL-DETAIL LOCK: exact fur color (light cream with darker ear tips), exact ear shape (rounded droop), eye spacing (slightly wide-set), nose size (small black), ribbon position (left ear base), face shape (round teddy-bear), keep identical in every scene."></textarea>
+            <div class="hint">
+              ✅ 이 문장은 “아랑 프리셋”에서 자동으로 LOOK LOCK에 합쳐져서 나노바나나/VEO3 흔들림을 더 줄입니다.<br/>
+              ✅ <b>팁:</b> 실제 아랑 사진을 보고 “털색/귀 모양/리본 위치/눈 간격/얼굴형”을 영어로 짧고 단정하게 적으면 가장 잘 먹힙니다.
+            </div>
+          </div>
+
           <div class="row" style="margin-top:8px; display:none" id="adminServerBox">
             <div class="control" style="flex:1 1 100%">
               <div class="k">서버 주소(운영자만 / Workers)</div>
@@ -270,7 +291,7 @@
     <div class="footerNote">© One-Line Movie V4.2 Omni Engine · 룩 고정 + 리텐션 강제 · 오프라인 기본 0원</div>
   </div>
 
-<script>
+  <script>
 /***********************
  * V4.2 Omni Engine (Single-file)
  * ✅ 룩 고정 토큰(일관성) + ✅ 리텐션 강제 장치
@@ -284,6 +305,9 @@ const ENABLE_RETENTION = true;
 
 // ✅ 서버 URL (고객은 못 바꿈)
 const DEFAULT_WORKER_URL = ""; // <-- 여기에 너 Worker 주소 넣기 (없으면 공란 = 오프라인 모드)
+
+// ✅ 아랑 “실물 디테일 잠금” 기본 문장(원하면 여기에도 기본값으로 넣어도 됨)
+const ARANG_DETAIL_LOCK_DEFAULT = ""; // 예: "ARANG REAL-DETAIL LOCK: ..."
 
 // Storage
 const LS_KEY = "olm_v42_state";
@@ -533,34 +557,69 @@ function extractKeywords(line){
 }
 
 /* =========================================================
- * ✅ V4.2: LOOK LOCK TOKENS (캐릭터 룩/비율/옷/얼굴 고정)
- * - 여기 문자열을 너 스타일로 바꾸면 “캐릭터 일관성”이 고정됨
+ * ✅ V4.2: LOOK LOCK TOKENS (실제 “너희 집 룩” 고정판)
+ * - 은비: 하늘색 롱패딩 세트 + 하늘색 하트핀 양쪽 (작은 시츄 체형)
+ * - 제리: 노란 패딩 세트 + 노란 목도리(머리1/목1) + 노란 리본 (작은 말티즈 체형)
+ * - 아랑: 말티푸 느낌 + 빨간 롱패딩 + 검정 장갑/신발 + 초록 리본 (룩 100% 고정)
+ * + 추가: 아랑 실물 디테일 락(사용자 입력)까지 합쳐 “초강력 룩락 문장” 지원
  * ========================================================= */
 const LOOK_LOCK_DB = {
   eunbi: [
-    "CONSISTENCY TOKEN: same small Shih Tzu, round face, short muzzle, fluffy white/cream fur",
-    "same outfit across scenes: simple cozy knit + light padded jacket, no hat, minimal accessories",
-    "same proportions: small body, big head, human-like upright posture when needed"
+    "CONSISTENCY TOKEN: always the same REALISTIC small Shih Tzu dog (very small body, round face, puppy proportions, consistent fur texture).",
+    "OUTFIT LOCK (must be identical across ALL scenes): light sky-blue long padded jacket (no hood, no hat), light sky-blue padded pants, light sky-blue mittens, light sky-blue padded boots.",
+    "ACCESSORY LOCK: two sky-blue heart-shaped hairpins (one on each side of the head).",
+    "PROPORTION LOCK: small Shih Tzu scale, big head-to-body ratio typical of a puppy, never change height/size between scenes.",
+    "STRICT RULE: do NOT change colors, do NOT change outfit type, do NOT add/remove accessories, keep identical identity and lighting continuity."
   ],
+
   jerry: [
-    "CONSISTENCY TOKEN: same small dog, gentle warm eyes, slightly tired but kind expression",
-    "same outfit across scenes: soft padded outfit + scarf, cozy indoor vibe, warm color continuity",
-    "same proportions: small body, realistic fur texture, consistent lighting style"
+    "CONSISTENCY TOKEN: always the same REALISTIC small Maltese dog (very small body, round face, gentle warm eyes, consistent fur texture).",
+    "OUTFIT LOCK (must be identical across ALL scenes): bright yellow padded jacket (no hat), bright yellow padded pants, bright yellow mittens, bright yellow padded boots.",
+    "SCARF LOCK: yellow scarf wrapped once around the head area and once around the neck (two loops clearly).",
+    "ACCESSORY LOCK: yellow ribbon (fixed position, do not change).",
+    "STRICT RULE: do NOT change colors, do NOT change outfit type, keep identical identity and proportions across scenes."
   ],
+
+  // ✅ 아랑 룩 100% 확정 (완전 고정형)
   arang: [
-    "CONSISTENCY TOKEN: same smart small dog, alert eyes, confident stance",
-    "same outfit across scenes: practical jacket/vest, ready-to-move, action blocking friendly",
-    "same proportions: consistent height, fur pattern, face shape, cinematic continuity"
+    "CONSISTENCY TOKEN: always the same REALISTIC small Maltipoo-like dog (small body, fluffy fur, consistent face shape and fur texture across ALL scenes).",
+    "OUTFIT LOCK (must be identical across ALL scenes): long red padded jacket (no hood, no hat), keep the same exact red tone and jacket length in every scene.",
+    "GLOVES/SHOES LOCK: black gloves (mittens style) and black shoes/boots must be present and identical in every scene.",
+    "ACCESSORY LOCK: green ribbon (fixed position, do not change its color, size, or location).",
+    "PROPORTION LOCK: keep identical height/size and body proportions across scenes (no scaling changes).",
+    "ULTRA LOOK-LOCK RULE: lock fur color pattern, ear shape, ribbon placement, eye spacing, nose size, face silhouette, and fluffy volume; DO NOT morph between scenes; enforce identical identity as if the exact same dog photo was used every time.",
+    "STRICT RULE: do NOT change breed feel, do NOT change colors, do NOT change outfit type, do NOT add/remove accessories, keep 100% identical identity and continuity across ALL scenes."
   ],
+
   custom: [
-    "CONSISTENCY TOKEN: keep the protagonist identity identical across scenes (face, fur, outfit, proportions)",
-    "same camera style and lighting continuity across scenes"
+    "CONSISTENCY TOKEN: keep the protagonist identity identical across scenes (face, fur, outfit, accessories, proportions).",
+    "STRICT RULE: same camera style and lighting continuity across scenes; do NOT change outfit colors mid-story."
   ]
 };
+
+// ✅ “아랑 실물 디테일 락”을 안전하게 가져오기 (없으면 공란)
+function getArangDetailLock(){
+  const el = $("arangDetailLock");
+  const v = safeTrim(el ? el.value : "");
+  return v || safeTrim(ARANG_DETAIL_LOCK_DEFAULT);
+}
+
 function lookLockText(presetId){
   if(!ENABLE_LOOK_LOCK) return "";
   const key = (presetId && LOOK_LOCK_DB[presetId]) ? presetId : "custom";
-  return LOOK_LOCK_DB[key].join(". ");
+
+  // ✅ 기본 룩락
+  let base = LOOK_LOCK_DB[key].join(" ");
+
+  // ✅ 아랑이면: 사용자 입력 디테일 룩락 문장을 추가로 합친다(초강력)
+  if(key === "arang"){
+    const extra = getArangDetailLock();
+    if(extra){
+      base += " " + extra;
+    }
+  }
+
+  return base;
 }
 
 /* ---------- Character Presets */
@@ -582,7 +641,7 @@ const CHAR_DB = {
   jerry: {
     id: "jerry",
     label: "제리",
-    hero_default: "제리(작은 강아지) — 심장이 약하지만 따뜻한 눈빛",
+    hero_default: "제리(작은 말티즈) — 심장이 약하지만 따뜻한 눈빛",
     setting_bias: "따뜻한 실내/담요/주방/포근한 조명/보호받는 분위기",
     tone_bias: "warm",
     genre_bias: "drama",
@@ -670,7 +729,7 @@ const BRAIN = {
     const subtitle_policy = preset?.rules?.subtitle || "MINIMAL";
     const dialogue_policy = preset?.rules?.dialogue || "NO_SPEECH";
 
-    // ✅ V4.2: 룩 고정 토큰
+    // ✅ V4.2: 룩 고정 토큰(아랑은 extra 문장까지 합쳐짐)
     const look_lock = lookLockText(pid || presetId || "custom");
 
     return {
@@ -741,16 +800,10 @@ const TRANSLATE = {
   },
 
   subtitle(brain, idx, line, flags){
-    // 0번: 훅(원라인 그대로)
     if(idx === 0) return `“${line}”`;
-
-    // ✅ 12초 첫 반전 강제
     if(flags?.isFirstTwist) return this.retentionSubtitle(brain, "firstTwist");
-
-    // ✅ 마지막 질문형 엔딩 강제
     if(flags?.isEnding) return this.retentionSubtitle(brain, "endingQ");
 
-    // 기존 정책
     const pol = brain.subtitle_policy;
 
     if(pol === "MINIMAL_POETIC"){
@@ -816,7 +869,6 @@ const TRANSLATE = {
     return base[Math.min(base.length-1, idx-1)];
   },
 
-  // ✅ V4.2: 룩 고정 토큰을 프롬프트에 강제 삽입
   toImage({ brain, line, beat, idx, seconds, tone, genre, flags }){
     const style = cinematicStyle(tone);
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
@@ -830,7 +882,7 @@ const TRANSLATE = {
     const add = brain.preset?.prompt_add?.join(", ") || "";
     const kw = extractKeywords(line).join(", ");
     const cam = this.cameraLine(brain, idx).replace("Camera:", "").trim();
-    const look = ENABLE_LOOK_LOCK ? `LOOK LOCK: ${brain.look_lock}.` : "";
+    const look = ENABLE_LOOK_LOCK ? `LOOK LOCK: ${brain.look_lock}` : "";
 
     return `Vertical 9:16, ${timeHint}, ${genreLabel(genre)} vibe,
 Beat: ${this.beatLine(beat, brain, idx, flags)},
@@ -881,6 +933,12 @@ function updatePresetHint(){
   if(v === "auto") hint.textContent = "🎛 자동: 입력 한 줄을 분석해서 은비/제리/아랑 스타일을 자동 선택합니다.";
   else if(v === "custom") hint.textContent = "🎛 커스텀: 아래 주인공/배경 입력값을 그대로 사용합니다.";
   else hint.textContent = `🎛 선택됨: ${CHAR_DB[v]?.label} — 훅/카메라/자막/행동 규칙이 자동 적용됩니다.`;
+
+  // ✅ 아랑 초강력 락 박스: 아랑일 때만 보여주기
+  const lockBox = $("arangLockBox");
+  if(lockBox){
+    lockBox.style.display = (v === "arang") ? "block" : "none";
+  }
 }
 
 /* ---------- makePrompts */
@@ -906,13 +964,11 @@ function makePrompts({line, genre, tone, seconds, hero, setting, idx, beat, brai
  * ✅ V4.2: 리텐션 강제 “12초 첫 반전” 씬 찾기
  * ========================================================= */
 function findFirstTwistIndex(times){
-  // 12초가 포함되는 씬 index(0-based)
   const target = 12;
   for(let i=0;i<times.length;i++){
     const t = times[i];
     if(t.start <= target && target < t.end) return i;
   }
-  // 12초가 범위 밖이면(30초 짧은 경우) 중간 씬으로
   return Math.max(1, Math.floor(times.length * 0.35));
 }
 
@@ -926,7 +982,6 @@ function buildPlan(payload){
   const brain = BRAIN.analyze({ line, genre, tone, seconds: total, presetId, hero, setting });
   const beats = beatsForGenre(brain.finalGenre || genre);
 
-  // 타임라인 구성
   const base = Math.floor(total / n);
   const times = [];
   let t = 0;
@@ -940,7 +995,6 @@ function buildPlan(payload){
   }
   if(times.length) times[times.length-1].end = total;
 
-  // ✅ V4.2: 12초 첫 반전 + 마지막 질문형 엔딩 강제
   const firstTwistIndex = ENABLE_RETENTION ? findFirstTwistIndex(times) : -1;
   const endingIndex = n - 1;
 
@@ -1148,6 +1202,7 @@ function getPayloadFromInputs(){
     hero: safeTrim($("hero").value),
     setting: safeTrim($("setting").value),
     preset: $("preset")?.value || "auto",
+    arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
     worker: getWorkerUrl()
   };
 }
@@ -1162,6 +1217,7 @@ function saveState(){
     preset: $("preset")?.value || "auto",
     hero: safeTrim($("hero").value),
     setting: safeTrim($("setting").value),
+    arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
     worker: isAdmin ? safeTrim($("worker")?.value) : ""
   };
   try{
@@ -1187,6 +1243,7 @@ function loadState(){
     if($("preset")) $("preset").value = s.preset || "auto";
     $("hero").value = s.hero || "";
     $("setting").value = s.setting || "";
+    if($("arangDetailLock")) $("arangDetailLock").value = s.arangDetailLock || ARANG_DETAIL_LOCK_DEFAULT || "";
     if(isAdmin){
       $("worker").value = s.worker || DEFAULT_WORKER_URL || "";
     }
@@ -1206,6 +1263,7 @@ function exportBackup(){
     preset: $("preset")?.value || "auto",
     hero: safeTrim($("hero").value),
     setting: safeTrim($("setting").value),
+    arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
     worker: isAdmin ? safeTrim($("worker")?.value) : ""
   };
   let lastPlan = null;
@@ -1243,6 +1301,7 @@ async function importBackup(){
     if($("preset")) $("preset").value = s.preset || "auto";
     $("hero").value = s.hero || "";
     $("setting").value = s.setting || "";
+    if($("arangDetailLock")) $("arangDetailLock").value = s.arangDetailLock || ARANG_DETAIL_LOCK_DEFAULT || "";
     if(isAdmin){
       $("worker").value = s.worker || DEFAULT_WORKER_URL || "";
     }
@@ -1273,6 +1332,7 @@ function recoveryMode(){
   $("line").value = "";
   $("hero").value = "";
   $("setting").value = "";
+  if($("arangDetailLock")) $("arangDetailLock").value = ARANG_DETAIL_LOCK_DEFAULT || "";
   $("genre").value = "mystery";
   $("tone").value = "serious";
   $("length").value = "60";
@@ -1396,6 +1456,7 @@ $("reset").addEventListener("click", () => {
   $("line").value = "";
   $("hero").value = "";
   $("setting").value = "";
+  if($("arangDetailLock")) $("arangDetailLock").value = ARANG_DETAIL_LOCK_DEFAULT || "";
   $("genre").value = "mystery";
   $("tone").value = "serious";
   $("length").value = "60";
@@ -1409,7 +1470,7 @@ $("reset").addEventListener("click", () => {
 });
 
 // preset 포함 자동 저장
-["line","genre","tone","length","hero","setting","preset"].forEach(id=>{
+["line","genre","tone","length","hero","setting","preset","arangDetailLock"].forEach(id=>{
   if(!$(id)) return;
   $(id).addEventListener("input", saveState);
   $(id).addEventListener("change", saveState);
@@ -1446,7 +1507,6 @@ if($("preset")) $("preset").addEventListener("change", updatePresetHint);
     }
   }catch(e){}
 })();
-</script>
-
+  </script>
 </body>
 </html>
