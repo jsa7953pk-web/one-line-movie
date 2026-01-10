@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>원라인 무비 V4.2 - Omni Engine (Ultimate Free)</title>
+  <title>원라인 무비 V4.2 - Omni Engine (Ultimate Free) · CAT Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
 
   <!-- ✅ ZIP 다운로드용 (필수) -->
@@ -147,10 +147,10 @@
 
     <div class="top">
       <div class="brand">
-        <h1>🎬 원라인 무비 <span style="opacity:.65">V4.2 Omni Engine · Ultimate Free</span></h1>
+        <h1>🎬 원라인 무비 <span style="opacity:.65">V4.2 Omni Engine · Ultimate Free · CAT</span></h1>
         <p>
           ✅ 룩 고정(일관성 토큰) · ✅ 리텐션 강제(2초 훅/12초 반전/질문 엔딩)<br/>
-          ✅ 기본 0원(오프라인) · ✅ 캐릭터 프리셋 · ✅ 자동저장/백업/복구 · ✅ 안전모드
+          ✅ 기본 0원(오프라인) · ✅ 고양이 캐릭터 프리셋 · ✅ 자동저장/백업/복구 · ✅ 안전모드
         </p>
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
@@ -158,7 +158,7 @@
         <div class="pill" id="serverPill">🛰 서버: 확인중…</div>
         <div class="pill" id="autosavePill">💾 자동저장: ON</div>
         <div class="pill" id="healthPill">🛡 안전모드: ON</div>
-        <div class="pill" id="buildPill">🏷 버전: v4.2-omni-free</div>
+        <div class="pill" id="buildPill">🏷 버전: v4.2-omni-free-cat</div>
       </div>
     </div>
 
@@ -170,7 +170,7 @@
         </div>
 
         <div class="cardBody">
-          <textarea id="line" placeholder="예: 비 오는 밤, 말을 하지 않는 강아지 탐정이 거리를 걷는다"></textarea>
+          <textarea id="line" placeholder="예: 비 오는 밤, 말을 하지 않는 고양이 탐정이 거리를 걷는다"></textarea>
 
           <div class="row" style="margin-top:10px">
             <div class="control">
@@ -214,16 +214,16 @@
               <div class="k">캐릭터(추천)</div>
               <select id="preset">
                 <option value="auto" selected>자동(입력 한 줄로 판단)</option>
-                <option value="eunbi">은비 (침묵·감각 중심·정적 훅)</option>
-                <option value="jerry">제리 (따뜻·보호·감정 리텐션)</option>
-                <option value="arang">아랑 (행동·리더·스토리 추진)</option>
+                <option value="luna">루나 (침묵·관찰·정적 훅)</option>
+                <option value="mio">미오 (따뜻·케어·감정 리텐션)</option>
+                <option value="coco">코코 (행동·리더·스토리 추진)</option>
                 <option value="custom">직접입력(주인공/배경 사용)</option>
               </select>
             </div>
 
             <div class="control">
               <div class="k">주인공(선택)</div>
-              <input id="hero" type="text" placeholder="예: 말 없는 강아지 탐정(시츄)" />
+              <input id="hero" type="text" placeholder="예: 말 없는 고양이 탐정(단모)" />
             </div>
           </div>
 
@@ -234,7 +234,7 @@
             </div>
           </div>
 
-          <!-- ✅ NEW: 모드 선택 + 룩락 제어 (기본=자유) -->
+          <!-- ✅ 모드 선택 + 룩락 제어 -->
           <div class="row" style="margin-top:10px">
             <div class="control">
               <div class="k">모드</div>
@@ -254,7 +254,7 @@
             </div>
           </div>
 
-          <!-- ✅ NEW: 입력 실시간 경고 + 예상 결과 -->
+          <!-- ✅ 실시간 경고 + 예상 결과 -->
           <div class="hint" id="liveHint" style="margin-top:8px"></div>
           <div class="hint" id="predictHint" style="margin-top:6px; opacity:.9"></div>
 
@@ -262,12 +262,13 @@
             🎛 캐릭터를 고르면: 훅/카메라/자막/행동 규칙이 자동으로 바뀝니다.
           </div>
 
+          <!-- ⚠️ ID는 에러 방지 위해 그대로 유지(arangLockBox/arangDetailLock) -->
           <div class="advancedLock" id="arangLockBox">
-            <div class="k">🔒 아랑 “초강력 룩락 문장”(선택 / 실물 디테일 잠금)</div>
-            <textarea id="arangDetailLock" placeholder="예) ARANG REAL-DETAIL LOCK: exact fur color (light cream with darker ear tips), exact ear shape (rounded droop), eye spacing (slightly wide-set), nose size (small black), ribbon position (left ear base), face shape (round teddy-bear), keep identical in every scene."></textarea>
+            <div class="k">🔒 코코 “초강력 룩락 문장”(선택 / 실물 디테일 잠금)</div>
+            <textarea id="arangDetailLock" placeholder="예) COCO REAL-DETAIL LOCK: exact fur color, exact ear shape, eye spacing, nose size, ribbon position, face silhouette; keep identical in every scene."></textarea>
             <div class="hint">
-              ✅ 이 문장은 “아랑 프리셋”에서 자동으로 LOOK LOCK에 합쳐져서 나노바나나/VEO3 흔들림을 더 줄입니다.<br/>
-              ✅ <b>팁:</b> 실제 아랑 사진을 보고 “털색/귀 모양/리본 위치/눈 간격/얼굴형”을 영어로 짧고 단정하게 적으면 가장 잘 먹힙니다.
+              ✅ 이 문장은 “코코 프리셋”에서 자동으로 LOOK LOCK에 합쳐져서 흔들림을 더 줄입니다.<br/>
+              ✅ <b>팁:</b> 실제 사진을 보고 “털색/귀 모양/리본 위치/눈 간격/얼굴형”을 영어로 짧고 단정하게 적으면 가장 잘 먹힙니다.
             </div>
           </div>
 
@@ -292,7 +293,7 @@
           </div>
 
           <div class="hint">
-            ✅ V4.2 만능급 패치 ON: 룩 고정 + 리텐션 강제(2초 훅/12초 반전/질문 엔딩)<br/>
+            ✅ CAT Edition: 고양이 프리셋(루나/미오/코코) + 룩 고정 + 리텐션 강제<br/>
             ✅ 서버가 죽어도: 오프라인 설계는 계속 정상 동작(0원).
           </div>
         </div>
@@ -305,7 +306,6 @@
             <span id="outMeta">설계 생성 완료</span>
           </div>
           <div class="outActions">
-            <!-- ✅ ZIP 버튼은 JS에서 자동으로 prepend 됨 -->
             <button class="mini" id="downloadJson">⬇️ JSON</button>
             <button class="mini" id="downloadSrt">🧾 SRT</button>
             <button class="mini" id="downloadTxt">📄 TXT</button>
@@ -316,27 +316,22 @@
       </div>
     </div>
 
-    <div class="footerNote">© One-Line Movie V4.2 Omni Engine · 룩 고정 + 리텐션 강제 · 오프라인 기본 0원</div>
+    <div class="footerNote">© One-Line Movie V4.2 Omni Engine · CAT Edition · 룩 고정 + 리텐션 강제 · 오프라인 기본 0원</div>
   </div>
 
   <script>
 /***********************
- * V4.2 Omni Engine (Single-file)
- * ✅ 룩 고정 토큰(일관성) + ✅ 리텐션 강제 장치
+ * V4.2 Omni Engine (Single-file) · CAT Edition
  ***********************/
+const BUILD = "v4.2-omni-free-cat";
 
-const BUILD = "v4.2-omni-free";
-
-// ✅ 패치 핵심:
-// - 기본은 자유 모드라서 룩락 OFF
-// - 시리즈 모드에서 룩락 ON(자동)
 let ENABLE_LOOK_LOCK = false;
 let ENABLE_RETENTION = true;
 
 // ✅ 서버 URL (고객은 못 바꿈)
-const DEFAULT_WORKER_URL = ""; // <-- Worker 주소 넣기 (없으면 공란 = 오프라인)
+const DEFAULT_WORKER_URL = ""; // Worker 주소 넣기 (없으면 공란 = 오프라인)
 
-// ✅ 아랑 “실물 디테일 잠금” 기본 문장(원하면 기본값으로)
+// ✅ 코코 “실물 디테일 잠금” 기본 문장(원하면 기본값으로)
 const ARANG_DETAIL_LOCK_DEFAULT = "";
 
 // Storage
@@ -464,10 +459,7 @@ function toneLabel(key){
   }[key] || key;
 }
 
-/* ==========================
- * ✅ EN-ONLY PROMPT UTIL
- * (PATCH) toneLabel() 아래 삽입
- * ========================== */
+/* ---------- EN-ONLY PROMPT UTIL ---------- */
 function genreLabelEn(key){
   return {
     thriller:"thriller", mystery:"mystery", horror:"horror", action:"action",
@@ -486,9 +478,7 @@ function toAsciiPrompt(str){
     .trim();
 }
 
-/* ==========================
- * ✅ GIANT SCALE ENFORCER
- * ========================== */
+/* ---------- GIANT SCALE ENFORCER ---------- */
 function needsGiantGatekeeper(line){
   const L = (line || "").toLowerCase();
   const kw = [
@@ -506,7 +496,7 @@ function giantScaleText(){
   ].join(" ");
 }
 
-/* ---------- Safety (basic) */
+/* ---------- Safety (basic) ---------- */
 const SAFETY_ON = true;
 const SENSITIVE_PATTERNS = [
   /자살|극단적 선택|죽고 싶|kill myself/i,
@@ -624,37 +614,37 @@ function extractKeywords(line){
   if(L.includes("눈") || L.includes("snow")) add("snowy");
   if(L.includes("추격") || L.includes("chase")) add("chase");
   if(L.includes("침묵") || L.includes("silent")) add("silence tension");
-  if(L.includes("강아지") || L.includes("dog")) add("dog protagonist");
+  if(L.includes("고양이") || L.includes("cat") || L.includes("냥")) add("cat protagonist");
   if(L.includes("요리") || L.includes("cook")) add("cooking scene");
   if(L.includes("구조") || L.includes("rescue")) add("rescue");
   return hints.slice(0,7);
 }
 
 /* =========================================================
- * ✅ V4.2: LOOK LOCK TOKENS
+ * ✅ LOOK LOCK TOKENS (CAT PRESETS)
  * ========================================================= */
 const LOOK_LOCK_DB = {
-  eunbi: [
-    "CONSISTENCY TOKEN: always the same REALISTIC small Shih Tzu dog (very small body, round face, puppy proportions, consistent fur texture).",
-    "OUTFIT LOCK (must be identical across ALL scenes): light sky-blue long padded jacket (no hood, no hat), light sky-blue padded pants, light sky-blue mittens, light sky-blue padded boots.",
+  luna: [
+    "CONSISTENCY TOKEN: always the same REALISTIC small cat (short-haired, compact body, round face, kitten-like proportions, consistent fur texture).",
+    "OUTFIT LOCK (must be identical across ALL scenes): light sky-blue long padded jacket (no hood, no hat), light sky-blue padded pants, light sky-blue padded mittens, light sky-blue padded boots.",
     "ACCESSORY LOCK: two sky-blue heart-shaped hairpins (one on each side of the head).",
-    "PROPORTION LOCK: small Shih Tzu scale, big head-to-body ratio typical of a puppy, never change height/size between scenes.",
+    "PROPORTION LOCK: small cat scale, big head-to-body ratio typical of a kitten, never change height/size between scenes.",
     "STRICT RULE: do NOT change colors, do NOT change outfit type, do NOT add/remove accessories, keep identical identity and lighting continuity."
   ],
-  jerry: [
-    "CONSISTENCY TOKEN: always the same REALISTIC small Maltese dog (very small body, round face, gentle warm eyes, consistent fur texture).",
-    "OUTFIT LOCK (must be identical across ALL scenes): bright yellow padded jacket (no hat), bright yellow padded pants, bright yellow mittens, bright yellow padded boots.",
+  mio: [
+    "CONSISTENCY TOKEN: always the same REALISTIC small white cat (soft fur, gentle warm eyes, consistent fur texture).",
+    "OUTFIT LOCK (must be identical across ALL scenes): bright yellow padded jacket (no hat), bright yellow padded pants, bright yellow padded mittens, bright yellow padded boots.",
     "SCARF LOCK: yellow scarf wrapped once around the head area and once around the neck (two loops clearly).",
     "ACCESSORY LOCK: yellow ribbon (fixed position, do not change).",
     "STRICT RULE: do NOT change colors, do NOT change outfit type, keep identical identity and proportions across scenes."
   ],
-  arang: [
-    "CONSISTENCY TOKEN: always the same REALISTIC small Maltipoo-like dog (small body, fluffy fur, consistent face shape and fur texture across ALL scenes).",
+  coco: [
+    "CONSISTENCY TOKEN: always the same REALISTIC small cat (fluffy or medium fur, consistent face silhouette and fur texture across ALL scenes).",
     "OUTFIT LOCK (must be identical across ALL scenes): long red padded jacket (no hood, no hat), keep the same exact red tone and jacket length in every scene.",
     "GLOVES/SHOES LOCK: black gloves (mittens style) and black shoes/boots must be present and identical in every scene.",
     "ACCESSORY LOCK: green ribbon (fixed position, do not change its color, size, or location).",
     "PROPORTION LOCK: keep identical height/size and body proportions across scenes (no scaling changes).",
-    "ULTRA LOOK-LOCK RULE: lock fur color pattern, ear shape, ribbon placement, eye spacing, nose size, face silhouette, and fluffy volume; DO NOT morph between scenes; enforce identical identity as if the exact same dog photo was used every time.",
+    "ULTRA LOOK-LOCK RULE: lock fur color pattern, ear shape, ribbon placement, eye spacing, nose size, face silhouette, and fluffy volume; DO NOT morph between scenes; enforce identical identity as if the exact same cat photo was used every time.",
     "STRICT RULE: do NOT change breed feel, do NOT change colors, do NOT change outfit type, do NOT add/remove accessories, keep 100% identical identity and continuity across ALL scenes."
   ],
   custom: [
@@ -668,38 +658,37 @@ function getArangDetailLock(){
   const v = safeTrim(el ? el.value : "");
   return v || safeTrim(ARANG_DETAIL_LOCK_DEFAULT);
 }
-
 function lookLockText(presetId){
   if(!ENABLE_LOOK_LOCK) return "";
   const key = (presetId && LOOK_LOCK_DB[presetId]) ? presetId : "custom";
   let base = LOOK_LOCK_DB[key].join(" ");
-  if(key === "arang"){
+  if(key === "coco"){
     const extra = getArangDetailLock();
     if(extra) base += " " + extra;
   }
   return base;
 }
 
-/* ---------- Character Presets */
+/* ---------- Character Presets (CAT) ---------- */
 const CHAR_DB = {
-  eunbi: {
-    id: "eunbi",
-    label: "은비",
-    hero_default: "은비(작은 시츄) — 말을 하지 않는 감각형 탐정",
-    setting_bias: "조용한 실내/새벽/부드러운 자연광/소리와 촉감 중심",
+  luna: {
+    id: "luna",
+    label: "루나",
+    hero_default: "루나(작은 고양이) — 말을 하지 않는 관찰형 탐정",
+    setting_bias: "조용한 실내/새벽/부드러운 자연광/미세한 소리와 촉감 중심",
     tone_bias: "serious",
     genre_bias: "mystery",
     rules: { dialogue:"NO_SPEECH", hook:"SILENCE_HOOK", camera:"CLOSE_SENSE", movement:"MINIMAL", reveal:"LATE", subtitle:"MINIMAL_POETIC" },
     prompt_add: [
-      "the dog does NOT speak, communicates with subtle movements",
+      "the cat does NOT speak, communicates with subtle movements",
       "focus on ears, paws, breathing, tiny head tilt",
       "gentle realism, documentary tension"
     ]
   },
-  jerry: {
-    id: "jerry",
-    label: "제리",
-    hero_default: "제리(작은 말티즈) — 심장이 약하지만 따뜻한 눈빛",
+  mio: {
+    id: "mio",
+    label: "미오",
+    hero_default: "미오(작은 고양이) — 따뜻하지만 약한 마음, 케어의 눈빛",
     setting_bias: "따뜻한 실내/담요/주방/포근한 조명/보호받는 분위기",
     tone_bias: "warm",
     genre_bias: "drama",
@@ -710,10 +699,10 @@ const CHAR_DB = {
       "slow breathing, gentle paws"
     ]
   },
-  arang: {
-    id: "arang",
-    label: "아랑",
-    hero_default: "아랑(똑똑한 강아지) — 행동으로 판을 뒤집는 리더",
+  coco: {
+    id: "coco",
+    label: "코코",
+    hero_default: "코코(똑똑한 고양이) — 행동으로 판을 뒤집는 리더",
     setting_bias: "집/골목/가게/현장감/동선이 보이는 공간",
     tone_bias: "cinematic",
     genre_bias: "thriller",
@@ -726,20 +715,24 @@ const CHAR_DB = {
   }
 };
 
-/* =========================================================
- * ✅ (PATCH) autoPickPreset 원본 교체
- * - 문지기/수호신/거대 입력이면 무조건 custom
- * ========================================================= */
+/* ---------- AUTO PICK (CAT) ---------- */
 function autoPickPreset(line){
   const L = (line || "").toLowerCase();
 
-  // ✅ 새 세계관/거대 문지기 요청은 무조건 custom
+  // ✅ 거대 문지기/수호신 입력은 무조건 custom
   if(needsGiantGatekeeper(line)) return "custom";
 
-  if(L.includes("침묵") || L.includes("말을 하지") || L.includes("조용") || L.includes("눈이 안") || L.includes("소리")) return "eunbi";
-  if(L.includes("심장") || L.includes("아픈") || L.includes("치유") || L.includes("따뜻") || L.includes("보호") || L.includes("안아")) return "jerry";
-  if(L.includes("구") || L.includes("구조") || L.includes("추격") || L.includes("달린") || L.includes("요리") || L.includes("리더")) return "arang";
-  return "eunbi";
+  // ✅ 고양이 프리셋 자동 선택
+  if(L.includes("침묵") || L.includes("말을 하지") || L.includes("조용") || L.includes("눈이 안") || L.includes("소리") || L.includes("관찰") || L.includes("탐정"))
+    return "luna";
+
+  if(L.includes("치유") || L.includes("따뜻") || L.includes("보호") || L.includes("안아") || L.includes("위로") || L.includes("눈물") || L.includes("감동"))
+    return "mio";
+
+  if(L.includes("추격") || L.includes("구조") || L.includes("도망") || L.includes("침입") || L.includes("리더") || L.includes("작전") || L.includes("돌파"))
+    return "coco";
+
+  return "luna";
 }
 
 /* =========================================================
@@ -752,10 +745,18 @@ function getLockMode(){
   return ($("lockMode")?.value || "auto"); // auto | on | off
 }
 
+/* ✅ 기존 함수명 유지(호환성): 내부만 고양이까지 확장 */
 function shouldUseDogPreset(line){
   const L = (line || "").toLowerCase();
-  const dogKeywords = ["강아지","시츄","말티즈","말티푸","eunbi","jerry","arang","은비","제리","아랑","dog","puppy","shih tzu","maltese","maltipoo"];
-  return dogKeywords.some(k => L.includes(k));
+  const petKeywords = [
+    // 기존 강아지 키워드(호환)
+    "강아지","시츄","말티즈","말티푸","eunbi","jerry","arang","은비","제리","아랑",
+    "dog","puppy","shih tzu","maltese","maltipoo",
+    // 고양이 키워드
+    "고양이","냥이","캣","cat","kitten","feline",
+    "루나","미오","코코","luna","mio","coco"
+  ];
+  return petKeywords.some(k => L.includes(k));
 }
 
 function looksLikeNewCharacterRequest(line){
@@ -771,9 +772,6 @@ function applyModePolicyToEngine(){
   if(lockMode === "on") ENABLE_LOOK_LOCK = true;
   else if(lockMode === "off") ENABLE_LOOK_LOCK = false;
   else ENABLE_LOOK_LOCK = (mode === "series");
-
-  // 리텐션은 기본 ON 유지
-  // ENABLE_RETENTION = (mode === "series");
 }
 
 function updateLiveHints(){
@@ -804,6 +802,21 @@ function updateLiveHints(){
     predict.textContent = `예상 결과: "${line}"을 그대로 반영한 새 장면/캐릭터 중심`;
   }
 }
+
+/* =========================================================
+ * ✅ autoPickPreset wrapper (문지기는 어떤 모드든 custom 고정)
+ * ========================================================= */
+const _autoPickPresetOriginal = autoPickPreset;
+autoPickPreset = function(line){
+  if(needsGiantGatekeeper(line)) return "custom";
+
+  const mode = getAppMode();
+  if(mode === "free"){
+    if(shouldUseDogPreset(line)) return _autoPickPresetOriginal(line);
+    return "custom";
+  }
+  return _autoPickPresetOriginal(line);
+};
 
 function explainResult(plan){
   const mode = getAppMode();
@@ -883,26 +896,7 @@ function injectExplainCard(plan){
   };
 }
 
-/* =========================================================
- * ✅ (PATCH) autoPickPreset 래퍼 교체
- * - 문지기/수호신/거대 입력은 어떤 모드든 custom 고정
- * ========================================================= */
-const _autoPickPresetOriginal = autoPickPreset;
-autoPickPreset = function(line){
-  // ✅ 문지기/수호신/거대 입력은 어떤 모드든 custom 고정
-  if(needsGiantGatekeeper(line)) return "custom";
-
-  const mode = getAppMode();
-  if(mode === "free"){
-    // 자유모드: 강아지 관련 키워드가 없으면 custom
-    if(shouldUseDogPreset(line)) return _autoPickPresetOriginal(line);
-    return "custom";
-  }
-  // 시리즈모드: 기존 로직 사용(단, 문지기는 위에서 이미 custom로 빠짐)
-  return _autoPickPresetOriginal(line);
-};
-
-/* ---------- BRAIN */
+/* ---------- BRAIN ---------- */
 const BRAIN = {
   analyze({ line, genre, tone, seconds, presetId, hero, setting }){
     const total = Number(seconds);
@@ -978,7 +972,7 @@ const BRAIN = {
   }
 };
 
-/* ---------- TRANSLATE */
+/* ---------- TRANSLATE ---------- */
 const TRANSLATE = {
   cameraLine(brain, idx){
     const cam = brain.camera_policy;
@@ -1012,13 +1006,13 @@ const TRANSLATE = {
   retentionSubtitle(brain, kind){
     const pid = brain.presetId;
     if(kind === "firstTwist"){
-      if(pid === "eunbi") return "방금… 규칙이 바뀌었어";
-      if(pid === "jerry") return "이 장면… 뭔가 숨기고 있어";
+      if(pid === "luna") return "방금… 규칙이 바뀌었어";
+      if(pid === "mio") return "이 장면… 뭔가 숨기고 있어";
       return "지금부터 판이 뒤집혀";
     }
     if(kind === "endingQ"){
-      if(pid === "eunbi") return "너라면… 이 단서 믿어?";
-      if(pid === "jerry") return "너라면… 제리 지켜줄래?";
+      if(pid === "luna") return "너라면… 이 단서 믿어?";
+      if(pid === "mio") return "너라면… 미오를 지켜줄래?";
       return "너라면… 지금 뭐 할래?";
     }
     return "너라면 어떻게 할래?";
@@ -1033,7 +1027,7 @@ const TRANSLATE = {
 
     if(pol === "MINIMAL_POETIC"){
       const pool = [
-        "…아무 소리도 없다","손끝이 먼저 안다","숨이 바뀌었다","여기, 규칙이 있다","놓치면 끝",
+        "…아무 소리도 없다","발끝이 먼저 안다","숨이 바뀌었다","여기, 규칙이 있다","놓치면 끝",
         "지금 보인 게 단서","반전은 조용히 온다","끝나지 않았다","질문은 남는다","다음 장면"
       ];
       return pool[Math.min(pool.length-1, idx)];
@@ -1062,10 +1056,6 @@ const TRANSLATE = {
     return base[Math.min(base.length-1, Math.max(0, idx-1))];
   },
 
-  /* =========================================================
-   * ✅ (PATCH) toImage 통째로 교체
-   * - EN/ASCII-only + text 금지 강화 + giant scale + (옵션) look lock
-   * ========================================================= */
   toImage({ brain, line, beat, idx, seconds, tone, genre, flags }){
     const style = cinematicStyle(tone);
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
@@ -1105,9 +1095,6 @@ ${add ? "Extra: " + toAsciiPrompt(add) + "," : ""}
 ${noText}`;
   },
 
-  /* =========================================================
-   * ✅ (PATCH) toVideo 통째로 교체
-   * ========================================================= */
   toVideo({ brain, line, beat, idx, seconds, tone, genre, flags }){
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
 
@@ -1148,23 +1135,23 @@ Make it feel like a real movie shot. ${noText}`;
   }
 };
 
-/* ---------- preset hint */
+/* ---------- preset hint ---------- */
 function updatePresetHint(){
   const v = $("preset")?.value || "auto";
   const hint = $("presetHint");
   if(hint){
-    if(v === "auto") hint.textContent = "🎛 자동: 입력 한 줄을 분석해서 은비/제리/아랑 스타일을 자동 선택합니다.";
+    if(v === "auto") hint.textContent = "🎛 자동: 입력 한 줄을 분석해서 루나/미오/코코 스타일을 자동 선택합니다.";
     else if(v === "custom") hint.textContent = "🎛 커스텀: 아래 주인공/배경 입력값을 그대로 사용합니다.";
     else hint.textContent = `🎛 선택됨: ${CHAR_DB[v]?.label} — 훅/카메라/자막/행동 규칙이 자동 적용됩니다.`;
   }
 
   const lockBox = $("arangLockBox");
   if(lockBox){
-    lockBox.style.display = (v === "arang") ? "block" : "none";
+    lockBox.style.display = (v === "coco") ? "block" : "none";
   }
 }
 
-/* ---------- makePrompts */
+/* ---------- makePrompts ---------- */
 function makePrompts({line, genre, tone, seconds, hero, setting, idx, beat, brain, flags}) {
   const b = brain || BRAIN.analyze({ line, genre, tone, seconds, presetId:"auto", hero, setting });
 
@@ -1183,9 +1170,7 @@ function makePrompts({line, genre, tone, seconds, hero, setting, idx, beat, brai
   return { imagePrompt, videoPrompt, subtitle };
 }
 
-/* =========================================================
- * ✅ V4.2: 리텐션 강제 “12초 첫 반전” 씬 찾기
- * ========================================================= */
+/* ---------- retention twist index ---------- */
 function findFirstTwistIndex(times){
   const target = 12;
   for(let i=0;i<times.length;i++){
@@ -1195,7 +1180,7 @@ function findFirstTwistIndex(times){
   return Math.max(1, Math.floor(times.length * 0.35));
 }
 
-/* ---------- buildPlan */
+/* ---------- buildPlan ---------- */
 function buildPlan(payload){
   const { line, genre, tone, seconds, hero, setting } = payload;
   const total = Number(seconds);
@@ -1289,7 +1274,7 @@ function buildPlan(payload){
   };
 }
 
-/* ---------- Export / Rendering helpers */
+/* ---------- Export / Rendering helpers ---------- */
 function planToText(plan){
   let txt = `🎬 원라인: ${plan.title}\n`;
   txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · preset: ${plan.meta.preset}\n`;
@@ -1357,7 +1342,7 @@ async function callWorkerEcho(msg){
   return { ok:true, text, url: u.toString() };
 }
 
-/* ---------- Render */
+/* ---------- Render ---------- */
 let latestPlan = null;
 
 function renderPlan(plan, serverResult){
@@ -1446,7 +1431,7 @@ function getPayloadFromInputs(){
   };
 }
 
-/* ---------- Save / Load / Backup */
+/* ---------- Save / Load / Backup ---------- */
 function saveState(){
   const state = {
     line: safeTrim($("line")?.value),
@@ -1609,12 +1594,12 @@ function recoveryMode(){
   saveState();
 }
 
-/* ---------- Run */
+/* ---------- Run ---------- */
 async function run(){
   applyModePolicyToEngine();
   updateLiveHints();
 
-  // ✅ (PATCH) 새 캐릭터(문지기/수호신/거대) 입력이면 강제로 룩락 OFF (시리즈 모드 충돌 방지)
+  // ✅ 새 캐릭터(문지기/수호신/거대) 입력이면 강제로 룩락 OFF
   if(needsGiantGatekeeper(safeTrim($("line")?.value || ""))){
     ENABLE_LOOK_LOCK = false;
   }
@@ -1675,7 +1660,7 @@ async function run(){
   setTimeout(()=> $("outCard")?.scrollIntoView({behavior:"smooth", block:"start"}), 60);
 }
 
-/* ---------- Buttons */
+/* ---------- Buttons ---------- */
 $("make")?.addEventListener("click", run);
 
 $("copyAll")?.addEventListener("click", () => {
@@ -1741,9 +1726,7 @@ document.addEventListener("keydown", (e) => {
   if((e.ctrlKey || e.metaKey) && e.key === "Enter") run();
 });
 
-/* =========================================================
- * ✅ V4.2 PATCH: ZIP 다운로드(상품 패키지)
- * ========================================================= */
+/* ---------- ZIP download pack ---------- */
 function planToScenePlanTxt(plan){
   let txt = `TITLE: ${plan.title}\n`;
   txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · preset: ${plan.meta.preset}\n`;
@@ -1759,7 +1742,6 @@ function planToScenePlanTxt(plan){
   });
   return txt;
 }
-
 function planToPromptsImageTxt(plan){
   let txt = `# IMAGE PROMPTS (NanoBanana)\n`;
   txt += `TITLE: ${plan.title}\n`;
@@ -1772,7 +1754,6 @@ function planToPromptsImageTxt(plan){
   });
   return txt;
 }
-
 function planToPromptsVideoTxt(plan){
   let txt = `# VIDEO PROMPTS (VEO3)\n`;
   txt += `TITLE: ${plan.title}\n`;
@@ -1785,7 +1766,6 @@ function planToPromptsVideoTxt(plan){
   });
   return txt;
 }
-
 function planToYoutubePackTxt(plan){
   const titleBase = safeTrim(plan.title).slice(0, 60) || "원라인 무비";
   const preset = plan.meta.preset || "커스텀";
@@ -1793,7 +1773,7 @@ function planToYoutubePackTxt(plan){
   const tone = plan.meta.tone || "";
 
   const titles = [
-    `“${titleBase}” (말 없는 강아지의 선택)`,
+    `“${titleBase}” (말 없는 고양이의 선택)`,
     `${genre} 쇼츠: ${titleBase}… 마지막 장면에 답이 있다`,
     `${preset} 버전｜${titleBase}｜끝까지 보면 단서가 보임`
   ];
@@ -1808,10 +1788,10 @@ function planToYoutubePackTxt(plan){
 ✅ 어떤 장면이 가장 소름/감동이었나요?
 1) 첫 장면  2) 12초 반전  3) 마지막 질문 엔딩
 
-#원라인무비 #쇼츠 #강아지쇼츠`;
+#원라인무비 #쇼츠 #고양이쇼츠`;
 
   const hashtags = [
-    "#유튜브쇼츠","#shorts","#강아지","#강아지쇼츠","#댕댕이",
+    "#유튜브쇼츠","#shorts","#고양이","#고양이쇼츠","#냥이",
     "#스토리","#AI프롬프트","#영상기획","#srt","#nanobanana"
   ].join(" ");
 
@@ -1835,7 +1815,6 @@ ${hashtags}
 ${pinned}
 `;
 }
-
 function safeZipName(name){
   return (name || "one-line-movie")
     .toString()
@@ -1844,7 +1823,6 @@ function safeZipName(name){
     .trim()
     .slice(0, 60) || "one-line-movie";
 }
-
 async function downloadZipPack(){
   if(!window.JSZip){
     alert("JSZip 로드 실패! (head에 JSZip CDN 스크립트가 있는지 확인)");
@@ -1917,7 +1895,7 @@ function injectZipButton(){
   target.prepend(btn);
 }
 
-/* ---------- init */
+/* ---------- init ---------- */
 $("buildPill") && ($("buildPill").textContent = "🏷 버전: " + BUILD);
 $("healthPill") && ($("healthPill").textContent = SAFETY_ON ? "🛡 안전모드: ON" : "🛡 안전모드: OFF");
 
