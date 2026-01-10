@@ -2,1993 +2,771 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>원라인 무비 V4.2 - Omni Engine (Ultimate Free) · CAT Edition+</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cat Shorts Studio v4 FINAL — CAT Plugins Embedded (Merged)</title>
   <style>
-    :root{
-      --bg:#0b0b0c; --card:#131316; --text:#f4f4f5; --muted:#b2b2bb; --line:#23232a;
-      --accent:#22c55e; --accent2:#16a34a; --danger:#ef4444; --warn:#f59e0b; --info:#60a5fa;
-      --shadow:0 10px 30px rgba(0,0,0,.35); --radius:16px;
+    :root { --bg:#0b0d12; --panel:#121623; --card:#161c2e; --text:#e9ecf1; --muted:#9aa3b2; --line:#27304a; --ok:#47d18c; --bad:#ff6b6b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif; background:var(--bg); color:var(--text); }
+    header { padding:18px 16px; border-bottom:1px solid var(--line); background:linear-gradient(180deg, #0d1020, #0b0d12); }
+    header h1 { margin:0 0 6px; font-size:18px; }
+    header p { margin:0; color:var(--muted); font-size:13px; line-height:1.4; }
+    main { max-width:1180px; margin:0 auto; padding:16px; display:grid; gap:14px; grid-template-columns: 1.05fr 0.95fr; }
+    @media (max-width: 980px){ main{ grid-template-columns: 1fr; } }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    label { font-size:12px; color:var(--muted); display:block; margin:10px 0 6px; }
+    input, textarea, select, button {
+      width:100%; border-radius:12px; border:1px solid var(--line);
+      background:var(--card); color:var(--text); padding:10px 11px; font-size:14px;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0; padding:22px; min-height:100vh;
-      font-family:"Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-      background:
-        radial-gradient(1200px 800px at 50% -200px, rgba(34,197,94,.18), transparent 60%),
-        radial-gradient(900px 700px at 10% 10%, rgba(96,165,250,.10), transparent 55%),
-        var(--bg);
-      color:var(--text);
-      display:flex; justify-content:center;
-    }
-    .wrap{width:100%; max-width:1120px}
-    .hero-line{font-size:28px;font-weight:900;text-align:center;margin:10px 0 18px;letter-spacing:-0.03em}
-    .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-    .brand{display:flex;flex-direction:column;gap:6px}
-    .brand h1{margin:0;font-size:26px}
-    .brand p{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border:1px solid var(--line);border-radius:999px;
-      background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;white-space:nowrap;
-    }
-    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;align-items:start}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}}
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-      border:1px solid var(--line);border-radius:var(--radius);
-      box-shadow:var(--shadow);overflow:hidden;
-    }
-    .cardHeader{padding:14px 14px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .cardHeader h2{margin:0;font-size:14px;color:var(--muted);font-weight:750;letter-spacing:.2px}
-    .cardBody{padding:14px}
-    textarea{
-      width:100%;min-height:118px;border-radius:14px;border:1px solid var(--line);
-      background:#0f0f12;color:var(--text);padding:14px;font-size:16px;outline:none;resize:none;line-height:1.5;
-    }
-    textarea::placeholder{color:#7b7b86}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .control{flex:1 1 160px;min-width:150px}
-    select,input[type="text"]{
-      width:100%;height:44px;border-radius:12px;border:1px solid var(--line);
-      background:#0f0f12;color:var(--text);padding:0 12px;outline:none;font-size:14px;
-    }
-    button{
-      border:none;border-radius:14px;height:52px;padding:0 16px;font-size:16px;font-weight:900;cursor:pointer;
-      transition:transform .06s ease, opacity .15s ease;
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;user-select:none;
-    }
-    button:active{transform:translateY(1px)}
-    button:disabled{opacity:.45; cursor:not-allowed; transform:none}
-    .primary{background:linear-gradient(180deg,var(--accent),var(--accent2));color:#07150b;flex:1 1 240px}
-    .ghost{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line);flex:1 1 170px;height:46px;font-weight:800}
-    .danger{background:rgba(239,68,68,.12);color:#fecaca;border:1px solid rgba(239,68,68,.25);flex:1 1 170px;height:46px;font-weight:800}
-    .warn{background:rgba(245,158,11,.14);color:#fde68a;border:1px solid rgba(245,158,11,.25);flex:1 1 170px;height:46px;font-weight:800}
-    .info{background:rgba(96,165,250,.14);color:#bfdbfe;border:1px solid rgba(96,165,250,.25);flex:1 1 170px;height:46px;font-weight:800}
-    .hint{color:var(--muted);font-size:12px;line-height:1.5;margin-top:10px}
-    .badge{font-size:12px;color:var(--muted);border:1px solid var(--line);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px;white-space:nowrap}
-    .badge.good{border-color:rgba(34,197,94,.25); color:#bbf7d0; background:rgba(34,197,94,.10)}
-    .badge.bad{border-color:rgba(239,68,68,.25); color:#fecaca; background:rgba(239,68,68,.10)}
-    .badge.warn{border-color:rgba(245,158,11,.25); color:#fde68a; background:rgba(245,158,11,.10)}
-    .badge.info{border-color:rgba(96,165,250,.25); color:#bfdbfe; background:rgba(96,165,250,.10)}
-    .outTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
-    .outTop .title{display:flex;flex-direction:column;gap:4px;min-width:0}
-    .outTop .title b{font-size:14px}
-    .outTop .title span{font-size:12px;color:var(--muted)}
-    .outActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .mini{
-      height:36px;padding:0 10px;border-radius:12px;font-size:12px;font-weight:900;
-      background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line);cursor:pointer;
-    }
-    .out{padding:14px;display:grid;gap:12px}
-    .serverCard{background:#0f0f12;border:1px solid var(--line);border-radius:14px;padding:12px}
-    .serverHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
-    .serverHead b{font-size:14px}
-    .serverHead span{font-size:12px;color:var(--muted)}
-    .serverRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
-    .serverUrl{
-      flex:1 1 220px;font-size:12px;color:var(--muted);padding:8px 10px;border-radius:12px;
-      border:1px solid var(--line);background:#0b0b0c;overflow-wrap:anywhere;
-    }
-    .scene{background:#0f0f12;border:1px solid var(--line);border-radius:14px;padding:12px}
-    .sceneHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
-    .sceneHead .left{display:flex;flex-direction:column;gap:4px}
-    .sceneHead .left b{font-size:14px}
-    .sceneHead .left span{font-size:12px;color:var(--muted)}
-    .k{color:var(--muted);font-size:12px;margin:8px 0 6px}
-    .box{
-      white-space:pre-wrap;line-height:1.55;font-size:13px;background:#0b0b0c;border:1px solid var(--line);
-      border-radius:12px;padding:10px;color:var(--text);overflow-wrap:anywhere;
-    }
-    .footerNote{margin-top:14px;color:var(--muted);font-size:12px;text-align:center;opacity:.85}
-    .split{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
-    .split > * {flex:1 1 240px}
-
-    .banner{
-      display:none;
-      margin:0 0 14px;
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(245,158,11,.25);
-      background:rgba(245,158,11,.12);
-      color:#fde68a;
-      line-height:1.4;
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
-    }
-    .banner b{color:#fff}
-
-    .advancedLock{
-      display:none;
-      margin-top:10px;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid rgba(96,165,250,.25);
-      background:rgba(96,165,250,.08);
-    }
-    .advancedLock .k{margin-top:0}
-    .advancedLock textarea{min-height:92px;font-size:13px}
+    textarea { min-height:90px; resize:vertical; line-height:1.45; }
+    button { cursor:pointer; transition: .15s transform, .15s opacity; }
+    button:hover { transform: translateY(-1px); opacity:.95; }
+    button:active { transform: translateY(0px); opacity:.9; }
+    .btn { width:auto; padding:10px 12px; font-size:13px; }
+    .btn.primary { background:#1e2a5a; border-color:#2e3a77; }
+    .btn.ok { background:#173b2c; border-color:#1f5a43; }
+    .btn.bad { background:#3b1a1a; border-color:#6a2a2a; }
+    .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .chip { padding:6px 10px; border:1px solid var(--line); border-radius:999px; font-size:12px; color:var(--muted); background:#0f1424; }
+    .grid2 { display:grid; gap:10px; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 680px){ .grid2{ grid-template-columns:1fr; } }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px; }
+    .card h3 { margin:0 0 8px; font-size:14px; }
+    .muted { color:var(--muted); font-size:12px; }
+    .scene { border:1px solid var(--line); border-radius:14px; padding:12px; background:#0f1424; margin-top:10px; }
+    .scene-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+    .scene-title { font-weight:700; font-size:13px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size:12px; line-height:1.45; white-space:pre-wrap; word-break:break-word; }
+    .status { margin-top:10px; font-size:12px; padding:8px 10px; border-radius:12px; border:1px solid var(--line); background:#0f1424; }
+    .status.ok { border-color:#1f5a43; color:#bff3da; }
+    .status.bad { border-color:#6a2a2a; color:#ffd0d0; }
+    .tiny { font-size:11px; color:var(--muted); }
+    .hr { height:1px; background:var(--line); margin:12px 0; }
+    .warn { border-color:#7a5a1f; color:#ffe4b3; }
+    details summary { cursor:pointer; color:var(--muted); font-size:12px; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero-line">한 줄을 쓰면, 그 순간 영화가 된다.</div>
-    <div class="banner" id="banner"></div>
+<header>
+  <h1>🐾 Cat Shorts Studio v4 FINAL — CAT Plugins Embedded</h1>
+  <p>
+    한 줄 시나리오 → 쇼츠용 씬 자동 분해 → 나노바나나 프롬프트 + VEO3 컷 리스트 → Export.<br>
+    ✅ CAT Edition 핵심 기능(룩락/리텐션/유튜브팩)을 <b>플러그인 A/B로 내장</b>해 “파일 1개”로 완성했습니다.
+  </p>
+</header>
 
-    <div class="top">
-      <div class="brand">
-        <h1>🎬 원라인 무비 <span style="opacity:.65">V4.2 Omni Engine · Ultimate Free · CAT+ (업그레이드)</span></h1>
-        <p>
-          ✅ 룩 고정(일관성 토큰) · ✅ 리텐션 강제(2초 훅/12초 반전/질문 엔딩)<br/>
-          ✅ 고양이 전용 자막/키워드/비트 강화 · ✅ 유튜브팩(10제목/30해시태그/고정댓글 A/B) 자동 생성
-        </p>
+<main>
+  <!-- Left -->
+  <section class="panel">
+    <h2 style="margin:0 0 10px; font-size:15px;">1) 제작 입력</h2>
+
+    <div class="grid2">
+      <div>
+        <label>프로젝트 이름</label>
+        <input id="projectName" placeholder="예) 은비제리아랑 EP.1 / Shorts Studio" />
       </div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
-        <div class="pill" id="modePill">🧠 모드: 오프라인(0원)</div>
-        <div class="pill" id="serverPill">🛰 서버: 확인중…</div>
-        <div class="pill" id="autosavePill">💾 자동저장: ON</div>
-        <div class="pill" id="healthPill">🛡 안전모드: ON</div>
-        <div class="pill" id="buildPill">🏷 버전: v4.2-omni-free-cat-plus</div>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <div class="cardHeader">
-          <h2>입력</h2>
-          <span class="badge info" id="status">대기중</span>
-        </div>
-
-        <div class="cardBody">
-          <textarea id="line" placeholder="예: 비 오는 밤, 말을 하지 않는 고양이 탐정이 거리를 걷는다"></textarea>
-
-          <div class="row" style="margin-top:10px">
-            <div class="control">
-              <div class="k">장르</div>
-              <select id="genre">
-                <option value="mystery" selected>미스터리</option>
-                <option value="thriller">스릴러</option>
-                <option value="horror">공포</option>
-                <option value="action">액션</option>
-                <option value="drama">드라마</option>
-                <option value="romance">로맨스</option>
-                <option value="fantasy">판타지</option>
-                <option value="sf">SF</option>
-                <option value="comedy">코미디</option>
-              </select>
-            </div>
-
-            <div class="control">
-              <div class="k">길이</div>
-              <select id="length">
-                <option value="30">30초</option>
-                <option value="60" selected>60초</option>
-                <option value="180">3분</option>
-              </select>
-            </div>
-
-            <div class="control">
-              <div class="k">톤</div>
-              <select id="tone">
-                <option value="serious" selected>건조·진지</option>
-                <option value="cinematic">시네마틱</option>
-                <option value="noir">느와르</option>
-                <option value="warm">따뜻한</option>
-                <option value="dark">어두운</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:8px">
-            <div class="control">
-              <div class="k">캐릭터(추천)</div>
-              <select id="preset">
-                <option value="auto" selected>자동(입력 한 줄로 판단)</option>
-                <option value="luna">루나 (침묵·관찰·정적 훅)</option>
-                <option value="mio">미오 (따뜻·케어·감정 리텐션)</option>
-                <option value="coco">코코 (행동·리더·스토리 추진)</option>
-                <option value="custom">직접입력(주인공/배경 사용)</option>
-              </select>
-            </div>
-
-            <div class="control">
-              <div class="k">주인공(선택)</div>
-              <input id="hero" type="text" placeholder="예: 말 없는 고양이 탐정(단모)" />
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:8px">
-            <div class="control" style="flex:1 1 100%">
-              <div class="k">배경(선택)</div>
-              <input id="setting" type="text" placeholder="예: 비 내리는 골목, 새벽, 네온 간판" />
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px">
-            <div class="control">
-              <div class="k">모드</div>
-              <select id="appMode">
-                <option value="free" selected>🟢 자유 생성(추천) — 입력대로 해석</option>
-                <option value="series">🔵 시리즈 제작(고급) — 캐릭터/룩 고정</option>
-              </select>
-            </div>
-
-            <div class="control">
-              <div class="k">캐릭터 고정(룩락)</div>
-              <select id="lockMode">
-                <option value="auto" selected>자동(모드에 따라)</option>
-                <option value="off">OFF</option>
-                <option value="on">ON</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="hint" id="liveHint" style="margin-top:8px"></div>
-          <div class="hint" id="predictHint" style="margin-top:6px; opacity:.9"></div>
-
-          <div class="hint" id="presetHint" style="margin-top:8px">
-            🎛 캐릭터를 고르면: 훅/카메라/자막/행동 규칙이 자동으로 바뀝니다.
-          </div>
-
-          <!-- ID 유지(에러 방지): arangLockBox / arangDetailLock -->
-          <div class="advancedLock" id="arangLockBox">
-            <div class="k">🔒 코코 “초강력 룩락 문장”(선택 / 실물 디테일 잠금)</div>
-            <textarea id="arangDetailLock" placeholder="예) COCO REAL-DETAIL LOCK: exact fur color, exact ear shape, eye spacing, nose size, ribbon position, face silhouette; keep identical in every scene."></textarea>
-            <div class="hint">
-              ✅ 이 문장은 “코코 프리셋”에서 자동으로 LOOK LOCK에 합쳐져서 흔들림을 더 줄입니다.
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:8px; display:none" id="adminServerBox">
-            <div class="control" style="flex:1 1 100%">
-              <div class="k">서버 주소(운영자만 / Workers)</div>
-              <input id="worker" type="text" placeholder="운영자만 수정. 예: https://xxxxx.workers.dev" />
-              <div class="hint">✅ 고객은 서버 주소를 못 바꿉니다(잠금). 운영자만 ?admin=1 로 보임.</div>
-            </div>
-          </div>
-
-          <div class="split">
-            <button class="primary" id="make">⚡ 생성하기</button>
-            <button class="ghost" id="copyAll">📋 Copy All</button>
-          </div>
-
-          <div class="split">
-            <button class="ghost" id="downloadAll">⬇️ 3개 파일</button>
-            <button class="warn" id="backupBtn">🧰 백업(내보내기)</button>
-            <button class="info" id="restoreBtn">🧩 복구(가져오기)</button>
-            <button class="danger" id="reset">🧹 초기화</button>
-          </div>
-
-          <div class="hint">
-            ✅ CAT+ Edition: 고양이 전용 자막/키워드/유튜브팩 강화<br/>
-            ✅ 서버가 죽어도: 오프라인 설계는 계속 정상 동작(0원).
-          </div>
-        </div>
-      </div>
-
-      <div class="card" id="outCard" style="display:none">
-        <div class="outTop">
-          <div class="title">
-            <b id="outTitle">원라인</b>
-            <span id="outMeta">설계 생성 완료</span>
-          </div>
-          <div class="outActions">
-            <button class="mini" id="downloadJson">⬇️ JSON</button>
-            <button class="mini" id="downloadSrt">🧾 SRT</button>
-            <button class="mini" id="downloadTxt">📄 TXT</button>
-            <button class="mini" id="recoveryBtn">🧯 복구 모드</button>
-          </div>
-        </div>
-        <div class="out" id="out"></div>
+      <div>
+        <label>쇼츠 길이(초)</label>
+        <input id="totalSec" type="number" min="10" max="180" value="60"/>
       </div>
     </div>
 
-    <div class="footerNote">© One-Line Movie V4.2 Omni Engine · CAT+ Edition · 자막/키워드/유튜브팩 강화</div>
-  </div>
+    <div class="grid2">
+      <div>
+        <label>톤</label>
+        <select id="tone">
+          <option value="cinematic_realistic">시네마틱 실사</option>
+          <option value="documentary">다큐멘터리</option>
+          <option value="news_interview">뉴스 인터뷰</option>
+          <option value="comedy_deadpan">건조한 코미디</option>
+          <option value="emotional_warm">감성/따뜻함</option>
+        </select>
+      </div>
+      <div>
+        <label>비율</label>
+        <select id="aspect">
+          <option value="Vertical 9:16">세로 9:16</option>
+          <option value="Square 1:1">정사각 1:1</option>
+          <option value="Horizontal 16:9">가로 16:9</option>
+        </select>
+      </div>
+    </div>
 
-  <script>
-/***********************
- * V4.2 Omni Engine (Single-file) · CAT+ Edition
- ***********************/
-const BUILD = "v4.2-omni-free-cat-plus";
+    <label>한 줄 시나리오</label>
+    <textarea id="oneLine" placeholder="예) 은비·제리·아랑이 사람처럼 옷 입고 인터뷰를 하는데, 12초에 반전이 터지고 엔딩 질문으로 끝나는 쇼츠"></textarea>
 
-let ENABLE_LOOK_LOCK = false;
-let ENABLE_RETENTION = true;
+    <div class="grid2">
+      <div>
+        <label>캐릭터 설정(쉼표 구분)</label>
+        <input id="characters" placeholder="예) 은비(시츄), 제리(말티즈), 아랑(리더), 인터뷰어 손" />
+      </div>
+      <div>
+        <label>배경/공간</label>
+        <input id="locations" placeholder="예) 새벽 골목, 거실, 스튜디오" />
+      </div>
+    </div>
 
-// 서버 URL(고객은 못 바꿈)
-const DEFAULT_WORKER_URL = "";
+    <div class="grid2">
+      <div>
+        <label>씬 개수(자동)</label>
+        <input id="sceneCount" type="number" min="3" max="20" value="8"/>
+      </div>
+      <div>
+        <label>언어 출력</label>
+        <select id="langMode">
+          <option value="kr_en">한국어 + 영어</option>
+          <option value="kr">한국어만</option>
+          <option value="en">영어만</option>
+        </select>
+      </div>
+    </div>
 
-// 코코 디테일 락 기본값
-const ARANG_DETAIL_LOCK_DEFAULT = "";
+    <label>리텐션 규칙(선택)</label>
+    <input id="retentionRules" placeholder="예) 0-2초 정적→급전개, 12초 반전, 엔딩 질문" />
 
-// Storage
-const LS_KEY = "olm_v42_state";
-const LS_LAST_PLAN = "olm_v42_last_plan";
-const LS_LAST_BACKUP = "olm_v42_last_backup";
+    <div class="row" style="margin-top:12px;">
+      <button class="btn primary" id="btnGenerate">🎬 자동 씬 생성</button>
+      <button class="btn" id="btnRefine">✨ 리텐션 강화</button>
+      <button class="btn bad" id="btnReset">초기화</button>
+    </div>
 
+    <div id="status" class="status ok">준비 완료. 입력 후 ‘자동 씬 생성’을 누르세요.</div>
+
+    <div class="hr"></div>
+
+    <h2 style="margin:0 0 10px; font-size:15px;">2) 씬/프롬프트 결과</h2>
+    <div class="chips" id="chips"></div>
+    <div id="sceneList"></div>
+  </section>
+
+  <!-- Right -->
+  <aside class="panel">
+    <h2 style="margin:0 0 10px; font-size:15px;">내보내기 / CAT 플러그인 포함</h2>
+
+    <div class="card">
+      <h3>📦 Export</h3>
+      <div class="row">
+        <button class="btn ok" id="btnCopyJSON">JSON 복사</button>
+        <button class="btn ok" id="btnDownloadJSON">JSON 다운로드</button>
+        <button class="btn ok" id="btnDownloadCSV">CSV 다운로드</button>
+      </div>
+      <p class="tiny">JSON: 씬/시간/카메라/프롬프트/대사. CSV: 컷 리스트(엑셀용).</p>
+    </div>
+
+    <div class="card" style="margin-top:10px;">
+      <h3>🧩 CAT 플러그인 상태</h3>
+      <p class="muted">
+        ✅ 이 파일은 <b>플러그인 A/B가 이미 내장</b>되어 자동으로 로드됩니다.<br>
+        A: 이미지/프롬프트 강화(룩락/리텐션 문장 보강) · B: VEO3 컷 리스트 + (옵션) 유튜브팩 생성
+      </p>
+
+      <div class="row" style="margin-top:10px;">
+        <button class="btn primary" id="btnRunPlugins">▶ 플러그인 실행(테스트)</button>
+        <button class="btn ok" id="btnCopyPluginOut">📋 플러그인 결과 복사</button>
+      </div>
+
+      <div id="pluginStatus" class="status ok" style="margin-top:10px;">✅ 내장 플러그인 로드됨 (A/B OK)</div>
+      <div id="pluginOut" class="status" style="margin-top:10px;">플러그인 출력 대기…</div>
+
+      <details style="margin-top:10px;">
+        <summary>고급: 내장 플러그인 코드 보기</summary>
+        <div class="hr"></div>
+        <div class="mono" id="embeddedCodePreview"></div>
+      </details>
+    </div>
+
+    <div class="card" style="margin-top:10px;">
+      <h3>🛡️ 에러 방어</h3>
+      <ul class="muted" style="margin:8px 0 0 18px; line-height:1.5;">
+        <li>입력 누락 시 생성 금지</li>
+        <li>시간 합계 자동 검증</li>
+        <li>플러그인 실행 실패해도 앱 기능 유지</li>
+      </ul>
+    </div>
+  </aside>
+</main>
+
+<script>
+/** ========= Core State ========= */
 const $ = (id) => document.getElementById(id);
-const safeTrim = (v) => (v || "").toString().trim();
+const schemaVersion = "v4-final-cat-merged";
 
-function setStatus(text, kind="info"){
+let state = {
+  schemaVersion,
+  projectName: "",
+  totalSec: 60,
+  tone: "cinematic_realistic",
+  aspect: "Vertical 9:16",
+  oneLine: "",
+  characters: "",
+  locations: "",
+  langMode: "kr_en",
+  sceneCount: 8,
+  retentionRules: "",
+  tags: [],
+  scenes: [],
+  // plugin outputs go here
+  plugin: { A:null, B:null }
+};
+
+function setStatus(msg, ok=true){
   const el = $("status");
-  if(!el) return;
-  el.textContent = text;
-  el.className = "badge " + (kind || "info");
+  el.textContent = msg;
+  el.className = "status " + (ok ? "ok" : "bad");
 }
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;");
+function setPluginStatus(msg, type="ok"){
+  const el = $("pluginStatus");
+  el.textContent = msg;
+  el.className = "status " + (type === "ok" ? "ok" : (type === "bad" ? "bad" : "warn"));
+}
+function safeParseInt(v, fallback){
+  const n = Number.parseInt(String(v ?? "").trim(), 10);
+  return Number.isFinite(n) ? n : fallback;
+}
+function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+function computeTags(){
+  const tags = [];
+  tags.push(`Tone:${$("tone").value}`);
+  tags.push(`Aspect:${$("aspect").value}`);
+  const rules = $("retentionRules").value.trim();
+  if (rules) tags.push(`Rules:${rules}`);
+  return tags;
 }
 
-/* admin */
-const isAdmin = new URL(location.href).searchParams.get("admin") === "1";
-
-function setBanner(html, show=true){
-  const b = $("banner");
-  if(!b) return;
-  b.innerHTML = html;
-  b.style.display = show ? "block" : "none";
-}
-
-/* Server status */
-let serverState = { status: "UNKNOWN", message: "", until: "" };
-function setServerPill(text){ const el=$("serverPill"); if(el) el.textContent = text; }
-
-function normalizeBase(url){
-  const u = safeTrim(url);
-  if(!u) return "";
-  return u.endsWith("/") ? u.slice(0,-1) : u;
-}
-function getWorkerUrl(){
-  if(isAdmin){
-    const v = safeTrim($("worker")?.value);
-    return normalizeBase(v || DEFAULT_WORKER_URL);
-  }
-  return normalizeBase(DEFAULT_WORKER_URL);
-}
-
-async function fetchServerStatus(){
-  const base = getWorkerUrl();
-  if(!base){
-    serverState = { status:"OFFLINE", message:"서버 주소 미설정(오프라인)", until:"" };
-    setServerPill("🛰 서버: 오프라인(고정)");
-    return serverState;
-  }
-  try{
-    const res = await fetch(base + "/status", { cache:"no-store" });
-    const data = await res.json().catch(()=>null);
-    if(!data?.status){
-      serverState = { status:"UNKNOWN", message:"서버 응답 형식 오류", until:"" };
-      setServerPill("🛰 서버: 오류");
-      return serverState;
-    }
-    serverState = { status: data.status, message: data.message || "", until: data.until || "" };
-    if(data.status === "ON") setServerPill("🛰 서버: ON");
-    else if(data.status === "MAINTENANCE") setServerPill("🛰 서버: 점검중");
-    else if(data.status === "UPGRADE") setServerPill("🛰 서버: 업그레이드중");
-    else if(data.status === "OFF") setServerPill("🛰 서버: OFF");
-    else setServerPill("🛰 서버: UNKNOWN");
-    return serverState;
-  }catch(e){
-    serverState = { status:"DOWN", message:"서버 연결 실패(오프라인으로 동작)", until:"" };
-    setServerPill("🛰 서버: DOWN");
-    return serverState;
-  }
-}
-
-function applyServerPolicy(){
-  const st = serverState.status;
-
-  if(st === "MAINTENANCE" || st === "UPGRADE"){
-    const title = st === "MAINTENANCE" ? "🔧 서비스 점검 중" : "🧠 엔진 업그레이드 중";
-    const msg = serverState.message || "잠시 후 다시 시도해 주세요.";
-    const until = serverState.until ? `<div style="margin-top:6px; opacity:.9">예정: <b>${escapeHtml(serverState.until)}</b></div>` : "";
-    setBanner(`<b>${title}</b><div style="margin-top:6px">${escapeHtml(msg)}</div>${until}`, true);
-    const makeBtn = $("make"); if(makeBtn) makeBtn.disabled = true;
-    const mode = $("modePill"); if(mode) mode.textContent = "🧠 모드: 점검/업그레이드";
-    return;
-  }
-
-  if(st === "OFF" || st === "DOWN" || st === "OFFLINE"){
-    setBanner(`<b>📴 서버 연결 없음</b><div style="margin-top:6px">오프라인(0원) 모드로 계속 사용 가능합니다.</div>`, true);
-    const makeBtn = $("make"); if(makeBtn) makeBtn.disabled = false;
-    const mode = $("modePill"); if(mode) mode.textContent = "🧠 모드: 오프라인(0원)";
-    return;
-  }
-
-  setBanner("", false);
-  const makeBtn = $("make"); if(makeBtn) makeBtn.disabled = false;
-  const mode = $("modePill"); if(mode) mode.textContent = getWorkerUrl() ? "🧠 모드: 서버연결(고정)" : "🧠 모드: 오프라인(0원)";
-}
-
-/* Time utils (SRT) */
-function pad2(n){ return String(n).padStart(2,"0"); }
-function srtTime(seconds){
-  const ms = Math.max(0, Math.floor(seconds * 1000));
-  const h = Math.floor(ms / 3600000);
-  const m = Math.floor((ms % 3600000) / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  const milli = ms % 1000;
-  return `${pad2(h)}:${pad2(m)}:${pad2(s)},${String(milli).padStart(3,"0")}`;
-}
-
-function genreLabel(key){
-  return {
-    thriller:"스릴러", mystery:"미스터리", horror:"공포", action:"액션",
-    drama:"드라마", romance:"로맨스", fantasy:"판타지", sf:"SF", comedy:"코미디"
-  }[key] || key;
-}
-function toneLabel(key){
-  return {
-    serious:"건조·진지", cinematic:"시네마틱", noir:"느와르", warm:"따뜻한", dark:"어두운"
-  }[key] || key;
-}
-
-/* EN prompt utils */
-function genreLabelEn(key){
-  return {
-    thriller:"thriller", mystery:"mystery", horror:"horror", action:"action",
-    drama:"drama", romance:"romance", fantasy:"fantasy", sf:"science fiction", comedy:"comedy"
-  }[key] || key;
-}
-function toneLabelEn(key){
-  return {
-    serious:"dry & serious", cinematic:"cinematic", noir:"neo-noir", warm:"warm", dark:"dark"
-  }[key] || key;
-}
-function toAsciiPrompt(str){
-  return String(str || "")
-    .replace(/[^\x00-\x7F]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-/* Giant gatekeeper enforce */
-function needsGiantGatekeeper(line){
-  const L = (line || "").toLowerCase();
-  const kw = [
-    "문지기","수호신","성문","성벽","거대한","성보다",
-    "gatekeeper","guardian","castle gate","castle wall","giant","titan","colossus",
-    "castle","fortress","keep","wall","guardian statue","gate guardian"
-  ];
-  return kw.some(k => L.includes(k));
-}
-function giantScaleText(){
+/** ========= Prompt Utils ========= */
+function buildBasePromptKR(){
+  const aspect = $("aspect").value;
+  const tone = $("tone").value;
+  const chars = $("characters").value.trim();
+  const locs = $("locations").value.trim();
+  const toneKRMap = {
+    cinematic_realistic: "시네마틱 실사 느낌, 실제 사진 같은 질감, 자연스러운 조명",
+    documentary: "다큐멘터리 톤, 관찰 카메라, 과장 없는 리얼함",
+    news_interview: "뉴스 인터뷰 현장 사진 스타일, 마이크/리포터 프레임 일부",
+    comedy_deadpan: "건조하고 담담한 코미디 톤, 표정 대비 강조",
+    emotional_warm: "따뜻한 감성, 부드러운 자연광, 잔잔한 분위기"
+  };
   return [
-    "SCALE ENFORCE: the gatekeeper/guardian is COLOSSAL, taller than the castle gate and at least as tall as the castle wall.",
-    "Show clear size reference: tiny human silhouettes near the feet, massive hands, towering body filling the frame.",
-    "Low-angle wide lens to emphasize scale, the guardian dominates the scene."
-  ].join(" ");
+    `${aspect}, ${toneKRMap[tone] ?? "실사 스타일"}`,
+    chars ? `등장: ${chars}` : "",
+    locs ? `배경: ${locs}` : "",
+    "카툰/일러스트 금지, 텍스트/자막/워터마크 금지, 왜곡된 얼굴 금지"
+  ].filter(Boolean).join(", ");
 }
-
-/* Safety */
-const SAFETY_ON = true;
-const SENSITIVE_PATTERNS = [
-  /자살|극단적 선택|죽고 싶|kill myself/i,
-  /총기|폭탄|테러|살인|독극물/i,
-  /마약|필로폰|대마|코카인/i
-];
-function applySafety(line){
-  const raw = safeTrim(line);
-  if(!raw) return { ok:false, line:"" };
-
-  if(raw.length > 240){
-    return { ok:true, line: raw.slice(0, 240) + "…", note:"입력이 길어서 자동 축약됨" };
-  }
-
-  for(const p of SENSITIVE_PATTERNS){
-    if(p.test(raw)){
-      const softened = raw
-        .replaceAll(/자살|극단적 선택|죽고 싶/gi, "절망의 순간")
-        .replaceAll(/총기|폭탄|테러|살인|독극물/gi, "위험한 사건")
-        .replaceAll(/마약|필로폰|대마|코카인/gi, "금지된 물질");
-      return { ok:true, line: softened, note:"안전모드가 민감 표현을 완곡 처리함" };
-    }
-  }
-  return { ok:true, line: raw };
-}
-
-function cinematicStyle(tone){
-  const map = {
-    serious: "realistic, restrained, dry, minimal camera movement, documentary-like tension",
-    cinematic: "cinematic, dramatic lighting, shallow depth of field, film grain, high contrast",
-    noir: "neo-noir, wet streets, neon reflections, hard shadows, smoke, low-key lighting",
-    warm: "warm tone, soft light, cozy atmosphere, gentle camera, emotional close-ups",
-    dark: "dark tone, moody lighting, heavy shadows, desaturated colors, ominous ambience"
+function buildBasePromptEN(){
+  const aspect = $("aspect").value;
+  const tone = $("tone").value;
+  const chars = $("characters").value.trim();
+  const locs = $("locations").value.trim();
+  const toneENMap = {
+    cinematic_realistic: "cinematic realistic, photo-like texture, natural lighting",
+    documentary: "documentary style, observational camera, unexaggerated realism",
+    news_interview: "realistic news interview photography, microphone/reporter partial frame",
+    comedy_deadpan: "deadpan comedy tone, emphasize subtle facial contrast",
+    emotional_warm: "warm emotional tone, soft natural light, gentle mood"
   };
-  return map[tone] || map.serious;
+  return [
+    `${aspect}, ${toneENMap[tone] ?? "realistic style"}`,
+    chars ? `Cast: ${chars}` : "",
+    locs ? `Location: ${locs}` : "",
+    "no cartoon, no text/subtitles/watermark, no face distortion"
+  ].filter(Boolean).join(", ");
 }
-function buildSceneCount(seconds){
-  const s = Number(seconds);
-  if(s <= 30) return 7;
-  if(s <= 60) return 9;
-  return 12;
-}
-
-/* =========================================================
- * ✅ CAT+ KEYWORD EXTRACTOR (강화)
- * ========================================================= */
-function extractKeywordsCat(line){
-  const L = (line || "").toLowerCase();
-  const hints = [];
-  const add=(k)=>{ if(k && !hints.includes(k)) hints.push(k); };
-
-  // 공통 분위기
-  if(L.includes("비") || L.includes("rain")) add("rainy");
-  if(L.includes("밤") || L.includes("night")) add("night");
-  if(L.includes("새벽") || L.includes("dawn")) add("dawn");
-  if(L.includes("골목") || L.includes("alley")) add("alley");
-  if(L.includes("네온") || L.includes("neon")) add("neon");
-  if(L.includes("눈") || L.includes("snow")) add("snowy");
-
-  // 고양이 행동 특화
-  const catKw = [
-    ["귀", "ear twitch"], ["꼬리", "tail flick"], ["눈동자","pupil dilation"],
-    ["그루밍","grooming"], ["점프","jump"], ["사냥","hunt instinct"],
-    ["레이저","laser dot"], ["상자","cardboard box"], ["창문","window perch"],
-    ["발바닥","paw pads"], ["수염","whiskers"], ["골골","purring"],
-    ["하악","hissing"], ["숨","breathing"], ["발소리","soft footsteps"]
+function shotPresets(){
+  return [
+    { nameKR:"훅 클로즈업", nameEN:"Hook Close-up", camera:"eye-level close-up, slight push-in", actionKR:"정적 1~2초 후 미세 움직임", actionEN:"1–2s stillness then micro-movement" },
+    { nameKR:"상황 제시 와이드", nameEN:"Establishing Wide", camera:"wide shot, stable frame", actionKR:"공간/소품으로 상황 설명", actionEN:"explain context via space/props" },
+    { nameKR:"손/소품 클로즈업", nameEN:"Prop Close-up", camera:"macro/close-up on prop, shallow DOF", actionKR:"소품이 이야기의 열쇠", actionEN:"prop becomes the key" },
+    { nameKR:"리액션 샷", nameEN:"Reaction Shot", camera:"medium close-up, quick zoom-in", actionKR:"눈/귀/입 미세 변화", actionEN:"tiny eye/ear/mouth change" },
+    { nameKR:"반전 리빌", nameEN:"Twist Reveal", camera:"snap zoom or quick cut reveal", actionKR:"새 정보로 재해석", actionEN:"new info recontextualizes" },
+    { nameKR:"엔딩 고정", nameEN:"Ending Hold", camera:"locked shot, 1s hold", actionKR:"짧은 정적 후 종료", actionEN:"brief stillness then end" }
   ];
-  for(const [k, en] of catKw){
-    if(L.includes(k)) add(en);
-  }
-
-  // 스토리 구조
-  if(L.includes("추격") || L.includes("chase")) add("chase");
-  if(L.includes("침묵") || L.includes("silent")) add("silence tension");
-  if(L.includes("탐정") || L.includes("detective")) add("detective");
-  if(L.includes("요리") || L.includes("cook")) add("cooking");
-  if(L.includes("구조") || L.includes("rescue")) add("rescue");
-
-  // 기본
-  if(L.includes("고양이") || L.includes("cat") || L.includes("냥")) add("cat protagonist");
-
-  return hints.slice(0, 9);
+}
+function pickBeatKR(idx, count, oneLine, rules){
+  // CAT식 리텐션을 기본으로 깔아줌 (2초 훅/12초 반전/질문 엔딩 느낌)
+  if (idx === 1) return `훅(2초): ${oneLine}의 핵심을 ‘설명 없이’ 암시`;
+  if (idx === count) return `엔딩(질문): 선택을 강요하는 한 문장 + 0.7초 정적`;
+  if (idx === 2) return "상황 제시: 캐릭터가 사람처럼 행동하는 증거(소품/옷/제스처)";
+  if (idx === Math.ceil(count*0.6)) return "반전(12초 근처): 관객의 착각을 깨는 ‘새 정보 1개’";
+  if (idx === Math.ceil(count*0.8)) return "가속: 템포 업(줌/컷) + 결말 직전 미끼 질문";
+  return rules ? `진행: ${rules}에 맞춰 긴장 유지` : "진행: 매 5~8초마다 시각 변화(줌/각도/소품) 1번";
+}
+function pickBeatEN(idx, count, oneLine, rules){
+  if (idx === 1) return `Hook (2s): imply the core of "${oneLine}" with no explanation`;
+  if (idx === count) return `Ending (question): force a choice + 0.7s stillness`;
+  if (idx === 2) return "Setup: proof the character behaves like a human (prop/clothes/gesture)";
+  if (idx === Math.ceil(count*0.6)) return "Twist (~12s): one new info that breaks the viewer’s assumption";
+  if (idx === Math.ceil(count*0.8)) return "Acceleration: faster tempo (zoom/cuts) + bait question before ending";
+  return rules ? `Flow: keep tension based on "${rules}"` : "Flow: add one visual change every 5–8 seconds";
+}
+function suggestDialogueKR(idx, count){
+  if (idx === 1) return "자막(선택): “지금… 뭔가 이상합니다.”";
+  if (idx === 2) return "자막(선택): “얘… 사람처럼 행동해요.”";
+  if (idx === Math.ceil(count*0.6)) return "자막(선택): “방금 그건… 착각이 아니었어.”";
+  if (idx === count) return "자막(선택): “당신이라면… 믿었을까요?”";
+  return "자막(선택): 핵심 단어 1~3개만";
+}
+function suggestDialogueEN(idx, count){
+  if (idx === 1) return "Caption (optional): “Something is… off.”";
+  if (idx === 2) return "Caption (optional): “It behaves like a human.”";
+  if (idx === Math.ceil(count*0.6)) return "Caption (optional): “That wasn’t imagination.”";
+  if (idx === count) return "Caption (optional): “Would you believe it?”";
+  return "Caption (optional): 1–3 keywords only";
+}
+function suggestEditNotes(idx, count){
+  if (idx === 1) return "0–2초 정적 → 2초에 미세 움직임(시선/귀/손).";
+  if (idx === 2) return "상황 설명은 소품/의상으로. 과설명 금지.";
+  if (idx === Math.ceil(count*0.6)) return "반전은 ‘새 정보 1개’만. 반전 직후 0.3초 정적.";
+  if (idx === count) return "엔딩 0.7~1초 정적 유지 후 컷. 댓글 유도 1문장.";
+  return "매 5~8초마다 시각 변화(줌/각도/소품 클로즈업) 1번.";
 }
 
-/* =========================================================
- * ✅ CAT+ BEAT TEMPLATES (강화)
- * - 고양이 행동을 “서사의 장치”로 강제 삽입
- * ========================================================= */
-function beatsForGenre(genre){
-  const base = [
-    "오프닝 훅 — 한 컷에 상황 박기",
-    "이상 징후 — 평범이 깨진다",
-    "위협 제시 — 위험이 보인다",
-    "첫 행동 — 주인공이 움직인다(귀/꼬리 반응)",
-    "규칙/단서 — 조건이 드러난다(눈동자/수염 클로즈업)",
-    "최대 위기 — 실패 직전(하악/정적)",
-    "실마리 — 작은 힌트(발바닥/발소리)",
-    "반전 — 진짜 원인/적",
-    "엔딩 — 여운/다음 떡밥(질문)"
-  ];
-  const map = {
-    mystery: [
-      "오프닝 훅 — 수상한 단서 한 컷(귀가 움직인다)",
-      "이상 징후 — 말이 안 되는 점(꼬리 멈춤)",
-      "의심 — 용의자/장소 등장(창가 시선 고정)",
-      "첫 조사 — 단서 확대(수염/눈동자 클로즈업)",
-      "규칙/퍼즐 — 숨은 연결고리(발바닥 자국)",
-      "최대 위기 — 오해/함정(정적 + 숨소리)",
-      "실마리 — 결정적 힌트(레이저 점/반사광)",
-      "반전 — 진범/진실(상자 속에서 나온다)",
-      "엔딩 — 여운/다음 사건(질문 엔딩)"
-    ],
-    thriller: [
-      "오프닝 훅 — 숨막히는 긴장 한 컷(꼬리 떨림)",
-      "추적 시작 — 누가 누구를 쫓나(발소리)",
-      "위협 확대 — 점점 가까워진다(눈동자 확장)",
-      "노출 — 들켰다(하악)",
-      "룰/조건 — 도망칠 수 없는 이유(문/잠금)",
-      "최대 위기 — 코앞에서 잡힘(숨 멎는 정적)",
-      "미끼 — 판을 뒤집는 한 수(레이저 유도)",
-      "클라이맥스 — 도망/대치(점프/회피)",
-      "엔딩 — 아직 끝나지 않음(질문)"
-    ],
-    horror: [
-      "오프닝 훅 — 섬뜩한 전조(골골이 멈춘다)",
-      "이상 징후 — 소리가 멈춘다(귀만 움직임)",
-      "규칙 — 하면 안 되는 것(상자 열지 마)",
-      "접근 — 금지구역 진입(창문 너머 그림자)",
-      "징후 확대 — 존재가 드러남(눈동자 반사)",
-      "최대 위기 — 바로 뒤(하악/털 곤두)",
-      "탈출 시도 — 문이 안 열린다(발바닥 미끄럼)",
-      "반전 — 진짜 공포(거울/반사)",
-      "엔딩 — 남는 흔적(질문)"
-    ],
-    action: [
-      "오프닝 훅 — 폭발적 시작(점프 진입)",
-      "목표 제시 — 무엇을 지켜야 하나(대상 확보)",
-      "추격 — 속도감(발소리/회피)",
-      "전투 — 첫 충돌(발톱 스치기)",
-      "전술 — 한 수(상자/가구 활용)",
-      "최대 위기 — 포위(탈출로 봉쇄)",
-      "역전 — 반격(레이저/유인)",
-      "결착 — 승부(한 컷에 끝)",
-      "엔딩 — 다음 미션(질문)"
-    ],
-    drama: [
-      "오프닝 훅 — 감정의 공기(숨/눈빛)",
-      "상처 — 말하지 못하는 이유(침묵)",
-      "접근 — 조심스러운 한 걸음(발바닥)",
-      "교감 — 작은 변화(골골)",
-      "오해 — 마음이 어긋남(꼬리 내림)",
-      "최대 위기 — 떠나려는 순간(정적)",
-      "실마리 — 따뜻한 신호(눈동자)",
-      "반전 — 진짜 마음(그루밍/머리 기대기)",
-      "엔딩 — 당신이라면?(질문)"
-    ],
-    comedy: [
-      "오프닝 훅 — 한 컷에 웃김(상자에 끼임)",
-      "이상 징후 — 뭔가 이상하다(꼬리 폭주)",
-      "실패 — 첫 시도 망함(점프 미스)",
-      "오해 — 괜히 심각(눈동자 확대)",
-      "상황폭발 — 더 꼬임(레이저 난리)",
-      "최대 위기 — 이대로 끝?(정적 1초)",
-      "역전 — 우연히 해결(상자 굴러감)",
-      "반전 — 진짜 범인(인형/리모컨)",
-      "엔딩 — 너라면?(질문)"
-    ]
-  };
-  return map[genre] || base;
-}
-
-/* =========================================================
- * ✅ CAT+ SUBTITLE POOL (완전 분리)
- * - 루나: 관찰/정적/단서
- * - 미오: 케어/온기/감정
- * - 코코: 리더/명령/돌파
- * ========================================================= */
-const SUB_POOL = {
-  luna: {
-    hook: [
-      "…지금, 소리가 사라졌어", "그 눈은 이미 알고 있어", "움직인 건 귀뿐이야", "이 정적이 단서야"
-    ],
-    mid: [
-      "발끝이 먼저 느꼈다", "눈동자가 확장됐다", "수염이 떨렸다", "여기엔 규칙이 있다",
-      "상자 안이 비었다", "반사광이 이상해", "발바닥 자국… 하나가 더", "숨이 바뀌었어",
-      "보고 있어… 들키지 않게", "천천히… 더 가까이"
-    ],
-    twist: [
-      "방금… 단서가 ‘움직였어’", "규칙이 바뀌었다", "그게… 미끼였어", "진짜는 따로 있다"
-    ],
-    endQ: [
-      "너라면… 이 단서 믿어?", "너라면… 지금 문을 열어?", "너라면… 따라갈래?", "너라면… 멈출래?"
-    ]
-  },
-  mio: {
-    hook: [
-      "괜찮아… 여기 있어", "숨을 천천히", "지금은 ‘버티는’ 장면", "손이 먼저 움직인다"
-    ],
-    mid: [
-      "따뜻함이 규칙이야", "조금만 더", "여기서 포기하면 안 돼", "눈빛이 말하고 있어",
-      "골골이 다시 들린다", "이건 도움의 신호", "조심스럽게… 다가가", "지켜줄게",
-      "작은 행동이 큰 용기", "아직 끝나지 않아"
-    ],
-    twist: [
-      "이 장면… 숨기고 있었어", "진짜 아픈 건 다른 쪽", "미오가 먼저 안다", "사실은…"
-    ],
-    endQ: [
-      "너라면… 안아줄래?", "너라면… 기다려줄래?", "너라면… 지켜줄래?", "너라면… 포기할래?"
-    ]
-  },
-  coco: {
-    hook: [
-      "멈춰. 지금이다", "들켰다", "시간 없어", "코코가 움직인다"
-    ],
-    mid: [
-      "단서 확보", "동선 변경", "상자 이용", "눈동자 확대… 확인",
-      "레이저로 유도", "문이 잠겼다", "우회로 확보", "지금은 돌파",
-      "실패하면 끝", "한 번에 끝낸다"
-    ],
-    twist: [
-      "지금부터 판이 뒤집혀", "미끼 성공", "진짜 적은 뒤에", "역전 시작"
-    ],
-    endQ: [
-      "너라면… 지금 뭐 할래?", "너라면… 돌파할래?", "너라면… 숨을래?", "너라면… 따라올래?"
-    ]
-  },
-  custom: {
-    hook: ["…뭔가 이상하다","시작부터 분위기가 다르다","지금, 무언가가 바뀐다"],
-    mid: ["이건 단서야","선택은 지금","숨겨진 규칙","실패 직전","작은 힌트","반전"],
-    twist: ["방금… 반전","규칙이 바뀜","진짜가 나타남"],
-    endQ: ["너라면 어떻게 할래?","너라면 믿어?","너라면 멈춰?"]
-  }
-};
-
-function pickFrom(arr, seed){
-  if(!arr || !arr.length) return "";
-  const x = Math.abs(seed) % arr.length;
-  return arr[x];
-}
-
-/* =========================================================
- * ✅ LOOK LOCK TOKENS
- * ========================================================= */
-const LOOK_LOCK_DB = {
-  luna: [
-    "CONSISTENCY TOKEN: always the same REALISTIC small cat (short-haired, compact body, round face, kitten-like proportions, consistent fur texture).",
-    "OUTFIT LOCK (must be identical across ALL scenes): light sky-blue long padded jacket (no hood, no hat), light sky-blue padded pants, light sky-blue padded mittens, light sky-blue padded boots.",
-    "ACCESSORY LOCK: two sky-blue heart-shaped hairpins (one on each side of the head).",
-    "PROPORTION LOCK: small cat scale, big head-to-body ratio typical of a kitten, never change height/size between scenes.",
-    "STRICT RULE: do NOT change colors, do NOT change outfit type, do NOT add/remove accessories, keep identical identity and lighting continuity."
-  ],
-  mio: [
-    "CONSISTENCY TOKEN: always the same REALISTIC small white cat (soft fur, gentle warm eyes, consistent fur texture).",
-    "OUTFIT LOCK (must be identical across ALL scenes): bright yellow padded jacket (no hat), bright yellow padded pants, bright yellow padded mittens, bright yellow padded boots.",
-    "SCARF LOCK: yellow scarf wrapped once around the head area and once around the neck (two loops clearly).",
-    "ACCESSORY LOCK: yellow ribbon (fixed position, do not change).",
-    "STRICT RULE: do NOT change colors, do NOT change outfit type, keep identical identity and proportions across scenes."
-  ],
-  coco: [
-    "CONSISTENCY TOKEN: always the same REALISTIC small cat (fluffy or medium fur, consistent face silhouette and fur texture across ALL scenes).",
-    "OUTFIT LOCK (must be identical across ALL scenes): long red padded jacket (no hood, no hat), keep the same exact red tone and jacket length in every scene.",
-    "GLOVES/SHOES LOCK: black gloves (mittens style) and black shoes/boots must be present and identical in every scene.",
-    "ACCESSORY LOCK: green ribbon (fixed position, do not change its color, size, or location).",
-    "PROPORTION LOCK: keep identical height/size and body proportions across scenes (no scaling changes).",
-    "ULTRA LOOK-LOCK RULE: lock fur color pattern, ear shape, ribbon placement, eye spacing, nose size, face silhouette, and fluffy volume; DO NOT morph between scenes; enforce identical identity as if the exact same cat photo was used every time.",
-    "STRICT RULE: do NOT change breed feel, do NOT change colors, do NOT change outfit type, do NOT add/remove accessories, keep 100% identical identity and continuity across ALL scenes."
-  ],
-  custom: [
-    "CONSISTENCY TOKEN: keep the protagonist identity identical across scenes (face, fur, outfit, accessories, proportions).",
-    "STRICT RULE: same camera style and lighting continuity across scenes; do NOT change outfit colors mid-story."
-  ]
-};
-
-function getArangDetailLock(){
-  const el = $("arangDetailLock");
-  const v = safeTrim(el ? el.value : "");
-  return v || safeTrim(ARANG_DETAIL_LOCK_DEFAULT);
-}
-function lookLockText(presetId){
-  if(!ENABLE_LOOK_LOCK) return "";
-  const key = (presetId && LOOK_LOCK_DB[presetId]) ? presetId : "custom";
-  let base = LOOK_LOCK_DB[key].join(" ");
-  if(key === "coco"){
-    const extra = getArangDetailLock();
-    if(extra) base += " " + extra;
-  }
-  return base;
-}
-
-/* Character presets */
-const CHAR_DB = {
-  luna: {
-    id: "luna",
-    label: "루나",
-    hero_default: "루나(작은 고양이) — 말을 하지 않는 관찰형 탐정",
-    setting_bias: "조용한 실내/새벽/부드러운 자연광/미세한 소리와 촉감 중심",
-    tone_bias: "serious",
-    genre_bias: "mystery",
-    rules: { dialogue:"NO_SPEECH", hook:"SILENCE_HOOK", camera:"CLOSE_SENSE", movement:"MINIMAL", reveal:"LATE", subtitle:"LUNA" },
-    prompt_add: [
-      "the cat does NOT speak, communicates with subtle movements",
-      "focus on ears, paws, breathing, tiny head tilt",
-      "gentle realism, documentary tension"
-    ]
-  },
-  mio: {
-    id: "mio",
-    label: "미오",
-    hero_default: "미오(작은 고양이) — 따뜻하지만 약한 마음, 케어의 눈빛",
-    setting_bias: "따뜻한 실내/담요/주방/포근한 조명/보호받는 분위기",
-    tone_bias: "warm",
-    genre_bias: "drama",
-    rules: { dialogue:"LOW_SPEECH", hook:"EMOTION_HOOK", camera:"WARM_CLOSE", movement:"SLOW", reveal:"MID", subtitle:"MIO" },
-    prompt_add: [
-      "protective, warm atmosphere",
-      "subtle emotional close-ups",
-      "slow breathing, gentle paws"
-    ]
-  },
-  coco: {
-    id: "coco",
-    label: "코코",
-    hero_default: "코코(똑똑한 고양이) — 행동으로 판을 뒤집는 리더",
-    setting_bias: "집/골목/가게/현장감/동선이 보이는 공간",
-    tone_bias: "cinematic",
-    genre_bias: "thriller",
-    rules: { dialogue:"NO_SPEECH", hook:"ACTION_HOOK", camera:"WIDE_TO_CLOSE", movement:"DYNAMIC", reveal:"EARLY", subtitle:"COCO" },
-    prompt_add: [
-      "purposeful actions, clear blocking",
-      "wide establishing then punch-in close-ups",
-      "cinematic urgency, grounded realism"
-    ]
-  }
-};
-
-/* AUTO pick */
-function autoPickPreset(line){
-  const L = (line || "").toLowerCase();
-  if(needsGiantGatekeeper(line)) return "custom";
-
-  if(L.includes("침묵") || L.includes("말을 하지") || L.includes("조용") || L.includes("관찰") || L.includes("탐정") || L.includes("단서"))
-    return "luna";
-  if(L.includes("치유") || L.includes("따뜻") || L.includes("보호") || L.includes("위로") || L.includes("감동") || L.includes("아픔"))
-    return "mio";
-  if(L.includes("추격") || L.includes("구조") || L.includes("도망") || L.includes("작전") || L.includes("돌파") || L.includes("리더"))
-    return "coco";
-  return "luna";
-}
-
-/* MVP UX */
-function getAppMode(){ return ($("appMode")?.value || "free"); } // free | series
-function getLockMode(){ return ($("lockMode")?.value || "auto"); } // auto | on | off
-
-// ✅ 기존 함수명 유지(호환성): 고양이도 포함
-function shouldUseDogPreset(line){
-  const L = (line || "").toLowerCase();
-  const petKeywords = [
-    "강아지","시츄","말티즈","말티푸","eunbi","jerry","arang","은비","제리","아랑",
-    "dog","puppy","shih tzu","maltese","maltipoo",
-    "고양이","냥이","캣","cat","kitten","feline",
-    "루나","미오","코코","luna","mio","coco"
-  ];
-  return petKeywords.some(k => L.includes(k));
-}
-
-function looksLikeNewCharacterRequest(line){
-  const L = (line || "").toLowerCase();
-  const kw = ["문지기","수호신","거대한","성벽","성문","성","guardian","gatekeeper","giant","castle","wall","monster","괴물","수호"];
-  return kw.some(k => L.includes(k));
-}
-
-function applyModePolicyToEngine(){
-  const mode = getAppMode();
-  const lockMode = getLockMode();
-
-  if(lockMode === "on") ENABLE_LOOK_LOCK = true;
-  else if(lockMode === "off") ENABLE_LOOK_LOCK = false;
-  else ENABLE_LOOK_LOCK = (mode === "series");
-}
-
-function updateLiveHints(){
-  const line = safeTrim($("line")?.value || "");
-  const mode = getAppMode();
-  const lock = (getLockMode() === "auto") ? (mode === "series") : (getLockMode() === "on");
-  const live = $("liveHint");
-  const predict = $("predictHint");
-  if(!live || !predict) return;
-
-  if(!line){ live.textContent = ""; predict.textContent = ""; return; }
-
-  if(lock && looksLikeNewCharacterRequest(line) && !shouldUseDogPreset(line)){
-    live.textContent = "⚠ 현재 캐릭터 고정(룩락)이 켜져있어요. ‘새 인물/문지기/수호신’ 입력은 기존 캐릭터 역할로 해석될 수 있어요.";
-  }else if(lock){
-    live.textContent = "ℹ 캐릭터 고정(룩락) 모드입니다. 시리즈 유지에는 좋아요.";
-  }else{
-    live.textContent = "✅ 자유 생성 모드입니다. 입력 문장을 새 설정으로 해석해요.";
-  }
-
-  if(lock && !shouldUseDogPreset(line)){
-    predict.textContent = `예상 결과: (고정 캐릭터) + "${line}" 역할/상황을 수행하는 장면`;
-  }else{
-    predict.textContent = `예상 결과: "${line}"을 그대로 반영한 새 장면/캐릭터 중심`;
-  }
-}
-
-/* autoPickPreset wrapper */
-const _autoPickPresetOriginal = autoPickPreset;
-autoPickPreset = function(line){
-  if(needsGiantGatekeeper(line)) return "custom";
-  const mode = getAppMode();
-  if(mode === "free"){
-    if(shouldUseDogPreset(line)) return _autoPickPresetOriginal(line);
-    return "custom";
-  }
-  return _autoPickPresetOriginal(line);
-};
-
-function explainResult(plan){
-  const mode = getAppMode();
-  const lock = (getLockMode() === "auto") ? (mode === "series" ? "ON" : "OFF") : (getLockMode() === "on" ? "ON" : "OFF");
-  const pid = plan?.brain?.presetId || "custom";
-  const hero = plan?.payload?.hero || plan?.meta?.hero || "";
-  const genre = plan?.meta?.genre || "";
-  const tone = plan?.meta?.tone || "";
-
-  const roleHint = looksLikeNewCharacterRequest(plan?.title) ? "입력은 ‘새 캐릭터/세계관’ 요청으로 판단" : "입력은 ‘스토리 상황’으로 판단";
-  const why = (lock === "ON")
-    ? "캐릭터 고정(룩락)이 켜져있어서 입력이 ‘역할’로 적용될 수 있어요."
-    : "자유 생성이라 입력 문장을 ‘새 설정’으로 그대로 해석해요.";
-
-  return { mode, lock, pid, hero, genre, tone, roleHint, why };
-}
-
-function injectExplainCard(plan){
-  const out = $("out");
-  if(!out) return;
-
-  const old = document.getElementById("explainCard");
-  if(old) old.remove();
-
-  const e = explainResult(plan);
-
-  const card = document.createElement("div");
-  card.id = "explainCard";
-  card.className = "serverCard";
-  card.innerHTML = `
-    <div class="serverHead">
-      <b>🔍 이번 결과 요약</b>
-      <span>${e.mode === "series" ? "시리즈(고급)" : "자유(추천)"} · 룩락 ${e.lock}</span>
-    </div>
-    <div class="box">
-• 캐릭터/프리셋: ${e.pid}
-• 주인공: ${e.hero}
-• 분위기: ${e.genre} · ${e.tone}
-• 해석: ${e.roleHint}
-• 이유: ${e.why}
-    </div>
-    <div class="serverRow">
-      <button class="mini" id="btnFree">🟢 자유 생성으로 다시</button>
-      <button class="mini" id="btnSeries">🔵 시리즈 제작으로 다시</button>
-      <button class="mini" id="btnWhy">❓ 왜 이렇게 나왔나요?</button>
-    </div>
-  `;
-
-  out.prepend(card);
-
-  $("btnFree").onclick = () => {
-    if($("appMode")) $("appMode").value = "free";
-    if($("lockMode")) $("lockMode").value = "auto";
-    applyModePolicyToEngine();
-    updateLiveHints();
-    run();
-  };
-  $("btnSeries").onclick = () => {
-    if($("appMode")) $("appMode").value = "series";
-    if($("lockMode")) $("lockMode").value = "auto";
-    applyModePolicyToEngine();
-    updateLiveHints();
-    run();
-  };
-  $("btnWhy").onclick = () => {
-    alert(
-`입력 분석 결과
-- 현재 모드: ${e.mode === "series" ? "시리즈 제작(고급)" : "자유 생성(추천)"}
-- 룩락(캐릭터 고정): ${e.lock}
-- 해석: ${e.roleHint}
-- 이유: ${e.why}
-
-팁:
-• 새 캐릭터/새 세계관 → 🟢 자유 생성
-• 같은 캐릭터 시리즈 → 🔵 시리즈 제작`
-    );
-  };
-}
-
-/* ---------- BRAIN ---------- */
-const BRAIN = {
-  analyze({ line, genre, tone, seconds, presetId, hero, setting }){
-    const total = Number(seconds);
-    const n = buildSceneCount(total);
-
-    let pid = presetId;
-    if(pid === "auto") pid = autoPickPreset(line);
-
-    const preset = (pid && pid !== "custom") ? CHAR_DB[pid] : null;
-
-    let finalTone = tone;
-    let finalGenre = genre;
-    if(preset){
-      if(!tone || tone === "serious") finalTone = preset.tone_bias || tone;
-      if(!genre || genre === "mystery") finalGenre = preset.genre_bias || genre;
-    }
-
-    const curve = [];
-    for(let i=0;i<n;i++){
-      const x = i/(n-1 || 1);
-      let v;
-      if(total <= 30) v = Math.min(1, x*1.4);
-      else if(total <= 60) v = x < 0.25 ? x*2 : (x < 0.8 ? 0.55 + (x-0.25)*0.5 : 0.9);
-      else v = x < 0.2 ? x*2 : (x < 0.75 ? 0.5 + (x-0.2)*0.7 : 0.9 - (x-0.75)*0.6);
-      curve.push(Math.max(0.08, Math.min(0.98, v)));
-    }
-
-    const reveal_policy = preset?.rules?.reveal || "MID";
-    const revealIndex =
-      reveal_policy === "EARLY" ? Math.max(1, Math.floor(n*0.25)) :
-      reveal_policy === "LATE"  ? Math.max(2, Math.floor(n*0.65)) :
-                                  Math.max(2, Math.floor(n*0.45));
-
-    const camera_policy = preset?.rules?.camera || "WIDE_TO_CLOSE";
-    const movement_policy = preset?.rules?.movement || "MINIMAL";
-
-    const finalHero = preset ? (hero || preset.hero_default) : (hero || "말을 하지 않는 주인공(고양이)");
-    const finalSetting = preset ? (setting || preset.setting_bias || "도시의 밤, 비에 젖은 골목") : (setting || "도시의 밤, 비에 젖은 골목");
-
-    const subtitle_policy = preset?.rules?.subtitle || "CUSTOM";
-    const dialogue_policy = preset?.rules?.dialogue || "NO_SPEECH";
-    const look_lock = lookLockText(pid || presetId || "custom");
-
-    return {
-      presetId: preset?.id || (presetId || "custom"),
-      presetLabel: preset?.label || "커스텀",
-      preset,
-      finalTone,
-      finalGenre,
-      curve,
-      revealIndex,
-      camera_policy,
-      movement_policy,
-      subtitle_policy,
-      dialogue_policy,
-      hero: finalHero,
-      setting: finalSetting,
-      look_lock
-    };
-  }
-};
-
-/* ---------- TRANSLATE ---------- */
-const TRANSLATE = {
-  cameraLine(brain, idx){
-    const cam = brain.camera_policy;
-    const move = brain.movement_policy;
-
-    const camStr =
-      cam === "CLOSE_SENSE" ? "macro close-up on paws/ears/whiskers, eye-level tight framing" :
-      cam === "WARM_CLOSE"  ? "warm close-up on face/eyes, soft shallow depth of field" :
-      "wide establishing shot, then slow push-in to close-up";
-
-    const moveStr =
-      move === "DYNAMIC" ? "handheld tension, quick push-in, slight parallax" :
-      move === "SLOW"    ? "very slow push-in, steady cam, calm motion" :
-      "minimal movement, locked shot, subtle breathing focus";
-
-    if(idx === 0) return `Camera: ${camStr}. Movement: ${moveStr}. Hook framing emphasized.`;
-    return `Camera: ${camStr}. Movement: ${moveStr}.`;
-  },
-
-  subtitle(brain, idx, line, flags){
-    const pid = brain.presetId && SUB_POOL[brain.presetId] ? brain.presetId : "custom";
-    const pool = SUB_POOL[pid];
-
-    // 0번 씬: 입력 문장 그대로
-    if(idx === 0) return `“${line}”`;
-    if(flags?.isFirstTwist) return pickFrom(pool.twist, idx + 7);
-    if(flags?.isEnding) return pickFrom(pool.endQ, idx + 13);
-
-    // 중간: 상황에 따라 섞기(룩/행동 특화 키워드 있을수록 mid 문장 선택)
-    return pickFrom(pool.mid, idx * 3 + line.length);
-  },
-
-  beatLine(beat, brain, idx, flags){
-    const isReveal = idx === brain.revealIndex;
-    const isClimax = idx >= Math.floor(brain.curve.length * 0.75);
-    const isFirstTwist = flags?.isFirstTwist;
-
-    if(isFirstTwist) return `${beat} (FIRST TWIST forced: reveal a surprising detail)`;
-    if(isReveal) return `${beat} (clue reveal: show the key detail clearly)`;
-    if(isClimax) return `${beat} (pressure spikes: make it feel inevitable)`;
-    return beat;
-  },
-
-  toImage({ brain, line, beat, idx, seconds, tone, genre, flags }){
-    const style = cinematicStyle(tone);
-    const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
-
-    const noText =
-      "NO TEXT AT ALL: do not render any words, letters, symbols, subtitles, captions, quotes, signage, UI overlays, watermarks, logos. " +
-      "Do not draw text in any language (Korean/English/Chinese/Japanese). " +
-      "Blank surfaces: no writing on walls, no glowing runes, no signs. If text appears, regenerate.";
-
-    const tension = brain.curve[idx] || 0.5;
-    const tensionWords = tension > 0.85 ? "high tension, urgent micro-expression" :
-                        tension > 0.55 ? "building tension, uneasy calm" :
-                                         "quiet tension, restrained";
-
-    const add = brain.preset?.prompt_add?.join(", ") || "";
-    const kw = extractKeywordsCat(line).join(", ");
-    const cam = this.cameraLine(brain, idx).replace("Camera:", "").trim();
-
-    const look = ENABLE_LOOK_LOCK ? `LOOK LOCK: ${brain.look_lock}` : "";
-    const scale = needsGiantGatekeeper(line) ? giantScaleText() : "";
-
-    const safeBeat = toAsciiPrompt(this.beatLine(beat, brain, idx, flags));
-    const safeHero = toAsciiPrompt(brain.hero);
-    const safeSetting = toAsciiPrompt(brain.setting);
-
-    return `Vertical 9:16, ${timeHint}, ${genreLabelEn(genre)} vibe,
-Beat: ${safeBeat},
-Protagonist: ${safeHero},
-Setting: ${safeSetting},
-Keywords: ${toAsciiPrompt(kw || "cinematic tension")},
-Mood: ${toneLabelEn(tone)}, ${tensionWords},
-Framing: ${toAsciiPrompt(cam)},
-Style: ${toAsciiPrompt(style)}, ultra realistic, sharp focus, detailed, high quality,
-${scale}
-${look}
-${add ? "Extra: " + toAsciiPrompt(add) + "," : ""}
-${noText}`;
-  },
-
-  toVideo({ brain, line, beat, idx, seconds, tone, genre, flags }){
-    const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
-
-    const noText =
-      "NO TEXT AT ALL: do not render any words, letters, symbols, subtitles, captions, quotes, signage, UI overlays, watermarks, logos. " +
-      "Do not draw text in any language (Korean/English/Chinese/Japanese). " +
-      "Blank surfaces: no writing on walls, no glowing runes, no signs. If text appears, regenerate.";
-
-    const tension = brain.curve[idx] || 0.5;
-    const sfx = tension > 0.8 ? "heartbeat, distant siren, wet footsteps, subtle cat foley" :
-             tension > 0.5 ? "low hum, room tone, subtle foley, cat paw steps" :
-                             "room tone, soft ambience, gentle purring or silence";
-
-    const speech = brain.dialogue_policy === "NO_SPEECH"
-      ? "The protagonist does NOT speak. Communicate through actions only."
-      : "Dialogue is minimal. Prefer gestures over speech.";
-
-    const look = ENABLE_LOOK_LOCK ? `LOOK LOCK: ${brain.look_lock}` : "";
-    const scale = needsGiantGatekeeper(line) ? giantScaleText() : "";
-
-    const safeBeat = toAsciiPrompt(this.beatLine(beat, brain, idx, flags));
-    const safeHero = toAsciiPrompt(brain.hero);
-    const safeSetting = toAsciiPrompt(brain.setting);
-    const safeLine = toAsciiPrompt(line);
-
-    return `Vertical 9:16, ${timeHint}, ${genreLabelEn(genre)}.
-Scene ${idx+1}: ${safeBeat}
-Input line: ${safeLine}
-Character: ${safeHero}
-Setting: ${safeSetting}
-${speech}
-${toAsciiPrompt(this.cameraLine(brain, idx))}
-Lighting/Mood: ${toneLabelEn(tone)}. Sound: ${sfx}
-Continuity: match the same character look across scenes (consistent identity, outfit, proportions).
-${scale}
-${look}
-Make it feel like a real movie shot. ${noText}`;
-  }
-};
-
-/* preset hint */
-function updatePresetHint(){
-  const v = $("preset")?.value || "auto";
-  const hint = $("presetHint");
-  if(hint){
-    if(v === "auto") hint.textContent = "🎛 자동: 입력 한 줄을 분석해서 루나/미오/코코 스타일을 자동 선택합니다.";
-    else if(v === "custom") hint.textContent = "🎛 커스텀: 아래 주인공/배경 입력값을 그대로 사용합니다.";
-    else hint.textContent = `🎛 선택됨: ${CHAR_DB[v]?.label} — 훅/카메라/자막/행동 규칙이 자동 적용됩니다.`;
-  }
-  const lockBox = $("arangLockBox");
-  if(lockBox) lockBox.style.display = (v === "coco") ? "block" : "none";
-}
-
-/* makePrompts */
-function makePrompts({line, genre, tone, seconds, hero, setting, idx, beat, brain, flags}) {
-  const b = brain || BRAIN.analyze({ line, genre, tone, seconds, presetId:"auto", hero, setting });
-
-  const imagePrompt = TRANSLATE.toImage({
-    brain: b, line, beat, idx, seconds: Number(seconds),
-    tone: b.finalTone || tone, genre: b.finalGenre || genre, flags
-  });
-
-  const videoPrompt = TRANSLATE.toVideo({
-    brain: b, line, beat, idx, seconds: Number(seconds),
-    tone: b.finalTone || tone, genre: b.finalGenre || genre, flags
-  });
-
-  const subtitle = TRANSLATE.subtitle(b, idx, line, flags);
-
-  return { imagePrompt, videoPrompt, subtitle };
-}
-
-/* retention twist index */
-function findFirstTwistIndex(times){
-  const target = 12;
-  for(let i=0;i<times.length;i++){
-    const t = times[i];
-    if(t.start <= target && target < t.end) return i;
-  }
-  return Math.max(1, Math.floor(times.length * 0.35));
-}
-
-/* buildPlan */
-function buildPlan(payload){
-  const { line, genre, tone, seconds, hero, setting } = payload;
-  const total = Number(seconds);
-  const n = buildSceneCount(total);
-
-  const presetId = $("preset")?.value || "auto";
-  const brain = BRAIN.analyze({ line, genre, tone, seconds: total, presetId, hero, setting });
-  const beats = beatsForGenre(brain.finalGenre || genre);
-
-  const base = Math.floor(total / n);
-  const times = [];
-  let t = 0;
-  for(let i=0;i<n;i++){
-    const extra = (i >= n-2) ? 1 : 0;
-    const dur = base + extra;
-    const from = t;
-    const to = Math.min(total, t + dur);
-    times.push({start: from, end: to});
-    t = to;
-  }
-  if(times.length) times[times.length-1].end = total;
-
-  const firstTwistIndex = ENABLE_RETENTION ? findFirstTwistIndex(times) : -1;
-  const endingIndex = n - 1;
+/** ========= Scene Generator ========= */
+function generateScenes(){
+  const projectName = $("projectName").value.trim();
+  const oneLine = $("oneLine").value.trim();
+  const totalSec = clamp(safeParseInt($("totalSec").value, 60), 10, 180);
+  const count = clamp(safeParseInt($("sceneCount").value, 8), 3, 20);
+
+  if (!projectName) { setStatus("프로젝트 이름을 입력해 주세요.", false); return; }
+  if (oneLine.length < 10) { setStatus("한 줄 시나리오가 너무 짧아요. 최소 10자 이상.", false); return; }
+
+  const baseKR = buildBasePromptKR();
+  const baseEN = buildBasePromptEN();
+  const presets = shotPresets();
+  const rules = $("retentionRules").value.trim();
+  const langMode = $("langMode").value;
+
+  const base = Math.floor(totalSec / count);
+  const rem = totalSec - base * count;
+  const durations = Array.from({length: count}, (_, i) => base + (i < rem ? 1 : 0));
 
   const scenes = [];
-  for(let i=0;i<n;i++){
-    const beat = beats[i] || beats[beats.length-1];
-    const {start, end} = times[i];
+  for (let i=0; i<count; i++){
+    const p = presets[i % presets.length];
+    const idx = i+1;
 
-    const flags = {
-      isFirstTwist: ENABLE_RETENTION && (i === firstTwistIndex),
-      isEnding: ENABLE_RETENTION && (i === endingIndex)
+    const beatKR = pickBeatKR(idx, count, oneLine, rules);
+    const beatEN = pickBeatEN(idx, count, oneLine, rules);
+
+    const promptKR = `${baseKR}, 씬${idx}: ${beatKR}, 카메라: ${p.camera}, 동작: ${p.actionKR}`;
+    const promptEN = `${baseEN}, Scene ${idx}: ${beatEN}, Camera: ${p.camera}, Action: ${p.actionEN}`;
+
+    const scene = {
+      id: idx,
+      startSec: durations.slice(0,i).reduce((a,b)=>a+b,0),
+      durSec: durations[i],
+      titleKR: p.nameKR,
+      titleEN: p.nameEN,
+      beatKR,
+      beatEN,
+      camera: p.camera,
+      nanoBananaPromptKR: promptKR,
+      nanoBananaPromptEN: promptEN,
+      dialogueKR: suggestDialogueKR(idx, count),
+      dialogueEN: suggestDialogueEN(idx, count),
+      editNotes: suggestEditNotes(idx, count)
     };
 
-    const prompts = makePrompts({
-      line,
-      genre: brain.finalGenre || genre,
-      tone: brain.finalTone || tone,
-      seconds: total,
-      hero: brain.hero,
-      setting: brain.setting,
-      idx: i,
-      beat,
-      brain,
-      flags
-    });
-
-    scenes.push({
-      index: i+1,
-      start, end,
-      time: `${start}–${end}s`,
-      beat,
-      subtitle: prompts.subtitle,
-      image_prompt: prompts.imagePrompt,
-      video_prompt: prompts.videoPrompt,
-      retention_flags: flags
-    });
+    if (langMode === "kr"){
+      delete scene.titleEN; delete scene.beatEN; delete scene.nanoBananaPromptEN; delete scene.dialogueEN;
+    } else if (langMode === "en"){
+      delete scene.titleKR; delete scene.beatKR; delete scene.nanoBananaPromptKR; delete scene.dialogueKR;
+    }
+    scenes.push(scene);
   }
 
-  return {
-    ok: true,
-    version: BUILD,
-    title: line,
-    created_at: new Date().toISOString(),
-    meta: {
-      genre: genreLabel(brain.finalGenre || genre),
-      tone: toneLabel(brain.finalTone || tone),
-      length_seconds: total,
-      scene_count: n,
-      hero: brain.hero || null,
-      setting: brain.setting || null,
-      safety_mode: SAFETY_ON,
-      preset: brain.presetLabel || "커스텀",
-      look_lock: ENABLE_LOOK_LOCK ? "ON" : "OFF",
-      retention_force: ENABLE_RETENTION ? "ON" : "OFF",
-      first_twist_at: ENABLE_RETENTION ? "12s" : null
-    },
-    brain: {
-      presetId: brain.presetId,
-      revealIndex: brain.revealIndex,
-      camera_policy: brain.camera_policy,
-      movement_policy: brain.movement_policy,
-      subtitle_policy: brain.subtitle_policy,
-      dialogue_policy: brain.dialogue_policy,
-      look_lock_token: brain.look_lock
-    },
-    payload: {...payload, presetId, hero: brain.hero, setting: brain.setting, genre: brain.finalGenre, tone: brain.finalTone},
-    scenes
+  state = {
+    ...state,
+    schemaVersion,
+    projectName,
+    totalSec,
+    tone: $("tone").value,
+    aspect: $("aspect").value,
+    oneLine,
+    characters: $("characters").value.trim(),
+    locations: $("locations").value.trim(),
+    sceneCount: count,
+    langMode,
+    retentionRules: rules,
+    tags: computeTags(),
+    scenes,
+    plugin: { A:null, B:null }
   };
+
+  render();
+  setStatus(`씬 ${count}개 생성 완료 ✅ (총 ${totalSec}초)`, true);
 }
 
-/* Export helpers */
-function planToText(plan){
-  let txt = `🎬 원라인: ${plan.title}\n`;
-  txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · preset: ${plan.meta.preset}\n`;
-  txt += `룩고정:${plan.meta.look_lock} · 리텐션강제:${plan.meta.retention_force} · 첫반전:${plan.meta.first_twist_at || "-"}\n`;
-  txt += `버전: ${plan.version} · 생성: ${plan.created_at}\n\n`;
-  plan.scenes.forEach(s=>{
-    txt += `SCENE ${s.index} (${s.time}) — ${s.beat}\n`;
-    if(s.retention_flags?.isFirstTwist) txt += `※ 리텐션: 12초 첫 반전 강제\n`;
-    if(s.retention_flags?.isEnding) txt += `※ 리텐션: 질문형 엔딩 강제\n`;
-    txt += `자막: ${s.subtitle}\n\n`;
-    txt += `[이미지 프롬프트]\n${s.image_prompt}\n\n`;
-    txt += `[영상 프롬프트]\n${s.video_prompt}\n\n`;
-    txt += "----------------------------------------\n\n";
-  });
-  return txt;
-}
-function planToSrt(plan){
-  let srt = "";
-  for(const s of plan.scenes){
-    const start = srtTime(s.start);
-    const endSec = Math.max(s.end, s.start + 0.2);
-    const end = srtTime(endSec);
-    const text = String(s.subtitle || "").replace(/\r?\n/g, " ").trim();
-    srt += `${s.index}\n${start} --> ${end}\n${text}\n\n`;
+function refineRetention(){
+  if (!state.scenes?.length){
+    setStatus("먼저 씬을 생성하세요.", false);
+    return;
   }
-  return srt.trim() + "\n";
+  const scenes = structuredClone(state.scenes);
+  if (scenes[0]) scenes[0].editNotes = (scenes[0].editNotes ?? "") + " | 훅 자막은 6단어 이하.";
+  const mid = Math.max(1, Math.floor(scenes.length*0.6)-1);
+  if (scenes[mid]) scenes[mid].editNotes = (scenes[mid].editNotes ?? "") + " | 반전 직후 0.3초 정적.";
+  const last = scenes.length-1;
+  if (scenes[last]) scenes[last].editNotes = (scenes[last].editNotes ?? "") + " | 마지막 프레임 1초 고정.";
+  state.scenes = scenes;
+  render();
+  setStatus("리텐션 강화 규칙 적용 완료 ✨", true);
 }
 
-async function copyText(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    setStatus("복사 완료", "good");
-    setTimeout(()=>setStatus("완료","good"), 800);
-  }catch(e){
+/** ========= Render ========= */
+async function copyToClipboard(text){
+  try{ await navigator.clipboard.writeText(text); }
+  catch{
     const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.style.position="fixed"; ta.style.left="-9999px";
-    document.body.appendChild(ta);
-    ta.focus(); ta.select();
-    document.execCommand("copy");
-    document.body.removeChild(ta);
-    setStatus("복사 완료", "good");
-    setTimeout(()=>setStatus("완료","good"), 800);
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy"); ta.remove();
   }
 }
-function download(filename, content, mime){
-  const blob = new Blob([content], {type: mime || "text/plain;charset=utf-8"});
+
+function render(){
+  const chips = $("chips");
+  chips.innerHTML = "";
+  (state.tags || []).forEach(t=>{
+    const div = document.createElement("div");
+    div.className = "chip";
+    div.textContent = t;
+    chips.appendChild(div);
+  });
+
+  const list = $("sceneList");
+  list.innerHTML = "";
+  (state.scenes || []).forEach(scene=>{
+    const wrap = document.createElement("div");
+    wrap.className = "scene";
+
+    const head = document.createElement("div");
+    head.className = "scene-head";
+
+    const left = document.createElement("div");
+    const title = document.createElement("div");
+    title.className = "scene-title";
+    const tKR = scene.titleKR ? `[${scene.id}] ${scene.titleKR}` : `[${scene.id}]`;
+    const tEN = scene.titleEN ? ` / ${scene.titleEN}` : "";
+    title.textContent = tKR + tEN;
+    const meta = document.createElement("small");
+    meta.textContent = `시작 ${scene.startSec}s · 길이 ${scene.durSec}s · 카메라: ${scene.camera}`;
+    left.appendChild(title);
+    left.appendChild(meta);
+
+    const right = document.createElement("div");
+    const btnCopy = document.createElement("button");
+    btnCopy.className = "btn ok";
+    btnCopy.textContent = "프롬프트 복사";
+    btnCopy.onclick = async ()=>{
+      const text = [
+        scene.nanoBananaPromptKR ? `KR:\n${scene.nanoBananaPromptKR}\n` : "",
+        scene.nanoBananaPromptEN ? `EN:\n${scene.nanoBananaPromptEN}\n` : ""
+      ].filter(Boolean).join("\n");
+      await copyToClipboard(text);
+      setStatus(`씬 ${scene.id} 프롬프트 복사 완료 ✅`, true);
+    };
+    right.appendChild(btnCopy);
+
+    head.appendChild(left);
+    head.appendChild(right);
+
+    const body = document.createElement("div");
+    body.style.marginTop = "10px";
+
+    const beat = document.createElement("div");
+    beat.className = "muted";
+    beat.textContent = [
+      scene.beatKR ? `KR: ${scene.beatKR}` : "",
+      scene.beatEN ? `EN: ${scene.beatEN}` : ""
+    ].filter(Boolean).join(" | ");
+    body.appendChild(beat);
+
+    const prompts = document.createElement("div");
+    prompts.className = "mono";
+    prompts.style.marginTop = "8px";
+    prompts.textContent = [
+      scene.nanoBananaPromptKR ? `KR Prompt:\n${scene.nanoBananaPromptKR}` : "",
+      scene.nanoBananaPromptEN ? `EN Prompt:\n${scene.nanoBananaPromptEN}` : ""
+    ].filter(Boolean).join("\n\n");
+    body.appendChild(prompts);
+
+    const dialog = document.createElement("div");
+    dialog.className = "muted";
+    dialog.style.marginTop = "8px";
+    dialog.textContent = [
+      scene.dialogueKR ? `KR 캡션: ${scene.dialogueKR}` : "",
+      scene.dialogueEN ? `EN caption: ${scene.dialogueEN}` : "",
+      scene.editNotes ? `편집: ${scene.editNotes}` : ""
+    ].filter(Boolean).join(" | ");
+    body.appendChild(dialog);
+
+    // 플러그인 결과가 있으면 아래에 추가 표시
+    if (state.plugin?.B?.youtubePack){
+      const y = document.createElement("div");
+      y.className = "muted";
+      y.style.marginTop = "8px";
+      y.textContent = "📦 CAT+ 유튜브팩이 생성되었습니다. (오른쪽 ‘플러그인 실행’ 결과에서 복사 가능)";
+      body.appendChild(y);
+    }
+
+    wrap.appendChild(head);
+    wrap.appendChild(body);
+    list.appendChild(wrap);
+  });
+}
+
+/** ========= Export ========= */
+function validateStateForExport(){
+  if (!state.projectName || !state.oneLine) return { ok:false, msg:"프로젝트/시나리오가 비었습니다." };
+  if (!Array.isArray(state.scenes) || state.scenes.length < 1) return { ok:false, msg:"씬이 없습니다." };
+  const sum = state.scenes.reduce((a,s)=>a + (Number(s.durSec)||0), 0);
+  if (sum !== state.totalSec) return { ok:false, msg:`시간 합계 불일치: ${sum}s (총 ${state.totalSec}s)` };
+  return { ok:true };
+}
+function downloadText(filename, text){
+  const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
 }
-
-/* Worker echo call */
-async function callWorkerEcho(msg){
-  const base = getWorkerUrl();
-  if(!base) return { ok:false, text:"오프라인(서버 없음)", url:"" };
-  const u = new URL(base + "/echo");
-  u.searchParams.set("msg", msg);
-  const res = await fetch(u.toString(), { method:"GET", cache:"no-store" });
-  const text = await res.text().catch(()=> "");
-  if(!res.ok) return { ok:false, text, url: u.toString() };
-  return { ok:true, text, url: u.toString() };
+function toCSV(){
+  const header = ["id","startSec","durSec","camera","titleKR","titleEN","promptKR","promptEN","dialogueKR","dialogueEN","editNotes"];
+  const rows = (state.scenes||[]).map(s=>[
+    s.id, s.startSec, s.durSec, s.camera,
+    s.titleKR||"", s.titleEN||"",
+    (s.nanoBananaPromptKR||"").replaceAll("\n"," "),
+    (s.nanoBananaPromptEN||"").replaceAll("\n"," "),
+    s.dialogueKR||"", s.dialogueEN||"",
+    (s.editNotes||"").replaceAll("\n"," ")
+  ]);
+  const esc = (v)=> `"${String(v).replaceAll('"','""')}"`;
+  return [header.map(esc).join(","), ...rows.map(r=>r.map(esc).join(","))].join("\n");
 }
 
-/* Render */
-let latestPlan = null;
-
-function renderPlan(plan, serverResult){
-  const outCard = $("outCard");
-  if(outCard) outCard.style.display = "block";
-
-  const outTitle = $("outTitle");
-  if(outTitle) outTitle.textContent = `🎬 원라인: ${plan.title}`;
-
-  const outMeta = $("outMeta");
-  if(outMeta){
-    outMeta.textContent =
-      `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · preset: ${plan.meta.preset}
-       · 룩고정:${plan.meta.look_lock} · 리텐션:${plan.meta.retention_force}`;
-  }
-
-  const out = $("out");
-  if(!out) return;
-  out.innerHTML = "";
-
-  const srv = document.createElement("div");
-  srv.className = "serverCard";
-  srv.innerHTML = `
-    <div class="serverHead">
-      <b>🔌 서버 응답(선택)</b>
-      <span>${escapeHtml(serverResult?.ok ? "연결됨" : "오프라인/실패")}</span>
-    </div>
-    <div class="box">${escapeHtml(serverResult?.text || "오프라인 모드: 서버 없이도 V4.2 설계는 정상 동작합니다.")}</div>
-    <div class="serverRow">
-      <div class="serverUrl">${escapeHtml(serverResult?.url || "")}</div>
-      <button class="mini" id="copyServerUrl">📋 URL 복사</button>
-    </div>
-  `;
-  out.appendChild(srv);
-
-  const copySrv = $("copyServerUrl");
-  if(copySrv){
-    copySrv.onclick = () => {
-      const u = (serverResult?.url || "").trim();
-      if(!u) return alert("복사할 URL이 없어!");
-      copyText(u);
-    };
-  }
-
-  plan.scenes.forEach(s=>{
-    const tag = s.retention_flags?.isFirstTwist ? " (12초 반전)" : (s.retention_flags?.isEnding ? " (질문 엔딩)" : "");
-    const el = document.createElement("div");
-    el.className = "scene";
-    el.innerHTML = `
-      <div class="sceneHead">
-        <div class="left">
-          <b>SCENE ${s.index} <span style="color:#7ee7a6">(${escapeHtml(s.time)})</span>${escapeHtml(tag)}</b>
-          <span>${escapeHtml(s.beat)}</span>
-        </div>
-        <span class="badge">자막</span>
-      </div>
-
-      <div class="box">${escapeHtml(s.subtitle)}</div>
-
-      <div class="k">🖼 이미지 프롬프트 (나노바나나용)</div>
-      <div class="box">${escapeHtml(s.image_prompt)}</div>
-
-      <div class="k">🎥 영상 프롬프트 (VEO3용)</div>
-      <div class="box">${escapeHtml(s.video_prompt)}</div>
-    `;
-    out.appendChild(el);
-  });
-
-  injectExplainCard(plan);
-  injectZipButton();
-}
-
-function getPayloadFromInputs(){
-  return {
-    line: safeTrim($("line")?.value),
-    genre: $("genre")?.value,
-    tone: $("tone")?.value,
-    seconds: $("length")?.value,
-    hero: safeTrim($("hero")?.value),
-    setting: safeTrim($("setting")?.value),
-    preset: $("preset")?.value || "auto",
-    appMode: $("appMode")?.value || "free",
-    lockMode: $("lockMode")?.value || "auto",
-    arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
-    worker: getWorkerUrl()
-  };
-}
-
-/* Save / Load / Backup */
-function saveState(){
-  const state = {
-    line: safeTrim($("line")?.value),
-    genre: $("genre")?.value,
-    tone: $("tone")?.value,
-    seconds: $("length")?.value,
-    preset: $("preset")?.value || "auto",
-    hero: safeTrim($("hero")?.value),
-    setting: safeTrim($("setting")?.value),
-    appMode: $("appMode")?.value || "free",
-    lockMode: $("lockMode")?.value || "auto",
-    arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
-    worker: isAdmin ? safeTrim($("worker")?.value) : ""
-  };
-  try{
-    localStorage.setItem(LS_KEY, JSON.stringify({version:BUILD, saved_at:Date.now(), state}));
-    const pill = $("autosavePill"); if(pill) pill.textContent = "💾 자동저장: ON";
-  }catch(e){
-    const pill = $("autosavePill"); if(pill) pill.textContent = "💾 자동저장: 실패";
-  }
-}
-
-function loadState(){
-  try{
-    const raw = localStorage.getItem(LS_KEY);
-    if(!raw) return;
-    const obj = JSON.parse(raw);
-    const s = obj?.state;
-    if(!s) return;
-
-    if($("line")) $("line").value = s.line || "";
-    if($("genre")) $("genre").value = s.genre || "mystery";
-    if($("tone")) $("tone").value = s.tone || "serious";
-    if($("length")) $("length").value = s.seconds || "60";
-    if($("preset")) $("preset").value = s.preset || "auto";
-    if($("hero")) $("hero").value = s.hero || "";
-    if($("setting")) $("setting").value = s.setting || "";
-    if($("appMode")) $("appMode").value = s.appMode || "free";
-    if($("lockMode")) $("lockMode").value = s.lockMode || "auto";
-    if($("arangDetailLock")) $("arangDetailLock").value = s.arangDetailLock || "";
-    if(isAdmin && $("worker")) $("worker").value = s.worker || DEFAULT_WORKER_URL || "";
-  }catch(e){}
-}
-
-function saveLastPlan(plan){
-  try{ localStorage.setItem(LS_LAST_PLAN, JSON.stringify(plan)); }catch(e){}
-}
-
-function exportBackup(){
-  const state = {
-    line: safeTrim($("line")?.value),
-    genre: $("genre")?.value,
-    tone: $("tone")?.value,
-    seconds: $("length")?.value,
-    preset: $("preset")?.value || "auto",
-    hero: safeTrim($("hero")?.value),
-    setting: safeTrim($("setting")?.value),
-    appMode: $("appMode")?.value || "free",
-    lockMode: $("lockMode")?.value || "auto",
-    arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
-    worker: isAdmin ? safeTrim($("worker")?.value) : ""
-  };
-  let lastPlan = null;
-  try{ lastPlan = JSON.parse(localStorage.getItem(LS_LAST_PLAN) || "null"); }catch(e){}
-  const backup = {
-    type: "olm_backup",
-    version: BUILD,
-    exported_at: new Date().toISOString(),
-    state,
-    lastPlan
-  };
-  const text = JSON.stringify(backup, null, 2);
-  try{ localStorage.setItem(LS_LAST_BACKUP, text); }catch(e){}
-  download(`olm_backup_${Date.now()}.json`, text, "application/json;charset=utf-8");
-  setStatus("백업 저장됨", "good");
-}
-
-async function importBackup(){
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "application/json";
-  input.onchange = async () => {
-    const file = input.files?.[0];
-    if(!file) return;
-    const text = await file.text();
-    let backup;
-    try{ backup = JSON.parse(text); }catch(e){ alert("JSON이 아니야!"); return; }
-    if(backup?.type !== "olm_backup"){ alert("이 파일은 백업 파일이 아니야!"); return; }
-
-    const s = backup.state || {};
-    if($("line")) $("line").value = s.line || "";
-    if($("genre")) $("genre").value = s.genre || "mystery";
-    if($("tone")) $("tone").value = s.tone || "serious";
-    if($("length")) $("length").value = s.seconds || "60";
-    if($("preset")) $("preset").value = s.preset || "auto";
-    if($("hero")) $("hero").value = s.hero || "";
-    if($("setting")) $("setting").value = s.setting || "";
-    if($("appMode")) $("appMode").value = s.appMode || "free";
-    if($("lockMode")) $("lockMode").value = s.lockMode || "auto";
-    if($("arangDetailLock")) $("arangDetailLock").value = s.arangDetailLock || "";
-    if(isAdmin && $("worker")) $("worker").value = s.worker || DEFAULT_WORKER_URL || "";
-
-    updatePresetHint();
-    applyModePolicyToEngine();
-    updateLiveHints();
-
-    if(backup.lastPlan){
-      latestPlan = backup.lastPlan;
-      renderPlan(latestPlan, {ok:false, text:"(복구) 백업에서 마지막 결과를 불러옴", url:""});
-      $("outCard")?.scrollIntoView({behavior:"smooth", block:"start"});
-      saveLastPlan(latestPlan);
-    }
-
-    saveState();
-    setStatus("복구 완료", "good");
-  };
-  input.click();
-}
-
-function recoveryMode(){
-  const ok = confirm("복구 모드: 앱 상태를 정리하고, 가능한 마지막 백업/결과를 살려볼까?");
-  if(!ok) return;
-
-  let lastBackupText = null;
-  let lastPlan = null;
-  try{ lastBackupText = localStorage.getItem(LS_LAST_BACKUP); }catch(e){}
-  try{ lastPlan = JSON.parse(localStorage.getItem(LS_LAST_PLAN) || "null"); }catch(e){}
-
-  if($("line")) $("line").value = "";
-  if($("hero")) $("hero").value = "";
-  if($("setting")) $("setting").value = "";
-  if($("arangDetailLock")) $("arangDetailLock").value = "";
-  if($("genre")) $("genre").value = "mystery";
-  if($("tone")) $("tone").value = "serious";
-  if($("length")) $("length").value = "60";
-  if($("preset")) $("preset").value = "auto";
-  if($("appMode")) $("appMode").value = "free";
-  if($("lockMode")) $("lockMode").value = "auto";
-  if(isAdmin && $("worker")) $("worker").value = DEFAULT_WORKER_URL || "";
-
-  const out = $("out"); if(out) out.innerHTML = "";
-  const outCard = $("outCard"); if(outCard) outCard.style.display = "none";
-  latestPlan = null;
-
-  if(lastPlan){
-    latestPlan = lastPlan;
-    renderPlan(latestPlan, {ok:false, text:"(복구 모드) 마지막 생성 결과를 복원했어.", url:""});
-    if(outCard) outCard.style.display = "block";
-  }
-
-  if(lastBackupText){
-    setStatus("복구 모드: 마지막 백업 있음(복구 버튼으로 가져오기 가능)", "warn");
-  }else{
-    setStatus("복구 모드: 백업 없음(정상 초기화 완료)", "good");
-  }
-
-  updatePresetHint();
-  applyModePolicyToEngine();
-  updateLiveHints();
-  saveState();
-}
-
-/* ---------- Run ---------- */
-async function run(){
-  applyModePolicyToEngine();
-  updateLiveHints();
-
-  // 새 캐릭터(문지기/수호신/거대) 입력이면 강제로 룩락 OFF
-  if(needsGiantGatekeeper(safeTrim($("line")?.value || ""))){
-    ENABLE_LOOK_LOCK = false;
-  }
-
-  const rawLine = safeTrim($("line")?.value);
-  if(!rawLine){ alert("한 줄 써줘!"); return; }
-
-  await fetchServerStatus();
-  applyServerPolicy();
-  if(serverState.status === "MAINTENANCE" || serverState.status === "UPGRADE"){
-    alert("지금은 점검/업그레이드 중이라 생성이 잠시 막혀 있어요.");
-    return;
-  }
-
-  setStatus("생성중…", "info");
-
-  let safetyNote = null;
-  let finalLine = rawLine;
-
-  if(SAFETY_ON){
-    const r = applySafety(rawLine);
-    if(!r.ok){ alert("한 줄이 비어 있어!"); return; }
-    finalLine = r.line;
-    safetyNote = r.note || null;
-    if(finalLine !== rawLine && $("line")) $("line").value = finalLine;
-  }
-
-  const payload = getPayloadFromInputs();
-  payload.line = finalLine;
-
-  latestPlan = buildPlan(payload);
-  saveLastPlan(latestPlan);
-
-  const base = getWorkerUrl();
-  let serverResult = { ok:false, text:"", url:"" };
-
-  try{
-    if(base && serverState.status === "ON"){
-      setStatus("서버 확인중…", "info");
-      const r = await callWorkerEcho(finalLine);
-      serverResult = r;
-    } else {
-      serverResult = { ok:false, text:"오프라인/서버 OFF: 설계는 정상 생성됨", url:"" };
-    }
-
-    if(safetyNote){
-      serverResult.text = `🛡 안전모드 메모: ${safetyNote}\n\n${serverResult.text || ""}`.trim();
-    }
-
-    renderPlan(latestPlan, serverResult);
-    setStatus("완료", "good");
-  }catch(err){
-    renderPlan(latestPlan, { ok:false, text:`❌ 서버 실패: ${err.message}\n(오프라인 설계는 정상입니다)`, url:"" });
-    setStatus("서버 실패", "bad");
-  }
-
-  saveState();
-  setTimeout(()=> $("outCard")?.scrollIntoView({behavior:"smooth", block:"start"}), 60);
-}
-
-/* Buttons */
-$("make")?.addEventListener("click", run);
-$("copyAll")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  copyText(planToText(latestPlan));
-});
-$("downloadJson")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download("one-line-movie.json", JSON.stringify(latestPlan, null, 2), "application/json;charset=utf-8");
-});
-$("downloadSrt")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download("one-line-movie.srt", planToSrt(latestPlan), "text/plain;charset=utf-8");
-});
-$("downloadTxt")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download("one-line-movie.txt", planToText(latestPlan), "text/plain;charset=utf-8");
-});
-$("downloadAll")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  $("downloadJson")?.click();
-  setTimeout(()=> $("downloadSrt")?.click(), 200);
-  setTimeout(()=> $("downloadTxt")?.click(), 400);
-});
-$("backupBtn")?.addEventListener("click", exportBackup);
-$("restoreBtn")?.addEventListener("click", importBackup);
-$("recoveryBtn")?.addEventListener("click", recoveryMode);
-
-$("reset")?.addEventListener("click", () => {
-  const ok = confirm("초기화할까? (입력/결과 화면만 초기화. 백업 파일은 남아있음)");
-  if(!ok) return;
-  if($("line")) $("line").value = "";
-  if($("hero")) $("hero").value = "";
-  if($("setting")) $("setting").value = "";
-  if($("arangDetailLock")) $("arangDetailLock").value = "";
-  if($("genre")) $("genre").value = "mystery";
-  if($("tone")) $("tone").value = "serious";
-  if($("length")) $("length").value = "60";
-  if($("preset")) $("preset").value = "auto";
-  if($("appMode")) $("appMode").value = "free";
-  if($("lockMode")) $("lockMode").value = "auto";
-  const out = $("out"); if(out) out.innerHTML = "";
-  const outCard = $("outCard"); if(outCard) outCard.style.display = "none";
-  latestPlan = null;
-  updatePresetHint();
-  applyModePolicyToEngine();
-  updateLiveHints();
-  setStatus("대기중", "info");
-  saveState();
-});
-
-["line","genre","tone","length","hero","setting","preset","appMode","lockMode","arangDetailLock"].forEach(id=>{
-  const el = $(id);
-  if(!el) return;
-  el.addEventListener("input", saveState);
-  el.addEventListener("change", saveState);
-});
-
-document.addEventListener("keydown", (e) => {
-  if((e.ctrlKey || e.metaKey) && e.key === "Enter") run();
-});
-
-/* =========================================================
- * ✅ 유튜브팩 강화: 제목 10개 / 해시태그 30개 / 고정댓글 A/B
- * ========================================================= */
-function buildYoutubePack(plan){
-  const titleBase = safeTrim(plan.title).slice(0, 62) || "원라인 무비";
-  const preset = plan.meta.preset || "커스텀";
-  const genre = plan.meta.genre || "";
-  const tone = plan.meta.tone || "";
-
-  const pid = plan.brain?.presetId || "custom";
-  const hookTag =
-    pid === "luna" ? "침묵의 단서" :
-    pid === "mio" ? "따뜻한 구원" :
-    pid === "coco" ? "돌파의 한 수" :
-    "반전";
+/** ========= Embedded CAT Plugins (A/B) =========
+ * 목표: v4 씬을 받아서
+ *  - A: 프롬프트/룩락 문장/리텐션 키워드 보강
+ *  - B: VEO3 컷 리스트 + SRT + 유튜브팩(10제목/30해시태그/고정댓글)
+ */
+function CAT_buildYouTubePack({oneLine, characters, locations, totalSec}){
+  const hero = characters?.split(",")[0]?.trim() || "주인공";
+  const setting = locations || "어딘가";
+  const g = "쇼츠 스토리";
+  const length = totalSec || 60;
 
   const titles = [
-    `“${titleBase}”｜${hookTag} (끝까지 보면 답 나옴)`,
-    `${genre} 쇼츠｜${titleBase}… 마지막 3초가 다 바꿈`,
-    `${preset} 버전｜${titleBase}｜12초에 판 뒤집힘`,
-    `고양이 쇼츠인데… 왜 심장이 뛰지?｜${titleBase}`,
-    `이 정적… 이상하지 않아?｜${titleBase}`,
-    `눈동자가 바뀌는 순간｜${titleBase}`,
-    `단서가 “움직였다”｜${titleBase}`,
-    `너라면 이 문을 열어?｜${titleBase}`,
-    `사실은… 그게 미끼였어｜${titleBase}`,
-    `엔딩 질문 하나로 끝까지 보게 되는 영상｜${titleBase}`
+    `말 안 하는 ${hero}… 근데 다 알고 있었다?`,
+    `2초 훅 → 12초 반전… ${oneLine.slice(0,20)}…`,
+    `엔딩 질문: 당신이라면 믿을까요?`,
+    `${hero}가 사람처럼 행동하는 순간 (실사)`,
+    `짧은 영화인데, 끝까지 보게 됨 (${length}s)`,
+    `방금 장면… 착각 아니죠?`,
+    `댓글로 갈리는 선택… 당신은?`,
+    `이상한데 끌리는 이유가 있다`,
+    `12초에 의미가 뒤집힙니다`,
+    `실제 같은 쇼츠: ${hero} in ${setting}`
   ];
 
-  const hashtags = [
-    "#유튜브쇼츠","#shorts","#고양이","#고양이쇼츠","#냥이","#cat","#catshorts",
-    "#스토리","#스토리쇼츠","#반전","#미스터리","#스릴러","#드라마","#감정","#리텐션",
-    "#AI영상","#AI프롬프트","#영상기획","#나노바나나","#VEO3","#srt","#자막",
-    "#귀여운고양이","#고양이탐정","#고양이일상","#catlover","#pets","#cinematic","#shortfilm","#oneLineMovie"
-  ].slice(0,30).join(" ");
+  const baseTags = [
+    "#쇼츠","#유튜브쇼츠","#shorts","#강아지","#dog","#스토리","#시네마틱","#실사느낌",
+    "#반전","#리텐션","#엔딩질문","#댓글유도","#AI영상","#콘텐츠제작","#브이로그",
+    "#인터뷰","#다큐","#감성","#comedy","#cinematic","#plotTwist","#story"
+  ];
+  const extra = ["#은비","#제리","#아랑","#dogshorts","#koreanshorts","#viral","#trending","#ai"];
+  let tags = [...new Set([...baseTags, ...extra])];
+  while(tags.length < 30) tags.push("#oneLineMovie");
+  tags = tags.slice(0,30);
 
-  const pinnedA =
-`📌 고정댓글 A
-마지막 장면에서 당신이라면?
-1) 믿는다  2) 의심한다  3) 따라간다
-번호로 댓글 남겨줘!`;
+  const pinnedCommentA =
+    `🐾 엔딩 질문: 당신이라면 믿을까요?\n1) 믿는다  2) 못 믿는다\n이유 한 줄만 남겨줘요. 제일 많은 쪽으로 다음 편 갑니다`;
+  const pinnedCommentB =
+    `📌 12초 반전 포인트 찾았나요?\n“그 장면”이 몇 초인지 댓글로 찍어주세요!\n정답자 상단 고정 🔥`;
 
-  const pinnedB =
-`📌 고정댓글 B
-12초에 나온 “그 단서”… 너는 봤어?
-A) 봤다  B) 못 봤다
-(다시 보기 금지… 그냥 선택해)`;
-
-  const description =
-`한 줄로 시작한 고양이 시네마틱 쇼츠 설계입니다.
-- 장르: ${genre}
-- 톤: ${tone}
-- 프리셋: ${preset}
-- 룩고정/리텐션 강제 ON (12초 반전 + 질문 엔딩)
-
-✅ 질문: 어떤 장면이 가장 강했나요?
-1) 오프닝  2) 12초 반전  3) 엔딩 질문
-
-${hashtags}`;
-
-  return { titles, hashtags, pinnedA, pinnedB, description };
+  return { titles, hashtags: tags, pinnedCommentA, pinnedCommentB };
 }
 
-/* ZIP pack */
-function planToScenePlanTxt(plan){
-  let txt = `TITLE: ${plan.title}\n`;
-  txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · preset: ${plan.meta.preset}\n`;
-  txt += `LOOK_LOCK:${plan.meta.look_lock} · RETENTION:${plan.meta.retention_force} · FIRST_TWIST:${plan.meta.first_twist_at || "-"}\n`;
-  txt += `VERSION: ${plan.version} · CREATED: ${plan.created_at}\n\n`;
-  plan.scenes.forEach(s=>{
-    txt += `SCENE ${s.index} (${s.time}) — ${s.beat}\n`;
-    if(s.retention_flags?.isFirstTwist) txt += `RETENTION: FIRST_TWIST(12s)\n`;
-    if(s.retention_flags?.isEnding) txt += `RETENTION: ENDING_QUESTION\n`;
-    txt += `SUBTITLE: ${s.subtitle}\n`;
-    txt += `---\n`;
+function CAT_toSRTFromScenes(scenes){
+  // 각 씬 자막은 dialogueKR/EN에서 뽑음(있으면)
+  const pad = (n,w=2)=>String(n).padStart(w,"0");
+  const fmt = (sec)=>{
+    sec = Math.max(0, Number(sec)||0);
+    const h = Math.floor(sec/3600);
+    const m = Math.floor((sec%3600)/60);
+    const s = Math.floor(sec%60);
+    const ms = Math.floor((sec - Math.floor(sec))*1000);
+    return `${pad(h)}:${pad(m)}:${pad(s)},${pad(ms,3)}`;
+  };
+
+  const subs = scenes.map((sc,i)=>{
+    const start = sc.startSec;
+    const end = Math.min(sc.startSec + sc.durSec, sc.startSec + Math.max(1.8, sc.durSec - 0.6));
+    const text = (sc.dialogueKR || sc.dialogueEN || "").replace(/^자막\(선택\):\s*/,"").trim() || " ";
+    return { i:i+1, start, end, text };
   });
-  return txt;
+
+  return subs.map(s => [s.i, `${fmt(s.start)} --> ${fmt(s.end)}`, s.text, ""].join("\n")).join("\n");
 }
-function planToPromptsImageTxt(plan){
-  let txt = `# IMAGE PROMPTS (NanoBanana)\n`;
-  txt += `TITLE: ${plan.title}\n`;
-  txt += `PRESET: ${plan.meta.preset}\n`;
-  txt += `---\n\n`;
-  plan.scenes.forEach(s=>{
-    txt += `SCENE ${s.index} (${s.time}) — ${s.beat}\n`;
-    txt += `${s.image_prompt}\n\n`;
-    txt += `----------------------------------------\n\n`;
+
+async function plugin_generateImages(scenes, ctx){
+  // 룩락 문장: 캐릭터 첫번째를 히어로로 잡음
+  const hero = (ctx?.characters || "").split(",")[0]?.trim() || "main character";
+  const lookLockEN = `LOOK LOCK: Keep hero identical every scene (fur color, face silhouette, ear shape, eye spacing, nose size, accessories, outfit). Hero=${hero}.`;
+  const lookLockKR = `(룩고정) 주인공 외형(털색/얼굴형/귀/눈 간격/액세서리/의상)을 전 씬 동일 유지. 주인공=${hero}.`;
+
+  const enhanced = scenes.map(sc=>{
+    const addKR = `${lookLockKR} 2초 훅/12초 반전/질문 엔딩 리텐션 구조.`;
+    const addEN = `${lookLockEN} retention: 2s hook / ~12s twist / question ending.`;
+    return {
+      id: sc.id,
+      promptKR: sc.nanoBananaPromptKR ? (sc.nanoBananaPromptKR + ", " + addKR) : undefined,
+      promptEN: sc.nanoBananaPromptEN ? (sc.nanoBananaPromptEN + ", " + addEN) : undefined,
+      captionKR: sc.dialogueKR || "",
+      captionEN: sc.dialogueEN || ""
+    };
   });
-  return txt;
+
+  return {
+    ok:true,
+    message:`(CAT A) 프롬프트 강화 완료: 룩락+리텐션 보강 적용 (${scenes.length}씬)`,
+    lookLockKR,
+    lookLockEN,
+    images: enhanced
+  };
 }
-function planToPromptsVideoTxt(plan){
-  let txt = `# VIDEO PROMPTS (VEO3)\n`;
-  txt += `TITLE: ${plan.title}\n`;
-  txt += `PRESET: ${plan.meta.preset}\n`;
-  txt += `---\n\n`;
-  plan.scenes.forEach(s=>{
-    txt += `SCENE ${s.index} (${s.time}) — ${s.beat}\n`;
-    txt += `${s.video_prompt}\n\n`;
-    txt += `----------------------------------------\n\n`;
+
+async function plugin_renderVideoPlan(scenes, ctx){
+  const plan = scenes.map(sc=>({
+    cut: sc.id,
+    start: sc.startSec,
+    duration: sc.durSec,
+    camera: sc.camera,
+    captionKR: sc.dialogueKR || "",
+    captionEN: sc.dialogueEN || ""
+  }));
+
+  const srt = CAT_toSRTFromScenes(scenes);
+
+  // 유튜브팩: 항상 만들어주되, 필요 없으면 무시하면 됨
+  const youtubePack = CAT_buildYouTubePack({
+    oneLine: ctx?.oneLine || "",
+    characters: ctx?.characters || "",
+    locations: ctx?.locations || "",
+    totalSec: ctx?.totalSec || 60
   });
-  return txt;
+
+  return {
+    ok:true,
+    message:`(CAT B) VEO3 컷리스트 + SRT + 유튜브팩 생성 완료`,
+    veo3Cuts: plan,
+    srt,
+    youtubePack
+  };
 }
-function planToYoutubePackTxt(plan){
-  const pack = buildYoutubePack(plan);
-  return `=== TITLES (10) ===
-${pack.titles.map((t,i)=>`${i+1}) ${t}`).join("\n")}
 
-=== DESCRIPTION ===
-${pack.description}
+/** ========= Plugin Runner ========= */
+async function runPlugins(){
+  const out = $("pluginOut");
+  out.className = "status";
 
-=== HASHTAGS (30) ===
-${pack.hashtags}
-
-=== PINNED COMMENT A ===
-${pack.pinnedA}
-
-=== PINNED COMMENT B ===
-${pack.pinnedB}
-`;
-}
-function safeZipName(name){
-  return (name || "one-line-movie")
-    .toString()
-    .replace(/[\\/:*?"<>|]/g, "_")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 60) || "one-line-movie";
-}
-async function downloadZipPack(){
-  if(!window.JSZip){
-    alert("JSZip 로드 실패! (head에 JSZip CDN 스크립트가 있는지 확인)");
+  const v = validateStateForExport();
+  if (!v.ok){
+    out.className = "status bad";
+    out.textContent = `플러그인 실행 불가: ${v.msg}`;
     return;
   }
-  if(!latestPlan){
-    alert("먼저 생성하기를 눌러 결과를 만든 다음 ZIP을 눌러줘!");
-    return;
-  }
-
-  const plan = latestPlan;
-  setStatus("ZIP 생성중…", "info");
-
-  const zip = new JSZip();
-  const folder = zip.folder("one-line-movie");
-
-  folder.file("scene_plan.txt", planToScenePlanTxt(plan));
-  folder.file("prompts_image.txt", planToPromptsImageTxt(plan));
-  folder.file("prompts_video.txt", planToPromptsVideoTxt(plan));
-  folder.file("subtitles.srt", planToSrt(plan));
-  folder.file("youtube_pack.txt", planToYoutubePackTxt(plan));
-  folder.file("prompts.json", JSON.stringify(plan, null, 2));
 
   try{
-    const backup = {
-      type: "olm_backup",
-      version: BUILD,
-      exported_at: new Date().toISOString(),
-      state: {
-        line: safeTrim($("line")?.value),
-        genre: $("genre")?.value,
-        tone: $("tone")?.value,
-        seconds: $("length")?.value,
-        preset: $("preset")?.value || "auto",
-        hero: safeTrim($("hero")?.value),
-        setting: safeTrim($("setting")?.value),
-        appMode: $("appMode")?.value || "free",
-        lockMode: $("lockMode")?.value || "auto",
-        arangDetailLock: safeTrim($("arangDetailLock")?.value || "")
-      },
-      lastPlan: plan
+    const ctx = {
+      oneLine: state.oneLine,
+      characters: state.characters,
+      locations: state.locations,
+      totalSec: state.totalSec
     };
-    folder.file("backup.json", JSON.stringify(backup, null, 2));
-  }catch(e){}
+    const A = await plugin_generateImages(state.scenes, ctx);
+    const B = await plugin_renderVideoPlan(state.scenes, ctx);
 
-  const blob = await zip.generateAsync({ type: "blob" });
-  const a = document.createElement("a");
-  const url = URL.createObjectURL(blob);
-  a.href = url;
-  a.download = `${safeZipName(plan.title)}.zip`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    state.plugin = { A, B };
 
-  setStatus("ZIP 다운로드 완료", "good");
+    out.className = "status ok";
+    out.textContent = [
+      A?.ok ? `✅ A: ${A.message || "OK"}` : `❌ A 실패`,
+      B?.ok ? `✅ B: ${B.message || "OK"}` : `❌ B 실패`,
+      "",
+      "결과(JSON 미리보기):",
+      JSON.stringify({ A, B }, null, 2)
+    ].join("\n");
+
+    render();
+  }catch(e){
+    out.className = "status bad";
+    out.textContent = `플러그인 실행 에러: ${String(e?.message || e)}`;
+  }
 }
 
-function injectZipButton(){
-  const target = document.querySelector(".outActions");
-  if(!target) return;
-  if(document.getElementById("downloadZip")) return;
-
-  const btn = document.createElement("button");
-  btn.className = "mini";
-  btn.id = "downloadZip";
-  btn.textContent = "📦 ZIP";
-  btn.title = "상품 패키지를 ZIP으로 다운로드";
-  btn.addEventListener("click", downloadZipPack);
-  target.prepend(btn);
-}
-
-/* init */
-$("buildPill") && ($("buildPill").textContent = "🏷 버전: " + BUILD);
-$("healthPill") && ($("healthPill").textContent = SAFETY_ON ? "🛡 안전모드: ON" : "🛡 안전모드: OFF");
-
-if(isAdmin){
-  const adminBox = $("adminServerBox");
-  if(adminBox) adminBox.style.display = "flex";
-}
-
-loadState();
-updatePresetHint();
-applyModePolicyToEngine();
-updateLiveHints();
-
-$("preset")?.addEventListener("change", () => { updatePresetHint(); saveState(); });
-
-["appMode","lockMode","line"].forEach(id=>{
-  const el = $(id);
-  if(!el) return;
-  el.addEventListener("change", ()=>{ applyModePolicyToEngine(); updateLiveHints(); saveState(); });
-  el.addEventListener("input", ()=>{ updateLiveHints(); saveState(); });
+/** ========= Events ========= */
+$("btnGenerate").addEventListener("click", generateScenes);
+$("btnRefine").addEventListener("click", refineRetention);
+$("btnReset").addEventListener("click", ()=>{
+  $("projectName").value = "";
+  $("oneLine").value = "";
+  $("characters").value = "";
+  $("locations").value = "";
+  $("totalSec").value = 60;
+  $("sceneCount").value = 8;
+  $("retentionRules").value = "";
+  $("tone").value = "cinematic_realistic";
+  $("aspect").value = "Vertical 9:16";
+  $("langMode").value = "kr_en";
+  state = { ...state, projectName:"", oneLine:"", scenes:[], tags:[], plugin:{A:null,B:null} };
+  $("sceneList").innerHTML = "";
+  $("chips").innerHTML = "";
+  $("pluginOut").textContent = "플러그인 출력 대기…";
+  setStatus("초기화 완료", true);
 });
 
-document.addEventListener("DOMContentLoaded", injectZipButton);
+$("btnCopyJSON").addEventListener("click", async ()=>{
+  const v = validateStateForExport();
+  if (!v.ok){ setStatus(v.msg, false); return; }
+  await copyToClipboard(JSON.stringify(state, null, 2));
+  setStatus("JSON 복사 완료 ✅", true);
+});
+$("btnDownloadJSON").addEventListener("click", ()=>{
+  const v = validateStateForExport();
+  if (!v.ok){ setStatus(v.msg, false); return; }
+  downloadText(`${(state.projectName||"project").replaceAll(" ","_")}_v4.json`, JSON.stringify(state, null, 2));
+  setStatus("JSON 다운로드 시작 ✅", true);
+});
+$("btnDownloadCSV").addEventListener("click", ()=>{
+  const v = validateStateForExport();
+  if (!v.ok){ setStatus(v.msg, false); return; }
+  downloadText(`${(state.projectName||"project").replaceAll(" ","_")}_cuts_v4.csv`, toCSV());
+  setStatus("CSV 다운로드 시작 ✅", true);
+});
 
-(async () => {
-  await fetchServerStatus();
-  applyServerPolicy();
+$("btnRunPlugins").addEventListener("click", runPlugins);
+$("btnCopyPluginOut").addEventListener("click", async ()=>{
+  await copyToClipboard($("pluginOut").textContent || "");
+  setStatus("플러그인 결과 복사 완료 ✅", true);
+});
 
-  try{
-    const lastPlan = JSON.parse(localStorage.getItem(LS_LAST_PLAN) || "null");
-    if(lastPlan?.ok){
-      latestPlan = lastPlan;
-      renderPlan(latestPlan, {ok:false, text:"(자동 복원) 마지막 결과를 불러왔어.", url:""});
-      $("outCard") && ($("outCard").style.display = "block");
-      setStatus("마지막 결과 복원됨", "warn");
-    }
-  }catch(e){}
+// 내장 코드 미리보기
+(function(){
+  const preview = $("embeddedCodePreview");
+  const code = [
+    "/* Embedded Plugin A/B Summary */",
+    "A: plugin_generateImages(scenes, ctx) => 룩락+리텐션 보강된 프롬프트/캡션 배열",
+    "B: plugin_renderVideoPlan(scenes, ctx) => VEO3 컷리스트 + SRT + 유튜브팩(제목/해시태그/고정댓글)",
+    "",
+    "참고: 필요하면 이 부분을 너가 원하는 규칙으로 더 확장 가능"
+  ].join("\n");
+  preview.textContent = code;
 })();
-  </script>
+</script>
 </body>
 </html>
