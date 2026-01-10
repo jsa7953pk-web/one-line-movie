@@ -3,19 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cat Shorts Studio v4 FINAL — CAT Plugins Embedded (Merged)</title>
+  <title>Cat Shorts Studio v4 ULTIMATE — CAT Plugins Embedded (Single File)</title>
   <style>
-    :root { --bg:#0b0d12; --panel:#121623; --card:#161c2e; --text:#e9ecf1; --muted:#9aa3b2; --line:#27304a; --ok:#47d18c; --bad:#ff6b6b; }
+    :root {
+      --bg:#0b0d12; --panel:#121623; --card:#161c2e; --text:#e9ecf1; --muted:#9aa3b2;
+      --line:#27304a; --ok:#47d18c; --bad:#ff6b6b; --warn:#f6c177;
+      --primary:#1e2a5a; --primaryLine:#2e3a77;
+    }
     * { box-sizing:border-box; }
     body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif; background:var(--bg); color:var(--text); }
     header { padding:18px 16px; border-bottom:1px solid var(--line); background:linear-gradient(180deg, #0d1020, #0b0d12); }
     header h1 { margin:0 0 6px; font-size:18px; }
     header p { margin:0; color:var(--muted); font-size:13px; line-height:1.4; }
+
     main { max-width:1180px; margin:0 auto; padding:16px; display:grid; gap:14px; grid-template-columns: 1.05fr 0.95fr; }
     @media (max-width: 980px){ main{ grid-template-columns: 1fr; } }
+
     .panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
     .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
     label { font-size:12px; color:var(--muted); display:block; margin:10px 0 6px; }
+
     input, textarea, select, button {
       width:100%; border-radius:12px; border:1px solid var(--line);
       background:var(--card); color:var(--text); padding:10px 11px; font-size:14px;
@@ -24,14 +31,19 @@
     button { cursor:pointer; transition: .15s transform, .15s opacity; }
     button:hover { transform: translateY(-1px); opacity:.95; }
     button:active { transform: translateY(0px); opacity:.9; }
+
     .btn { width:auto; padding:10px 12px; font-size:13px; }
-    .btn.primary { background:#1e2a5a; border-color:#2e3a77; }
+    .btn.primary { background:var(--primary); border-color:var(--primaryLine); }
     .btn.ok { background:#173b2c; border-color:#1f5a43; }
     .btn.bad { background:#3b1a1a; border-color:#6a2a2a; }
+    .btn.warn { background:#3a2f12; border-color:#6b5a25; }
+
     .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
     .chip { padding:6px 10px; border:1px solid var(--line); border-radius:999px; font-size:12px; color:var(--muted); background:#0f1424; }
+
     .grid2 { display:grid; gap:10px; grid-template-columns: 1fr 1fr; }
     @media (max-width: 680px){ .grid2{ grid-template-columns:1fr; } }
+
     .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px; }
     .card h3 { margin:0 0 8px; font-size:14px; }
     .muted { color:var(--muted); font-size:12px; }
@@ -42,18 +54,27 @@
     .status { margin-top:10px; font-size:12px; padding:8px 10px; border-radius:12px; border:1px solid var(--line); background:#0f1424; }
     .status.ok { border-color:#1f5a43; color:#bff3da; }
     .status.bad { border-color:#6a2a2a; color:#ffd0d0; }
+    .status.warn { border-color:#7a5a1f; color:#ffe4b3; }
     .tiny { font-size:11px; color:var(--muted); }
     .hr { height:1px; background:var(--line); margin:12px 0; }
-    .warn { border-color:#7a5a1f; color:#ffe4b3; }
     details summary { cursor:pointer; color:var(--muted); font-size:12px; }
+
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .tab { width:auto; padding:8px 10px; border-radius:999px; border:1px solid var(--line); background:#0f1424; color:var(--muted); font-size:12px; cursor:pointer; }
+    .tab.active { background:#151b31; color:var(--text); border-color:#3b4a73; }
+    .kpi { display:grid; gap:10px; grid-template-columns: 1fr 1fr; margin-top:10px; }
+    @media (max-width: 680px){ .kpi{ grid-template-columns:1fr; } }
+    .kpi .box { border:1px solid var(--line); border-radius:12px; padding:10px; background:#0f1424; }
+    .kpi .box b { display:block; font-size:12px; margin-bottom:4px; }
+    .kpi .box span { font-size:12px; color:var(--muted); }
   </style>
 </head>
 <body>
 <header>
-  <h1>🐾 Cat Shorts Studio v4 FINAL — CAT Plugins Embedded</h1>
+  <h1>🐾 Cat Shorts Studio v4 ULTIMATE — CAT Plugins Embedded</h1>
   <p>
-    한 줄 시나리오 → 쇼츠용 씬 자동 분해 → 나노바나나 프롬프트 + VEO3 컷 리스트 → Export.<br>
-    ✅ CAT Edition 핵심 기능(룩락/리텐션/유튜브팩)을 <b>플러그인 A/B로 내장</b>해 “파일 1개”로 완성했습니다.
+    한 줄 시나리오 → 쇼츠 씬 자동 분해 → 나노바나나 프롬프트 + VEO3 컷 리스트 + SRT + 유튜브팩 → Export.<br>
+    ✅ 단일 파일(HTML 1개)로 “제작/내보내기/룩락/리텐션/유튜브팩”까지 최상위 합성본.
   </p>
 </header>
 
@@ -110,9 +131,16 @@
 
     <div class="grid2">
       <div>
+        <label>룩락 기준(선택)</label>
+        <input id="heroRef" placeholder="예) HeroRef: 하늘색 롱패딩+하늘색 장갑+하늘색 신발 / 또는 기준 이미지 설명 키워드" />
+      </div>
+      <div>
         <label>씬 개수(자동)</label>
         <input id="sceneCount" type="number" min="3" max="20" value="8"/>
       </div>
+    </div>
+
+    <div class="grid2">
       <div>
         <label>언어 출력</label>
         <select id="langMode">
@@ -121,18 +149,32 @@
           <option value="en">영어만</option>
         </select>
       </div>
+      <div>
+        <label>리텐션 규칙(선택)</label>
+        <input id="retentionRules" placeholder="예) 0-2초 정적→급전개, 12초 반전, 엔딩 질문" />
+      </div>
     </div>
-
-    <label>리텐션 규칙(선택)</label>
-    <input id="retentionRules" placeholder="예) 0-2초 정적→급전개, 12초 반전, 엔딩 질문" />
 
     <div class="row" style="margin-top:12px;">
       <button class="btn primary" id="btnGenerate">🎬 자동 씬 생성</button>
       <button class="btn" id="btnRefine">✨ 리텐션 강화</button>
+      <button class="btn warn" id="btnSave">💾 자동 저장</button>
+      <button class="btn warn" id="btnLoad">📥 불러오기</button>
       <button class="btn bad" id="btnReset">초기화</button>
     </div>
 
     <div id="status" class="status ok">준비 완료. 입력 후 ‘자동 씬 생성’을 누르세요.</div>
+
+    <div class="kpi">
+      <div class="box">
+        <b>시간 합계 검사</b>
+        <span id="kpiTime">—</span>
+      </div>
+      <div class="box">
+        <b>룩락 상태</b>
+        <span id="kpiLook">—</span>
+      </div>
+    </div>
 
     <div class="hr"></div>
 
@@ -151,27 +193,39 @@
         <button class="btn ok" id="btnCopyJSON">JSON 복사</button>
         <button class="btn ok" id="btnDownloadJSON">JSON 다운로드</button>
         <button class="btn ok" id="btnDownloadCSV">CSV 다운로드</button>
+        <button class="btn ok" id="btnDownloadSRT">SRT 다운로드</button>
       </div>
-      <p class="tiny">JSON: 씬/시간/카메라/프롬프트/대사. CSV: 컷 리스트(엑셀용).</p>
+      <p class="tiny">JSON: 전체 상태. CSV: 컷 리스트(엑셀용). SRT: 자막 파일.</p>
     </div>
 
     <div class="card" style="margin-top:10px;">
       <h3>🧩 CAT 플러그인 상태</h3>
       <p class="muted">
-        ✅ 이 파일은 <b>플러그인 A/B가 이미 내장</b>되어 자동으로 로드됩니다.<br>
-        A: 이미지/프롬프트 강화(룩락/리텐션 문장 보강) · B: VEO3 컷 리스트 + (옵션) 유튜브팩 생성
+        ✅ 플러그인 A/B 내장<br>
+        A: 룩락 + 프롬프트 강화(리텐션 구조 문장 보강)<br>
+        B: VEO3 컷 리스트 + SRT + 유튜브팩 생성
       </p>
 
       <div class="row" style="margin-top:10px;">
-        <button class="btn primary" id="btnRunPlugins">▶ 플러그인 실행(테스트)</button>
-        <button class="btn ok" id="btnCopyPluginOut">📋 플러그인 결과 복사</button>
+        <button class="btn primary" id="btnRunPlugins">▶ 플러그인 실행</button>
+        <button class="btn ok" id="btnCopyPluginSummary">📋 결과 요약 복사</button>
+        <button class="btn ok" id="btnCopyYouTubePack">📦 유튜브팩 복사</button>
+        <button class="btn ok" id="btnCopySRT">📝 SRT 복사</button>
       </div>
 
       <div id="pluginStatus" class="status ok" style="margin-top:10px;">✅ 내장 플러그인 로드됨 (A/B OK)</div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="summary">요약</div>
+        <div class="tab" data-tab="a">A(프롬프트)</div>
+        <div class="tab" data-tab="b">B(VEO3/SRT/유튜브)</div>
+        <div class="tab" data-tab="raw">RAW JSON</div>
+      </div>
+
       <div id="pluginOut" class="status" style="margin-top:10px;">플러그인 출력 대기…</div>
 
       <details style="margin-top:10px;">
-        <summary>고급: 내장 플러그인 코드 보기</summary>
+        <summary>고급: 내장 플러그인 코드 설명 보기</summary>
         <div class="hr"></div>
         <div class="mono" id="embeddedCodePreview"></div>
       </details>
@@ -180,36 +234,46 @@
     <div class="card" style="margin-top:10px;">
       <h3>🛡️ 에러 방어</h3>
       <ul class="muted" style="margin:8px 0 0 18px; line-height:1.5;">
-        <li>입력 누락 시 생성 금지</li>
-        <li>시간 합계 자동 검증</li>
-        <li>플러그인 실행 실패해도 앱 기능 유지</li>
+        <li>입력 누락 시 생성/내보내기/플러그인 실행 금지</li>
+        <li>시간 합계 자동 검증(불일치 시 경고)</li>
+        <li>플러그인 실패해도 앱 기능 유지</li>
+        <li>자동 저장/불러오기(LocalStorage)</li>
       </ul>
     </div>
   </aside>
 </main>
 
 <script>
-/** ========= Core State ========= */
+/** ========= Helpers ========= */
 const $ = (id) => document.getElementById(id);
-const schemaVersion = "v4-final-cat-merged";
+const schemaVersion = "v4-ultimate-cat-singlefile";
 
-let state = {
-  schemaVersion,
-  projectName: "",
-  totalSec: 60,
-  tone: "cinematic_realistic",
-  aspect: "Vertical 9:16",
-  oneLine: "",
-  characters: "",
-  locations: "",
-  langMode: "kr_en",
-  sceneCount: 8,
-  retentionRules: "",
-  tags: [],
-  scenes: [],
-  // plugin outputs go here
-  plugin: { A:null, B:null }
+const deepClone = (obj) => {
+  try { return structuredClone(obj); } catch { return JSON.parse(JSON.stringify(obj)); }
 };
+
+function safeParseInt(v, fallback){
+  const n = Number.parseInt(String(v ?? "").trim(), 10);
+  return Number.isFinite(n) ? n : fallback;
+}
+function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+async function copyToClipboard(text){
+  try{ await navigator.clipboard.writeText(text); }
+  catch{
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy"); ta.remove();
+  }
+}
+function downloadText(filename, text){
+  const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
 
 function setStatus(msg, ok=true){
   const el = $("status");
@@ -221,19 +285,50 @@ function setPluginStatus(msg, type="ok"){
   el.textContent = msg;
   el.className = "status " + (type === "ok" ? "ok" : (type === "bad" ? "bad" : "warn"));
 }
-function safeParseInt(v, fallback){
-  const n = Number.parseInt(String(v ?? "").trim(), 10);
-  return Number.isFinite(n) ? n : fallback;
-}
-function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+/** ========= Core State ========= */
+let state = {
+  schemaVersion,
+  projectName: "",
+  totalSec: 60,
+  tone: "cinematic_realistic",
+  aspect: "Vertical 9:16",
+  oneLine: "",
+  characters: "",
+  locations: "",
+  heroRef: "",
+  langMode: "kr_en",
+  sceneCount: 8,
+  retentionRules: "",
+  tags: [],
+  scenes: [],
+  plugin: { A:null, B:null },
+  meta: { lastSavedAt: null }
+};
 
 function computeTags(){
   const tags = [];
   tags.push(`Tone:${$("tone").value}`);
   tags.push(`Aspect:${$("aspect").value}`);
   const rules = $("retentionRules").value.trim();
+  const heroRef = $("heroRef").value.trim();
   if (rules) tags.push(`Rules:${rules}`);
+  if (heroRef) tags.push(`LookLock:${heroRef.slice(0,22)}${heroRef.length>22?"…":""}`);
   return tags;
+}
+
+function updateKPIs(){
+  const sum = (state.scenes||[]).reduce((a,s)=>a + (Number(s.durSec)||0), 0);
+  if (!state.scenes?.length){
+    $("kpiTime").textContent = "—";
+    $("kpiLook").textContent = "—";
+    return;
+  }
+  const ok = sum === state.totalSec;
+  $("kpiTime").textContent = ok ? `✅ ${sum}s / ${state.totalSec}s` : `⚠️ ${sum}s / ${state.totalSec}s (불일치)`;
+
+  const heroRef = (state.heroRef||"").trim();
+  $("kpiLook").textContent = heroRef ? `✅ 기준 있음: ${heroRef.slice(0,40)}${heroRef.length>40?"…":""}` : "⚠️ 기준 없음(권장)";
 }
 
 /** ========= Prompt Utils ========= */
@@ -276,50 +371,61 @@ function buildBasePromptEN(){
   ].filter(Boolean).join(", ");
 }
 function shotPresets(){
+  // 반복 느낌을 줄이려고 “구조 프리셋”을 더 강하게 잡음
   return [
-    { nameKR:"훅 클로즈업", nameEN:"Hook Close-up", camera:"eye-level close-up, slight push-in", actionKR:"정적 1~2초 후 미세 움직임", actionEN:"1–2s stillness then micro-movement" },
-    { nameKR:"상황 제시 와이드", nameEN:"Establishing Wide", camera:"wide shot, stable frame", actionKR:"공간/소품으로 상황 설명", actionEN:"explain context via space/props" },
-    { nameKR:"손/소품 클로즈업", nameEN:"Prop Close-up", camera:"macro/close-up on prop, shallow DOF", actionKR:"소품이 이야기의 열쇠", actionEN:"prop becomes the key" },
-    { nameKR:"리액션 샷", nameEN:"Reaction Shot", camera:"medium close-up, quick zoom-in", actionKR:"눈/귀/입 미세 변화", actionEN:"tiny eye/ear/mouth change" },
-    { nameKR:"반전 리빌", nameEN:"Twist Reveal", camera:"snap zoom or quick cut reveal", actionKR:"새 정보로 재해석", actionEN:"new info recontextualizes" },
-    { nameKR:"엔딩 고정", nameEN:"Ending Hold", camera:"locked shot, 1s hold", actionKR:"짧은 정적 후 종료", actionEN:"brief stillness then end" }
+    { key:"hook", nameKR:"훅 클로즈업", nameEN:"Hook Close-up", camera:"eye-level close-up, slight push-in", actionKR:"정적 1~2초 후 미세 움직임(귀/시선)", actionEN:"1–2s stillness then micro-movement (ears/gaze)" },
+    { key:"setup", nameKR:"상황 제시", nameEN:"Setup", camera:"medium shot, stable frame", actionKR:"사람처럼 행동하는 증거(의상/소품)", actionEN:"proof of human-like behavior (outfit/prop)" },
+    { key:"evidence", nameKR:"증거 클로즈업", nameEN:"Evidence Close-up", camera:"close-up on prop/hand, shallow DOF", actionKR:"소품이 이야기의 열쇠", actionEN:"prop becomes the key evidence" },
+    { key:"reaction", nameKR:"리액션 샷", nameEN:"Reaction Shot", camera:"medium close-up, quick zoom-in", actionKR:"눈/입/귀 미세 변화", actionEN:"tiny change in eyes/mouth/ears" },
+    { key:"twist", nameKR:"반전 리빌", nameEN:"Twist Reveal", camera:"snap zoom or quick cut reveal", actionKR:"새 정보 1개로 재해석", actionEN:"one new info recontextualizes" },
+    { key:"accelerate", nameKR:"가속", nameEN:"Acceleration", camera:"handheld slight shake or faster cuts", actionKR:"템포 업 + 결말 직전 미끼", actionEN:"tempo up + bait before ending" },
+    { key:"ending", nameKR:"엔딩 고정", nameEN:"Ending Hold", camera:"locked shot, 0.7–1.0s hold", actionKR:"짧은 정적 후 종료", actionEN:"brief stillness then end" }
   ];
 }
+
 function pickBeatKR(idx, count, oneLine, rules){
-  // CAT식 리텐션을 기본으로 깔아줌 (2초 훅/12초 반전/질문 엔딩 느낌)
-  if (idx === 1) return `훅(2초): ${oneLine}의 핵심을 ‘설명 없이’ 암시`;
-  if (idx === count) return `엔딩(질문): 선택을 강요하는 한 문장 + 0.7초 정적`;
-  if (idx === 2) return "상황 제시: 캐릭터가 사람처럼 행동하는 증거(소품/옷/제스처)";
-  if (idx === Math.ceil(count*0.6)) return "반전(12초 근처): 관객의 착각을 깨는 ‘새 정보 1개’";
-  if (idx === Math.ceil(count*0.8)) return "가속: 템포 업(줌/컷) + 결말 직전 미끼 질문";
-  return rules ? `진행: ${rules}에 맞춰 긴장 유지` : "진행: 매 5~8초마다 시각 변화(줌/각도/소품) 1번";
+  // 구조 강제: Hook / Setup / Evidence / Twist / Accel / Ending
+  const t = Math.ceil(count * 0.6);
+  const a = Math.ceil(count * 0.8);
+  if (idx === 1) return `훅(0–2초): 설명 없이 ‘이상함’을 먼저 보여주기 (핵심 암시)`;
+  if (idx === 2) return `셋업: ${oneLine}의 상황을 소품/의상/제스처로 설명`;
+  if (idx === t) return `반전(12초 근처): 관객의 착각을 깨는 새 정보 1개 공개`;
+  if (idx === a) return `가속: 템포 업(줌/컷) + 결말 직전 미끼 질문`;
+  if (idx === count) return `엔딩: “당신이라면?” 질문 + 0.7~1초 정적`;
+  return rules ? `진행: ${rules}를 유지하며 5~8초마다 변화` : "진행: 5~8초마다 시각 변화(줌/각도/소품) 1번";
 }
 function pickBeatEN(idx, count, oneLine, rules){
-  if (idx === 1) return `Hook (2s): imply the core of "${oneLine}" with no explanation`;
-  if (idx === count) return `Ending (question): force a choice + 0.7s stillness`;
-  if (idx === 2) return "Setup: proof the character behaves like a human (prop/clothes/gesture)";
-  if (idx === Math.ceil(count*0.6)) return "Twist (~12s): one new info that breaks the viewer’s assumption";
-  if (idx === Math.ceil(count*0.8)) return "Acceleration: faster tempo (zoom/cuts) + bait question before ending";
-  return rules ? `Flow: keep tension based on "${rules}"` : "Flow: add one visual change every 5–8 seconds";
+  const t = Math.ceil(count * 0.6);
+  const a = Math.ceil(count * 0.8);
+  if (idx === 1) return `Hook (0–2s): show “something off” with no explanation`;
+  if (idx === 2) return `Setup: explain via props/outfit/gesture (no narration)`;
+  if (idx === t) return `Twist (~12s): reveal exactly one new info`;
+  if (idx === a) return `Acceleration: faster tempo + bait question before ending`;
+  if (idx === count) return `Ending: “Would you believe it?” + 0.7–1.0s stillness`;
+  return rules ? `Flow: keep tension based on "${rules}"` : "Flow: one visual change every 5–8 seconds";
 }
+
 function suggestDialogueKR(idx, count){
+  const t = Math.ceil(count*0.6);
   if (idx === 1) return "자막(선택): “지금… 뭔가 이상합니다.”";
   if (idx === 2) return "자막(선택): “얘… 사람처럼 행동해요.”";
-  if (idx === Math.ceil(count*0.6)) return "자막(선택): “방금 그건… 착각이 아니었어.”";
+  if (idx === t) return "자막(선택): “방금 그건… 착각이 아니었어.”";
   if (idx === count) return "자막(선택): “당신이라면… 믿었을까요?”";
   return "자막(선택): 핵심 단어 1~3개만";
 }
 function suggestDialogueEN(idx, count){
+  const t = Math.ceil(count*0.6);
   if (idx === 1) return "Caption (optional): “Something is… off.”";
   if (idx === 2) return "Caption (optional): “It behaves like a human.”";
-  if (idx === Math.ceil(count*0.6)) return "Caption (optional): “That wasn’t imagination.”";
+  if (idx === t) return "Caption (optional): “That wasn’t imagination.”";
   if (idx === count) return "Caption (optional): “Would you believe it?”";
   return "Caption (optional): 1–3 keywords only";
 }
 function suggestEditNotes(idx, count){
-  if (idx === 1) return "0–2초 정적 → 2초에 미세 움직임(시선/귀/손).";
+  const t = Math.ceil(count*0.6);
+  if (idx === 1) return "0–2초 정적 → 2초에 미세 움직임(시선/귀/손). 훅 자막은 6단어 이하.";
   if (idx === 2) return "상황 설명은 소품/의상으로. 과설명 금지.";
-  if (idx === Math.ceil(count*0.6)) return "반전은 ‘새 정보 1개’만. 반전 직후 0.3초 정적.";
+  if (idx === t) return "반전은 ‘새 정보 1개’만. 반전 직후 0.3초 정적.";
   if (idx === count) return "엔딩 0.7~1초 정적 유지 후 컷. 댓글 유도 1문장.";
   return "매 5~8초마다 시각 변화(줌/각도/소품 클로즈업) 1번.";
 }
@@ -346,8 +452,8 @@ function generateScenes(){
 
   const scenes = [];
   for (let i=0; i<count; i++){
-    const p = presets[i % presets.length];
     const idx = i+1;
+    const p = presets[Math.min(i, presets.length-1)] || presets[presets.length-1]; // 구조를 앞쪽부터 순서대로
 
     const beatKR = pickBeatKR(idx, count, oneLine, rules);
     const beatEN = pickBeatEN(idx, count, oneLine, rules);
@@ -389,6 +495,7 @@ function generateScenes(){
     oneLine,
     characters: $("characters").value.trim(),
     locations: $("locations").value.trim(),
+    heroRef: $("heroRef").value.trim(),
     sceneCount: count,
     langMode,
     retentionRules: rules,
@@ -399,6 +506,7 @@ function generateScenes(){
 
   render();
   setStatus(`씬 ${count}개 생성 완료 ✅ (총 ${totalSec}초)`, true);
+  updateKPIs();
 }
 
 function refineRetention(){
@@ -406,27 +514,21 @@ function refineRetention(){
     setStatus("먼저 씬을 생성하세요.", false);
     return;
   }
-  const scenes = structuredClone(state.scenes);
-  if (scenes[0]) scenes[0].editNotes = (scenes[0].editNotes ?? "") + " | 훅 자막은 6단어 이하.";
-  const mid = Math.max(1, Math.floor(scenes.length*0.6)-1);
-  if (scenes[mid]) scenes[mid].editNotes = (scenes[mid].editNotes ?? "") + " | 반전 직후 0.3초 정적.";
+  const scenes = deepClone(state.scenes);
   const last = scenes.length-1;
-  if (scenes[last]) scenes[last].editNotes = (scenes[last].editNotes ?? "") + " | 마지막 프레임 1초 고정.";
+  const mid = Math.max(1, Math.floor(scenes.length*0.6)-1);
+
+  if (scenes[0]) scenes[0].editNotes = (scenes[0].editNotes ?? "") + " | 훅: 첫 2초 소리 없이도 이해되게.";
+  if (scenes[mid]) scenes[mid].editNotes = (scenes[mid].editNotes ?? "") + " | 반전 직후 0.3초 정적 유지.";
+  if (scenes[last]) scenes[last].editNotes = (scenes[last].editNotes ?? "") + " | 마지막 프레임 1초 고정 + 고정댓글 유도.";
+
   state.scenes = scenes;
   render();
   setStatus("리텐션 강화 규칙 적용 완료 ✨", true);
+  updateKPIs();
 }
 
 /** ========= Render ========= */
-async function copyToClipboard(text){
-  try{ await navigator.clipboard.writeText(text); }
-  catch{
-    const ta = document.createElement("textarea");
-    ta.value = text; document.body.appendChild(ta);
-    ta.select(); document.execCommand("copy"); ta.remove();
-  }
-}
-
 function render(){
   const chips = $("chips");
   chips.innerHTML = "";
@@ -452,6 +554,7 @@ function render(){
     const tKR = scene.titleKR ? `[${scene.id}] ${scene.titleKR}` : `[${scene.id}]`;
     const tEN = scene.titleEN ? ` / ${scene.titleEN}` : "";
     title.textContent = tKR + tEN;
+
     const meta = document.createElement("small");
     meta.textContent = `시작 ${scene.startSec}s · 길이 ${scene.durSec}s · 카메라: ${scene.camera}`;
     left.appendChild(title);
@@ -504,12 +607,11 @@ function render(){
     ].filter(Boolean).join(" | ");
     body.appendChild(dialog);
 
-    // 플러그인 결과가 있으면 아래에 추가 표시
     if (state.plugin?.B?.youtubePack){
       const y = document.createElement("div");
       y.className = "muted";
       y.style.marginTop = "8px";
-      y.textContent = "📦 CAT+ 유튜브팩이 생성되었습니다. (오른쪽 ‘플러그인 실행’ 결과에서 복사 가능)";
+      y.textContent = "📦 CAT+ 유튜브팩 생성됨 → 오른쪽 ‘유튜브팩 복사’ 버튼 사용";
       body.appendChild(y);
     }
 
@@ -517,6 +619,8 @@ function render(){
     wrap.appendChild(body);
     list.appendChild(wrap);
   });
+
+  updateKPIs();
 }
 
 /** ========= Export ========= */
@@ -526,14 +630,6 @@ function validateStateForExport(){
   const sum = state.scenes.reduce((a,s)=>a + (Number(s.durSec)||0), 0);
   if (sum !== state.totalSec) return { ok:false, msg:`시간 합계 불일치: ${sum}s (총 ${state.totalSec}s)` };
   return { ok:true };
-}
-function downloadText(filename, text){
-  const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
 }
 function toCSV(){
   const header = ["id","startSec","durSec","camera","titleKR","titleEN","promptKR","promptEN","dialogueKR","dialogueEN","editNotes"];
@@ -549,20 +645,15 @@ function toCSV(){
   return [header.map(esc).join(","), ...rows.map(r=>r.map(esc).join(","))].join("\n");
 }
 
-/** ========= Embedded CAT Plugins (A/B) =========
- * 목표: v4 씬을 받아서
- *  - A: 프롬프트/룩락 문장/리텐션 키워드 보강
- *  - B: VEO3 컷 리스트 + SRT + 유튜브팩(10제목/30해시태그/고정댓글)
- */
+/** ========= Embedded CAT Plugins (A/B) ========= */
 function CAT_buildYouTubePack({oneLine, characters, locations, totalSec}){
   const hero = characters?.split(",")[0]?.trim() || "주인공";
   const setting = locations || "어딘가";
-  const g = "쇼츠 스토리";
   const length = totalSec || 60;
 
   const titles = [
     `말 안 하는 ${hero}… 근데 다 알고 있었다?`,
-    `2초 훅 → 12초 반전… ${oneLine.slice(0,20)}…`,
+    `2초 훅 → 12초 반전… ${String(oneLine).slice(0,22)}…`,
     `엔딩 질문: 당신이라면 믿을까요?`,
     `${hero}가 사람처럼 행동하는 순간 (실사)`,
     `짧은 영화인데, 끝까지 보게 됨 (${length}s)`,
@@ -575,37 +666,47 @@ function CAT_buildYouTubePack({oneLine, characters, locations, totalSec}){
 
   const baseTags = [
     "#쇼츠","#유튜브쇼츠","#shorts","#강아지","#dog","#스토리","#시네마틱","#실사느낌",
-    "#반전","#리텐션","#엔딩질문","#댓글유도","#AI영상","#콘텐츠제작","#브이로그",
-    "#인터뷰","#다큐","#감성","#comedy","#cinematic","#plotTwist","#story"
+    "#반전","#리텐션","#엔딩질문","#댓글유도","#AI영상","#콘텐츠제작",
+    "#인터뷰","#다큐","#감성","#comedy","#cinematic","#plotTwist","#story",
+    "#dogshorts","#koreanshorts","#viral","#trending","#ai"
   ];
-  const extra = ["#은비","#제리","#아랑","#dogshorts","#koreanshorts","#viral","#trending","#ai"];
+  const extra = ["#은비","#제리","#아랑","#oneLineMovie","#veo3","#nanobanana"];
   let tags = [...new Set([...baseTags, ...extra])];
-  while(tags.length < 30) tags.push("#oneLineMovie");
+  while(tags.length < 30) tags.push("#shortfilm");
   tags = tags.slice(0,30);
 
   const pinnedCommentA =
-    `🐾 엔딩 질문: 당신이라면 믿을까요?\n1) 믿는다  2) 못 믿는다\n이유 한 줄만 남겨줘요. 제일 많은 쪽으로 다음 편 갑니다`;
+    `🐾 엔딩 질문: 당신이라면 믿었을까요?\n1) 믿는다  2) 못 믿는다\n이유 한 줄만! 제일 많은 쪽으로 다음 편 갑니다.`;
   const pinnedCommentB =
     `📌 12초 반전 포인트 찾았나요?\n“그 장면”이 몇 초인지 댓글로 찍어주세요!\n정답자 상단 고정 🔥`;
 
-  return { titles, hashtags: tags, pinnedCommentA, pinnedCommentB };
+  const description =
+`한 줄 시나리오로 만든 짧은 쇼츠 영화입니다.
+(2초 훅 → 12초 반전 → 엔딩 질문)
+
+📌 당신의 선택이 다음 편을 만듭니다.
+#shorts`;
+
+  return { titles, hashtags: tags, pinnedCommentA, pinnedCommentB, description };
 }
 
 function CAT_toSRTFromScenes(scenes){
-  // 각 씬 자막은 dialogueKR/EN에서 뽑음(있으면)
+  // ms 정확도: start/dur가 정수여도 계산 구조는 ms 지원
   const pad = (n,w=2)=>String(n).padStart(w,"0");
   const fmt = (sec)=>{
     sec = Math.max(0, Number(sec)||0);
     const h = Math.floor(sec/3600);
     const m = Math.floor((sec%3600)/60);
     const s = Math.floor(sec%60);
-    const ms = Math.floor((sec - Math.floor(sec))*1000);
+    const ms = Math.round((sec - Math.floor(sec))*1000);
     return `${pad(h)}:${pad(m)}:${pad(s)},${pad(ms,3)}`;
   };
 
   const subs = scenes.map((sc,i)=>{
-    const start = sc.startSec;
-    const end = Math.min(sc.startSec + sc.durSec, sc.startSec + Math.max(1.8, sc.durSec - 0.6));
+    const start = Number(sc.startSec)||0;
+    // 끝은 너무 딱 끝까지 붙지 않게 약간 당겨줌
+    const rawEnd = (Number(sc.startSec)||0) + (Number(sc.durSec)||0);
+    const end = Math.max(start + 0.9, rawEnd - 0.2);
     const text = (sc.dialogueKR || sc.dialogueEN || "").replace(/^자막\(선택\):\s*/,"").trim() || " ";
     return { i:i+1, start, end, text };
   });
@@ -614,13 +715,13 @@ function CAT_toSRTFromScenes(scenes){
 }
 
 async function plugin_generateImages(scenes, ctx){
-  // 룩락 문장: 캐릭터 첫번째를 히어로로 잡음
   const hero = (ctx?.characters || "").split(",")[0]?.trim() || "main character";
-  const lookLockEN = `LOOK LOCK: Keep hero identical every scene (fur color, face silhouette, ear shape, eye spacing, nose size, accessories, outfit). Hero=${hero}.`;
-  const lookLockKR = `(룩고정) 주인공 외형(털색/얼굴형/귀/눈 간격/액세서리/의상)을 전 씬 동일 유지. 주인공=${hero}.`;
+  const heroRef = (ctx?.heroRef || "").trim();
+  const lookLockEN = `LOOK LOCK: Keep hero identical every scene (fur color, face silhouette, ear shape, eye spacing, nose size, accessories, outfit). Hero=${hero}.${heroRef ? " Reference="+heroRef+"." : ""}`;
+  const lookLockKR = `(룩고정) 주인공 외형(털색/얼굴형/귀/눈 간격/코/액세서리/의상)을 전 씬 동일 유지. 주인공=${hero}.${heroRef ? " 기준="+heroRef+"." : ""}`;
 
   const enhanced = scenes.map(sc=>{
-    const addKR = `${lookLockKR} 2초 훅/12초 반전/질문 엔딩 리텐션 구조.`;
+    const addKR = `${lookLockKR} 리텐션: 2초 훅/12초 반전/질문 엔딩.`;
     const addEN = `${lookLockEN} retention: 2s hook / ~12s twist / question ending.`;
     return {
       id: sc.id,
@@ -652,7 +753,6 @@ async function plugin_renderVideoPlan(scenes, ctx){
 
   const srt = CAT_toSRTFromScenes(scenes);
 
-  // 유튜브팩: 항상 만들어주되, 필요 없으면 무시하면 됨
   const youtubePack = CAT_buildYouTubePack({
     oneLine: ctx?.oneLine || "",
     characters: ctx?.characters || "",
@@ -669,65 +769,152 @@ async function plugin_renderVideoPlan(scenes, ctx){
   };
 }
 
+/** ========= Plugin Output Tabs ========= */
+let activeTab = "summary";
+function setTab(tab){
+  activeTab = tab;
+  document.querySelectorAll(".tab").forEach(el=>{
+    el.classList.toggle("active", el.dataset.tab === tab);
+  });
+  renderPluginOut();
+}
+function pluginSummaryText(){
+  const A = state.plugin?.A;
+  const B = state.plugin?.B;
+  const lines = [];
+  lines.push(`A: ${A?.ok ? "OK" : "—"} ${A?.message || ""}`.trim());
+  lines.push(`B: ${B?.ok ? "OK" : "—"} ${B?.message || ""}`.trim());
+  if (B?.youtubePack?.titles?.length) lines.push(`YouTubePack: titles=${B.youtubePack.titles.length}, hashtags=${B.youtubePack.hashtags?.length || 0}`);
+  return lines.join("\n");
+}
+function renderPluginOut(){
+  const out = $("pluginOut");
+  const A = state.plugin?.A;
+  const B = state.plugin?.B;
+
+  if (!A && !B){
+    out.className = "status";
+    out.textContent = "플러그인 출력 대기…";
+    return;
+  }
+
+  out.className = "status ok";
+  if (activeTab === "summary"){
+    out.textContent = pluginSummaryText();
+  } else if (activeTab === "a"){
+    out.textContent = A ? JSON.stringify(A, null, 2) : "(A 결과 없음)";
+  } else if (activeTab === "b"){
+    out.textContent = B ? JSON.stringify(B, null, 2) : "(B 결과 없음)";
+  } else {
+    out.textContent = JSON.stringify({A,B}, null, 2);
+  }
+}
+
 /** ========= Plugin Runner ========= */
 async function runPlugins(){
-  const out = $("pluginOut");
-  out.className = "status";
-
   const v = validateStateForExport();
   if (!v.ok){
-    out.className = "status bad";
-    out.textContent = `플러그인 실행 불가: ${v.msg}`;
+    setPluginStatus(`플러그인 실행 불가: ${v.msg}`, "bad");
+    renderPluginOut();
     return;
   }
 
   try{
+    setPluginStatus("플러그인 실행 중…", "warn");
     const ctx = {
       oneLine: state.oneLine,
       characters: state.characters,
       locations: state.locations,
+      heroRef: state.heroRef,
       totalSec: state.totalSec
     };
     const A = await plugin_generateImages(state.scenes, ctx);
     const B = await plugin_renderVideoPlan(state.scenes, ctx);
 
     state.plugin = { A, B };
-
-    out.className = "status ok";
-    out.textContent = [
-      A?.ok ? `✅ A: ${A.message || "OK"}` : `❌ A 실패`,
-      B?.ok ? `✅ B: ${B.message || "OK"}` : `❌ B 실패`,
-      "",
-      "결과(JSON 미리보기):",
-      JSON.stringify({ A, B }, null, 2)
-    ].join("\n");
-
+    setPluginStatus("✅ 플러그인 실행 완료 (A/B)", "ok");
+    renderPluginOut();
     render();
   }catch(e){
-    out.className = "status bad";
-    out.textContent = `플러그인 실행 에러: ${String(e?.message || e)}`;
+    setPluginStatus(`플러그인 실행 에러: ${String(e?.message || e)}`, "bad");
+  }
+}
+
+/** ========= Persistence ========= */
+const LS_KEY = "cat_shorts_studio_v4_ultimate_state";
+function saveToLocal(){
+  try{
+    const s = deepClone(state);
+    s.meta = { ...(s.meta||{}), lastSavedAt: new Date().toISOString() };
+    localStorage.setItem(LS_KEY, JSON.stringify(s));
+    state.meta = s.meta;
+    setStatus("자동 저장 완료 💾", true);
+  }catch(e){
+    setStatus("저장 실패: localStorage를 사용할 수 없습니다.", false);
+  }
+}
+function loadFromLocal(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw){ setStatus("저장된 데이터가 없습니다.", false); return; }
+    const s = JSON.parse(raw);
+    if (!s || !s.schemaVersion){ setStatus("저장 데이터 형식이 올바르지 않습니다.", false); return; }
+
+    // 폼 반영
+    $("projectName").value = s.projectName || "";
+    $("oneLine").value = s.oneLine || "";
+    $("characters").value = s.characters || "";
+    $("locations").value = s.locations || "";
+    $("heroRef").value = s.heroRef || "";
+    $("totalSec").value = s.totalSec || 60;
+    $("sceneCount").value = s.sceneCount || 8;
+    $("retentionRules").value = s.retentionRules || "";
+    $("tone").value = s.tone || "cinematic_realistic";
+    $("aspect").value = s.aspect || "Vertical 9:16";
+    $("langMode").value = s.langMode || "kr_en";
+
+    state = {
+      ...state,
+      ...s,
+      schemaVersion, // 현재 버전 유지
+    };
+
+    render();
+    setStatus(`불러오기 완료 📥 (마지막 저장: ${state.meta?.lastSavedAt || "—"})`, true);
+  }catch(e){
+    setStatus("불러오기 실패: 데이터가 손상됐을 수 있어요.", false);
   }
 }
 
 /** ========= Events ========= */
 $("btnGenerate").addEventListener("click", generateScenes);
 $("btnRefine").addEventListener("click", refineRetention);
+
+$("btnSave").addEventListener("click", saveToLocal);
+$("btnLoad").addEventListener("click", loadFromLocal);
+
 $("btnReset").addEventListener("click", ()=>{
   $("projectName").value = "";
   $("oneLine").value = "";
   $("characters").value = "";
   $("locations").value = "";
+  $("heroRef").value = "";
   $("totalSec").value = 60;
   $("sceneCount").value = 8;
   $("retentionRules").value = "";
   $("tone").value = "cinematic_realistic";
   $("aspect").value = "Vertical 9:16";
   $("langMode").value = "kr_en";
-  state = { ...state, projectName:"", oneLine:"", scenes:[], tags:[], plugin:{A:null,B:null} };
+
+  state = { ...state, projectName:"", oneLine:"", scenes:[], tags:[], heroRef:"", plugin:{A:null,B:null} };
   $("sceneList").innerHTML = "";
   $("chips").innerHTML = "";
-  $("pluginOut").textContent = "플러그인 출력 대기…";
+  setPluginStatus("✅ 내장 플러그인 로드됨 (A/B OK)", "ok");
+  activeTab = "summary";
+  document.querySelectorAll(".tab").forEach(el=>el.classList.toggle("active", el.dataset.tab==="summary"));
+  renderPluginOut();
   setStatus("초기화 완료", true);
+  updateKPIs();
 });
 
 $("btnCopyJSON").addEventListener("click", async ()=>{
@@ -739,33 +926,81 @@ $("btnCopyJSON").addEventListener("click", async ()=>{
 $("btnDownloadJSON").addEventListener("click", ()=>{
   const v = validateStateForExport();
   if (!v.ok){ setStatus(v.msg, false); return; }
-  downloadText(`${(state.projectName||"project").replaceAll(" ","_")}_v4.json`, JSON.stringify(state, null, 2));
+  downloadText(`${(state.projectName||"project").replaceAll(" ","_")}_v4_ultimate.json`, JSON.stringify(state, null, 2));
   setStatus("JSON 다운로드 시작 ✅", true);
 });
 $("btnDownloadCSV").addEventListener("click", ()=>{
   const v = validateStateForExport();
   if (!v.ok){ setStatus(v.msg, false); return; }
-  downloadText(`${(state.projectName||"project").replaceAll(" ","_")}_cuts_v4.csv`, toCSV());
+  downloadText(`${(state.projectName||"project").replaceAll(" ","_")}_cuts_v4_ultimate.csv`, toCSV());
   setStatus("CSV 다운로드 시작 ✅", true);
+});
+$("btnDownloadSRT").addEventListener("click", ()=>{
+  const v = validateStateForExport();
+  if (!v.ok){ setStatus(v.msg, false); return; }
+  const srt = CAT_toSRTFromScenes(state.scenes || []);
+  downloadText(`${(state.projectName||"project").replaceAll(" ","_")}_subs.srt`, srt);
+  setStatus("SRT 다운로드 시작 ✅", true);
 });
 
 $("btnRunPlugins").addEventListener("click", runPlugins);
-$("btnCopyPluginOut").addEventListener("click", async ()=>{
-  await copyToClipboard($("pluginOut").textContent || "");
-  setStatus("플러그인 결과 복사 완료 ✅", true);
+
+$("btnCopyPluginSummary").addEventListener("click", async ()=>{
+  await copyToClipboard(pluginSummaryText());
+  setStatus("플러그인 요약 복사 완료 ✅", true);
+});
+$("btnCopyYouTubePack").addEventListener("click", async ()=>{
+  const pack = state.plugin?.B?.youtubePack;
+  if (!pack){ setStatus("유튜브팩이 없습니다. 먼저 플러그인을 실행하세요.", false); return; }
+  const text = [
+    "📌 TITLES (10)",
+    ...(pack.titles||[]).map((t,i)=>`${i+1}. ${t}`),
+    "",
+    "📌 DESCRIPTION",
+    pack.description || "",
+    "",
+    "📌 HASHTAGS (30)",
+    (pack.hashtags||[]).join(" "),
+    "",
+    "📌 PINNED COMMENTS",
+    "A) " + (pack.pinnedCommentA||""),
+    "",
+    "B) " + (pack.pinnedCommentB||"")
+  ].join("\n");
+  await copyToClipboard(text);
+  setStatus("유튜브팩 복사 완료 ✅", true);
+});
+$("btnCopySRT").addEventListener("click", async ()=>{
+  const B = state.plugin?.B;
+  if (!B?.srt){
+    const v = validateStateForExport();
+    if (!v.ok){ setStatus("SRT 복사 불가: " + v.msg, false); return; }
+    await copyToClipboard(CAT_toSRTFromScenes(state.scenes || []));
+    setStatus("SRT 복사 완료 ✅", true);
+    return;
+  }
+  await copyToClipboard(B.srt);
+  setStatus("SRT 복사 완료 ✅", true);
 });
 
-// 내장 코드 미리보기
+/** Tabs */
+document.querySelectorAll(".tab").forEach(el=>{
+  el.addEventListener("click", ()=>setTab(el.dataset.tab));
+});
+
+/** Embedded code preview */
 (function(){
   const preview = $("embeddedCodePreview");
-  const code = [
+  preview.textContent = [
     "/* Embedded Plugin A/B Summary */",
     "A: plugin_generateImages(scenes, ctx) => 룩락+리텐션 보강된 프롬프트/캡션 배열",
-    "B: plugin_renderVideoPlan(scenes, ctx) => VEO3 컷리스트 + SRT + 유튜브팩(제목/해시태그/고정댓글)",
+    "B: plugin_renderVideoPlan(scenes, ctx) => VEO3 컷리스트 + SRT + 유튜브팩(제목/설명/해시태그/고정댓글)",
     "",
-    "참고: 필요하면 이 부분을 너가 원하는 규칙으로 더 확장 가능"
+    "v4 ULTIMATE 개선:",
+    "- SRT(ms 지원), 플러그인 탭/요약, 룩락 기준(heroRef), 자동 저장/불러오기"
   ].join("\n");
-  preview.textContent = code;
+  renderPluginOut();
+  updateKPIs();
 })();
 </script>
 </body>
