@@ -234,6 +234,30 @@
             </div>
           </div>
 
+          <!-- ✅ NEW: 모드 선택 + 룩락 제어 (기본=자유) -->
+          <div class="row" style="margin-top:10px">
+            <div class="control">
+              <div class="k">모드</div>
+              <select id="appMode">
+                <option value="free" selected>🟢 자유 생성(추천) — 입력대로 해석</option>
+                <option value="series">🔵 시리즈 제작(고급) — 캐릭터/룩 고정</option>
+              </select>
+            </div>
+
+            <div class="control">
+              <div class="k">캐릭터 고정(룩락)</div>
+              <select id="lockMode">
+                <option value="auto" selected>자동(모드에 따라)</option>
+                <option value="off">OFF</option>
+                <option value="on">ON</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ✅ NEW: 입력 실시간 경고 + 예상 결과 -->
+          <div class="hint" id="liveHint" style="margin-top:8px"></div>
+          <div class="hint" id="predictHint" style="margin-top:6px; opacity:.9"></div>
+
           <div class="hint" id="presetHint" style="margin-top:8px">
             🎛 캐릭터를 고르면: 훅/카메라/자막/행동 규칙이 자동으로 바뀝니다.
           </div>
@@ -303,9 +327,11 @@
 
 const BUILD = "v4.2-omni-free";
 
-// ✅ 이 2개는 항상 ON
-const ENABLE_LOOK_LOCK = true;
-const ENABLE_RETENTION = true;
+// ✅ 패치 핵심:
+// - 기본은 자유 모드라서 룩락 OFF
+// - 시리즈 모드에서 룩락 ON(자동)
+let ENABLE_LOOK_LOCK = false;
+let ENABLE_RETENTION = true;
 
 // ✅ 서버 URL (고객은 못 바꿈)
 const DEFAULT_WORKER_URL = ""; // <-- Worker 주소 넣기 (없으면 공란 = 오프라인)
@@ -666,6 +692,163 @@ function autoPickPreset(line){
   return "eunbi";
 }
 
+/* =========================================================
+ * ✅ MVP UX PATCH (FREE vs SERIES)
+ * - 기본값: FREE(입력대로)
+ * - 고급: SERIES(룩락/고정/강제)
+ * - 실시간 경고/예상결과/왜카드/통제버튼
+ * ========================================================= */
+
+function getAppMode(){
+  return ($("appMode")?.value || "free"); // free | series
+}
+function getLockMode(){
+  return ($("lockMode")?.value || "auto"); // auto | on | off
+}
+
+function shouldUseDogPreset(line){
+  const L = (line || "").toLowerCase();
+  const dogKeywords = ["강아지","시츄","말티즈","말티푸","eunbi","jerry","arang","은비","제리","아랑","dog","puppy","shih tzu","maltese","maltipoo"];
+  return dogKeywords.some(k => L.includes(k));
+}
+
+function looksLikeNewCharacterRequest(line){
+  const L = (line || "").toLowerCase();
+  const kw = ["문지기","수호신","거대한","성벽","성문","성","guardian","gatekeeper","giant","castle","wall","monster","괴물","수호"];
+  return kw.some(k => L.includes(k));
+}
+
+function applyModePolicyToEngine(){
+  const mode = getAppMode();
+  const lockMode = getLockMode();
+
+  if(lockMode === "on") ENABLE_LOOK_LOCK = true;
+  else if(lockMode === "off") ENABLE_LOOK_LOCK = false;
+  else ENABLE_LOOK_LOCK = (mode === "series");
+
+  // 리텐션은 기본 ON 유지
+  // 원하면 자유모드에서는 OFF로 바꿀 수도 있음:
+  // ENABLE_RETENTION = (mode === "series");
+}
+
+function updateLiveHints(){
+  const line = safeTrim($("line")?.value || "");
+  const mode = getAppMode();
+  const lock = (getLockMode() === "auto") ? (mode === "series") : (getLockMode() === "on");
+  const live = $("liveHint");
+  const predict = $("predictHint");
+  if(!live || !predict) return;
+
+  if(!line){
+    live.textContent = "";
+    predict.textContent = "";
+    return;
+  }
+
+  if(lock && looksLikeNewCharacterRequest(line) && !shouldUseDogPreset(line)){
+    live.textContent = "⚠ 현재 캐릭터 고정(룩락)이 켜져있어요. ‘새 인물/문지기/수호신’ 입력은 기존 캐릭터 역할로 해석될 수 있어요.";
+  }else if(lock){
+    live.textContent = "ℹ 캐릭터 고정(룩락) 모드입니다. 시리즈 유지에는 좋아요.";
+  }else{
+    live.textContent = "✅ 자유 생성 모드입니다. 입력 문장을 새 설정으로 해석해요.";
+  }
+
+  if(lock && !shouldUseDogPreset(line)){
+    predict.textContent = `예상 결과: (고정 캐릭터) + "${line}" 역할/상황을 수행하는 장면`;
+  }else{
+    predict.textContent = `예상 결과: "${line}"을 그대로 반영한 새 장면/캐릭터 중심`;
+  }
+}
+
+function explainResult(plan){
+  const mode = getAppMode();
+  const lock = (getLockMode() === "auto") ? (mode === "series" ? "ON" : "OFF") : (getLockMode() === "on" ? "ON" : "OFF");
+  const pid = plan?.brain?.presetId || "custom";
+  const hero = plan?.payload?.hero || plan?.meta?.hero || "";
+  const genre = plan?.meta?.genre || "";
+  const tone = plan?.meta?.tone || "";
+
+  const roleHint = looksLikeNewCharacterRequest(plan?.title) ? "입력은 ‘새 캐릭터/세계관’ 요청으로 판단" : "입력은 ‘스토리 상황’으로 판단";
+  const why = (lock === "ON")
+    ? "캐릭터 고정(룩락)이 켜져있어서 입력이 ‘역할’로 적용될 수 있어요."
+    : "자유 생성이라 입력 문장을 ‘새 설정’으로 그대로 해석해요.";
+
+  return { mode, lock, pid, hero, genre, tone, roleHint, why };
+}
+
+function injectExplainCard(plan){
+  const out = $("out");
+  if(!out) return;
+
+  const old = document.getElementById("explainCard");
+  if(old) old.remove();
+
+  const e = explainResult(plan);
+
+  const card = document.createElement("div");
+  card.id = "explainCard";
+  card.className = "serverCard";
+  card.innerHTML = `
+    <div class="serverHead">
+      <b>🔍 이번 결과 요약</b>
+      <span>${e.mode === "series" ? "시리즈(고급)" : "자유(추천)"} · 룩락 ${e.lock}</span>
+    </div>
+    <div class="box">
+• 캐릭터/프리셋: ${e.pid}
+• 주인공: ${e.hero}
+• 분위기: ${e.genre} · ${e.tone}
+• 해석: ${e.roleHint}
+• 이유: ${e.why}
+    </div>
+    <div class="serverRow">
+      <button class="mini" id="btnFree">🟢 자유 생성으로 다시</button>
+      <button class="mini" id="btnSeries">🔵 시리즈 제작으로 다시</button>
+      <button class="mini" id="btnWhy">❓ 왜 이렇게 나왔나요?</button>
+    </div>
+  `;
+
+  out.prepend(card);
+
+  $("btnFree").onclick = () => {
+    if($("appMode")) $("appMode").value = "free";
+    if($("lockMode")) $("lockMode").value = "auto";
+    applyModePolicyToEngine();
+    updateLiveHints();
+    run();
+  };
+  $("btnSeries").onclick = () => {
+    if($("appMode")) $("appMode").value = "series";
+    if($("lockMode")) $("lockMode").value = "auto";
+    applyModePolicyToEngine();
+    updateLiveHints();
+    run();
+  };
+  $("btnWhy").onclick = () => {
+    alert(
+`입력 분석 결과
+- 현재 모드: ${e.mode === "series" ? "시리즈 제작(고급)" : "자유 생성(추천)"}
+- 룩락(캐릭터 고정): ${e.lock}
+- 해석: ${e.roleHint}
+- 이유: ${e.why}
+
+팁:
+• 새 캐릭터/새 세계관을 원하면 → 🟢 자유 생성
+• 같은 캐릭터로 시리즈 유지가 목표면 → 🔵 시리즈 제작`
+    );
+  };
+}
+
+// ✅ preset 자동 선택 로직을 모드에 따라 바꾸기
+const _autoPickPresetOriginal = autoPickPreset;
+autoPickPreset = function(line){
+  const mode = getAppMode();
+  if(mode === "free"){
+    if(shouldUseDogPreset(line)) return _autoPickPresetOriginal(line);
+    return "custom"; // 자유모드에서는 강아지 언급 없으면 커스텀
+  }
+  return _autoPickPresetOriginal(line); // 시리즈모드에서는 기존 로직
+};
+
 /* ---------- BRAIN */
 const BRAIN = {
   analyze({ line, genre, tone, seconds, presetId, hero, setting }){
@@ -674,6 +857,7 @@ const BRAIN = {
 
     let pid = presetId;
     if(pid === "auto") pid = autoPickPreset(line);
+
     const preset = (pid && pid !== "custom") ? CHAR_DB[pid] : null;
 
     let finalTone = tone;
@@ -710,7 +894,7 @@ const BRAIN = {
 
     const finalHero = (preset && presetId !== "custom")
       ? (hero || preset.hero_default)
-      : (hero || "말을 하지 않는 강아지 주인공");
+      : (hero || "말을 하지 않는 주인공");
 
     const finalSetting = (preset && presetId !== "custom")
       ? (setting || preset.setting_bias || "도시의 밤, 비에 젖은 골목")
@@ -1159,6 +1343,9 @@ function renderPlan(plan, serverResult){
     out.appendChild(el);
   });
 
+  // ✅ “왜 카드”를 항상 최상단에 주입
+  injectExplainCard(plan);
+
   // ✅ ZIP 버튼 보장(결과 렌더 후에도 한번 더)
   injectZipButton();
 }
@@ -1172,6 +1359,8 @@ function getPayloadFromInputs(){
     hero: safeTrim($("hero")?.value),
     setting: safeTrim($("setting")?.value),
     preset: $("preset")?.value || "auto",
+    appMode: $("appMode")?.value || "free",
+    lockMode: $("lockMode")?.value || "auto",
     arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
     worker: getWorkerUrl()
   };
@@ -1187,6 +1376,8 @@ function saveState(){
     preset: $("preset")?.value || "auto",
     hero: safeTrim($("hero")?.value),
     setting: safeTrim($("setting")?.value),
+    appMode: $("appMode")?.value || "free",
+    lockMode: $("lockMode")?.value || "auto",
     arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
     worker: isAdmin ? safeTrim($("worker")?.value) : ""
   };
@@ -1213,6 +1404,8 @@ function loadState(){
     if($("preset")) $("preset").value = s.preset || "auto";
     if($("hero")) $("hero").value = s.hero || "";
     if($("setting")) $("setting").value = s.setting || "";
+    if($("appMode")) $("appMode").value = s.appMode || "free";
+    if($("lockMode")) $("lockMode").value = s.lockMode || "auto";
     if($("arangDetailLock")) $("arangDetailLock").value = s.arangDetailLock || ARANG_DETAIL_LOCK_DEFAULT || "";
     if(isAdmin && $("worker")) $("worker").value = s.worker || DEFAULT_WORKER_URL || "";
   }catch(e){}
@@ -1231,6 +1424,8 @@ function exportBackup(){
     preset: $("preset")?.value || "auto",
     hero: safeTrim($("hero")?.value),
     setting: safeTrim($("setting")?.value),
+    appMode: $("appMode")?.value || "free",
+    lockMode: $("lockMode")?.value || "auto",
     arangDetailLock: safeTrim($("arangDetailLock")?.value || ""),
     worker: isAdmin ? safeTrim($("worker")?.value) : ""
   };
@@ -1269,10 +1464,14 @@ async function importBackup(){
     if($("preset")) $("preset").value = s.preset || "auto";
     if($("hero")) $("hero").value = s.hero || "";
     if($("setting")) $("setting").value = s.setting || "";
+    if($("appMode")) $("appMode").value = s.appMode || "free";
+    if($("lockMode")) $("lockMode").value = s.lockMode || "auto";
     if($("arangDetailLock")) $("arangDetailLock").value = s.arangDetailLock || ARANG_DETAIL_LOCK_DEFAULT || "";
     if(isAdmin && $("worker")) $("worker").value = s.worker || DEFAULT_WORKER_URL || "";
 
     updatePresetHint();
+    applyModePolicyToEngine();
+    updateLiveHints();
 
     if(backup.lastPlan){
       latestPlan = backup.lastPlan;
@@ -1304,6 +1503,8 @@ function recoveryMode(){
   if($("tone")) $("tone").value = "serious";
   if($("length")) $("length").value = "60";
   if($("preset")) $("preset").value = "auto";
+  if($("appMode")) $("appMode").value = "free";
+  if($("lockMode")) $("lockMode").value = "auto";
   if(isAdmin && $("worker")) $("worker").value = DEFAULT_WORKER_URL || "";
 
   const out = $("out"); if(out) out.innerHTML = "";
@@ -1323,11 +1524,16 @@ function recoveryMode(){
   }
 
   updatePresetHint();
+  applyModePolicyToEngine();
+  updateLiveHints();
   saveState();
 }
 
 /* ---------- Run */
 async function run(){
+  applyModePolicyToEngine();
+  updateLiveHints();
+
   const rawLine = safeTrim($("line")?.value);
   if(!rawLine){ alert("한 줄 써줘!"); return; }
 
@@ -1427,15 +1633,19 @@ $("reset")?.addEventListener("click", () => {
   if($("tone")) $("tone").value = "serious";
   if($("length")) $("length").value = "60";
   if($("preset")) $("preset").value = "auto";
+  if($("appMode")) $("appMode").value = "free";
+  if($("lockMode")) $("lockMode").value = "auto";
   const out = $("out"); if(out) out.innerHTML = "";
   const outCard = $("outCard"); if(outCard) outCard.style.display = "none";
   latestPlan = null;
   updatePresetHint();
+  applyModePolicyToEngine();
+  updateLiveHints();
   setStatus("대기중", "info");
   saveState();
 });
 
-["line","genre","tone","length","hero","setting","preset","arangDetailLock"].forEach(id=>{
+["line","genre","tone","length","hero","setting","preset","appMode","lockMode","arangDetailLock"].forEach(id=>{
   const el = $(id);
   if(!el) return;
   el.addEventListener("input", saveState);
@@ -1586,6 +1796,8 @@ async function downloadZipPack(){
         preset: $("preset")?.value || "auto",
         hero: safeTrim($("hero")?.value),
         setting: safeTrim($("setting")?.value),
+        appMode: $("appMode")?.value || "free",
+        lockMode: $("lockMode")?.value || "auto",
         arangDetailLock: safeTrim($("arangDetailLock")?.value || "")
       },
       lastPlan: plan
@@ -1631,10 +1843,19 @@ if(isAdmin){
 
 loadState();
 updatePresetHint();
-$("preset")?.addEventListener("change", updatePresetHint);
+applyModePolicyToEngine();
+updateLiveHints();
+
+$("preset")?.addEventListener("change", () => { updatePresetHint(); saveState(); });
+
+["appMode","lockMode","line"].forEach(id=>{
+  const el = $(id);
+  if(!el) return;
+  el.addEventListener("change", ()=>{ applyModePolicyToEngine(); updateLiveHints(); saveState(); });
+  el.addEventListener("input", ()=>{ updateLiveHints(); saveState(); });
+});
 
 // ✅ DOM 준비되면 ZIP 버튼 주입(한 번)
-// (outCard가 숨겨져 있어도 outActions는 DOM에 있어서 주입됨)
 document.addEventListener("DOMContentLoaded", injectZipButton);
 
 (async () => {
