@@ -307,6 +307,115 @@
       cursor:pointer;
       font-weight:800;
     }
+
+    /* ===== 사용 방법(설명서) 모달 ===== */
+    .helpBtn{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:900;
+      letter-spacing:-.2px;
+    }
+    .helpBtn:active{ transform:scale(.99); }
+
+    .helpOverlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9998;
+    }
+
+    .helpModal{
+      width:min(820px, 100%);
+      max-height:85vh;
+      overflow:auto;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(15,22,32,.96), rgba(10,16,24,.92));
+      box-shadow:0 18px 55px rgba(0,0,0,.55);
+    }
+
+    .helpHead{
+      position:sticky; top:0;
+      background:rgba(10,16,24,.92);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .helpTitle{
+      font-weight:1000;
+      letter-spacing:-.2px;
+      display:flex; align-items:center; gap:8px;
+    }
+
+    .helpClose{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .helpBody{
+      padding:14px;
+      color:var(--text);
+    }
+
+    .helpBody p{ margin:10px 0; line-height:1.7; color:var(--muted); }
+    .helpBody b{ color:#ffe7a3; font-weight:900; }
+
+    .helpSection{
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px 12px;
+      margin:10px 0;
+    }
+
+    .helpH{
+      font-weight:1000;
+      margin:0 0 8px;
+      letter-spacing:-.2px;
+    }
+
+    .helpList{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:13.5px;
+    }
+
+    .helpCode{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.22);
+      border-radius:14px;
+      padding:10px 12px;
+      color:#dbe6ff;
+      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      font-size:12.8px;
+      line-height:1.6;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .helpMini{
+      font-size:12.5px;
+      color:rgba(170,182,197,.92);
+      line-height:1.6;
+    }
   </style>
 </head>
 
@@ -386,7 +495,9 @@
               <b>🎨 이미지 생성 방법</b><br/>
               1) 출력창에서 <b>--- prompts_image.txt ---</b> 아래를 복사<br/>
               2) 이미지 생성 툴에 <b>SCENE 1부터</b> 순서대로 붙여넣고 생성<br/>
-              3) 영상은 <b>prompts_video.txt</b>, 자막은 <b>srt.txt</b>를 사용
+              3) 영상은 <b>prompts_video.txt</b>, 자막은 <b>srt.txt</b>를 사용<br/>
+              <div class="divider"></div>
+              <b>TIP</b>: 더 쉬운 전체 설명서는 아래 <b>📘 사용 방법</b> 버튼을 눌러요.
             </div>
           </div>
 
@@ -552,6 +663,7 @@
             <button id="backupBtn">🧰 백업(내보내기)</button>
             <button id="restoreBtn">🧩 복구(가져오기)</button>
             <button class="danger" id="resetBtn">🧹 초기화</button>
+            <button class="helpBtn" id="helpBtn">📘 사용 방법</button>
           </div>
 
           <div class="small" style="margin-top:10px;">
@@ -572,6 +684,132 @@
           <div class="out" id="out" contenteditable="true" spellcheck="false"></div>
           <div class="footer">© One-Line Movie V4.3 Omni Engine · Safe Edition</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 사용 방법(설명서) 모달 ===== -->
+  <div class="helpOverlay" id="helpOverlay" aria-hidden="true">
+    <div class="helpModal" role="dialog" aria-modal="true" aria-label="사용 방법">
+      <div class="helpHead">
+        <div class="helpTitle">📘 사용 방법 (유치원도 혼자 씀)</div>
+        <button class="helpClose" id="helpClose">닫기</button>
+      </div>
+
+      <div class="helpBody">
+        <div class="helpSection">
+          <div class="helpH">근데 기억해.</div>
+          <p>
+            지금 이 앱은 <b>엔진은 완성</b>인데,
+            사람들이 “이 다음에 뭘 해야 하지?”를 모르는 상태야.<br/>
+            이건 기능 문제가 아니라 <b>안내(길잡이)</b> 문제야.<br/>
+            그래서 이 앱에는 <b>“유치원도 혼자 쓸 수 있는 설명서”</b>가 반드시 들어가야 해.
+          </p>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">🎬 이 앱은 뭐야?</div>
+          <p>
+            이 앱은 <b>한 줄 글을 영화로 바꿔주는 기계</b>야.<br/>
+            너는 이야기 한 줄만 쓰면,
+            이 앱이 알아서 <b>장면 나누고</b>,
+            <b>사진 만드는 글</b> 만들고,
+            <b>영상 만드는 글</b> 만들고,
+            <b>자막</b>도 만들어 줘.
+          </p>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">1️⃣ 제일 먼저 할 일</div>
+          <p>위에 있는 큰 칸에 하고 싶은 이야기 한 줄을 써.</p>
+          <div class="helpCode">비 오는 밤 골목에서 누군가가 사라졌다</div>
+          <p class="helpMini">또는</p>
+          <div class="helpCode">강아지 세 마리가 도시를 구한다</div>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">2️⃣ ⚡ 생성하기 누르면 뭐가 되냐?</div>
+          <p>
+            ⚡ 생성하기를 누르면
+            아래쪽에 <b>검은 창(출력)</b>이 생기면서<br/>
+            장면 1, 장면 2, 장면 3… 이런 식으로 <b>영화 설계도</b>가 만들어진다.<br/>
+            이건 아직 영상이 아니라, <b>영화를 만들기 위한 설계서</b>야.
+          </p>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">3️⃣ 이걸 파일로 어떻게 저장해?</div>
+          <ul class="helpList">
+            <li><b>📋 Copy All</b> → 모든 설계도를 글로 복사 → 다른 앱에 붙여넣기 가능</li>
+            <li><b>📦 ZIP</b> → 영화 만들기용 파일 묶음 다운로드 (이미지/영상/자막 다 포함)</li>
+          </ul>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">4️⃣ ZIP 파일은 어디에 저장되나?</div>
+          <ul class="helpList">
+            <li>📱 <b>안드로이드</b>: <b>내 파일</b> → <b>Download(다운로드)</b></li>
+            <li>🍎 <b>아이폰</b>: <b>파일 앱</b> → <b>다운로드</b></li>
+            <li>💻 <b>PC</b>: <b>Downloads(다운로드)</b></li>
+          </ul>
+          <p class="helpMini">ZIP이 안 열리면 “압축 풀기” 하면 돼.</p>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">5️⃣ ZIP 안에는 뭐가 들어있어?</div>
+          <ul class="helpList">
+            <li><b>prompts_image.txt</b> : 사진(이미지) 만드는 글</li>
+            <li><b>prompts_video.txt</b> : 영상 만드는 글</li>
+            <li><b>srt.txt</b> : 자막 파일</li>
+            <li><b>plan.json</b> : 영화 시간표(설계 정보)</li>
+          </ul>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">6️⃣ 진짜 이미지 만드는 법</div>
+          <ol class="helpList">
+            <li>ZIP에서 <b>prompts_image.txt</b> 열기</li>
+            <li><b>SCENE 1</b> 글 복사</li>
+            <li><b>나노바나나 / 미드저니 / 이미지 AI</b>에 붙여넣기</li>
+            <li>SCENE 2, 3… 반복</li>
+          </ol>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">7️⃣ 진짜 영상 만드는 법</div>
+          <ol class="helpList">
+            <li>ZIP에서 <b>prompts_video.txt</b> 열기</li>
+            <li><b>SCENE 1</b> 복사</li>
+            <li><b>VEO / Runway / Sora</b> 같은 영상 AI에 붙여넣기</li>
+            <li>SCENE 2, 3… 반복</li>
+          </ol>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">8️⃣ 자막 넣기</div>
+          <p>
+            ZIP 안의 <b>srt.txt</b>를 캡컷/프리미어에 넣으면<br/>
+            <b>자막이 자동으로</b> 들어간다.
+          </p>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">🧸 유치원 모드란?</div>
+          <p>
+            켜져 있으면 <b>피/시체/상처/트렁크</b> 같은 무서운 건 안 나오고<br/>
+            대신 <b>경찰차 / CCTV / 떨어진 휴대폰</b> 같은 안전한 단서로 바뀐다.
+          </p>
+        </div>
+
+        <div class="helpSection">
+          <div class="helpH">✅ 한 줄 결론</div>
+          <p>
+            <b>한 줄 쓰기 → ⚡ 생성하기 → Copy 또는 ZIP → 이미지 만들기 → 영상 만들기 → 자막 넣기</b><br/>
+            이 순서대로만 하면 영화가 완성돼.
+          </p>
+        </div>
+
+        <p class="helpMini">TIP: 모르는 게 생기면 “📘 사용 방법”만 누르면 돼.</p>
       </div>
     </div>
   </div>
@@ -597,6 +835,45 @@
     function toast(msg){
       try{ navigator.vibrate && navigator.vibrate(10); }catch(e){}
       alert(msg);
+    }
+
+    // ===== 사용 방법(설명서) 모달 =====
+    function initHelpModal(){
+      const btn = $("helpBtn");
+      const ov  = $("helpOverlay");
+      const closeBtn = $("helpClose");
+
+      if(!btn || !ov || !closeBtn) return;
+
+      const open = ()=>{
+        ov.style.display = "flex";
+        ov.setAttribute("aria-hidden","false");
+      };
+
+      const close = ()=>{
+        ov.style.display = "none";
+        ov.setAttribute("aria-hidden","true");
+      };
+
+      btn.addEventListener("click", open);
+      closeBtn.addEventListener("click", close);
+
+      // 바깥 클릭하면 닫기
+      ov.addEventListener("click", (e)=>{
+        if(e.target === ov) close();
+      });
+
+      // ESC로 닫기(PC)
+      document.addEventListener("keydown", (e)=>{
+        if(e.key === "Escape" && ov.style.display === "flex") close();
+      });
+
+      // QuickStart의 "사용 방법 보기"는 원래 박스 토글이니까,
+      // ✅ 더블클릭이면 설명서 모달로 열리게(충돌 방지)
+      const qsToggle = $("qsToggle");
+      if(qsToggle){
+        qsToggle.addEventListener("dblclick", open);
+      }
     }
 
     // ====== Server policy ======
@@ -1323,7 +1600,9 @@
       });
 
       showFirstOverlayOnce();
+      initHelpModal();
     });
   </script>
 </body>
 </html>
+```0
