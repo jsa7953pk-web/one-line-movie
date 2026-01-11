@@ -98,7 +98,21 @@
     }
     .banner b{color:#fff}
 
-    .outTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02);flex-wrap:wrap}
+    /* ✅ OUTPUT TOP: 결과로 내려간 뒤에도 ZIP/JSON/SRT/TXT가 항상 보이게 sticky 고정 */
+    .outTop{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      background:rgba(11,11,12,.92);
+      backdrop-filter: blur(8px);
+      flex-wrap:wrap;
+    }
     .outTop .title{display:flex;flex-direction:column;gap:4px;min-width:0}
     .outTop .title b{font-size:14px}
     .outTop .title span{font-size:12px;color:var(--muted)}
@@ -644,8 +658,7 @@ const TRANSLATE = {
     return "…";
   },
 
-  // ✅ hardLock 파라미터 추가
-  toImage({ brain, line, hardLock, beat, idx, seconds, flags }){
+  toImage({ brain, line, hardLock, beat, idx, seconds }){
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
     const noText = "no subtitles, no captions, no text, no watermark, no logo, no letters, no typography";
 
@@ -657,7 +670,6 @@ const TRANSLATE = {
     const add = brain.preset?.prompt_add?.join(", ") || "";
     const cam = this.cameraLine(brain, idx).replace("Camera:", "").trim();
     const look = ENABLE_LOOK_LOCK ? `LOOK LOCK: ${brain.look_lock}` : "";
-
     const styleLine = cinematicStyle();
 
     return `Vertical 9:16, ${timeHint}, realistic drama vibe,
@@ -674,8 +686,7 @@ ${noText}
 ${hardLock ? ("\n" + hardLock) : ""}`.trim();
   },
 
-  // ✅ hardLock 파라미터 추가
-  toVideo({ brain, line, hardLock, beat, idx, seconds, flags }){
+  toVideo({ brain, line, hardLock, beat, idx, seconds }){
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
     const noText = "no subtitles, no captions, no text, no watermark, no logo, no letters, no typography";
 
@@ -685,7 +696,6 @@ ${hardLock ? ("\n" + hardLock) : ""}`.trim();
                                "room tone, soft ambience";
 
     const speech = "The dogs do NOT speak. Communicate through actions only.";
-
     const look = ENABLE_LOOK_LOCK ? `LOOK LOCK: ${brain.look_lock}` : "";
     const styleLine = `Be literal to the input. Do not invent extra characters/props. Make it look like real footage.`;
 
@@ -708,11 +718,10 @@ ${hardLock ? ("\n" + hardLock) : ""}`.trim();
  * Brain
  * ========================================================= */
 const BRAIN = {
-  analyze({ line, seconds }){
+  analyze({ seconds }){
     const total = Number(seconds);
     const n = buildSceneCount(total);
 
-    // tension curve
     const curve = [];
     for(let i=0;i<n;i++){
       const x = i/(n-1 || 1);
@@ -723,17 +732,13 @@ const BRAIN = {
     }
 
     const preset = CHAR_DB.trio;
-
-    const hero = preset.hero_default;
-    const setting = preset.setting_bias;
-
     return {
       presetId: "trio",
       presetLabel: preset.label,
       preset,
       curve,
-      hero,
-      setting,
+      hero: preset.hero_default,
+      setting: preset.setting_bias,
       look_lock: lookLockText()
     };
   }
@@ -741,60 +746,46 @@ const BRAIN = {
 
 /* =========================================================
  * Validator + Auto-Fix (간단)
- * - 자막 넣기/텍스트 넣기 지시 제거
- * - 고어 단어 제거
  * ========================================================= */
 function validateAndFixPlan(plan){
   const issues = [];
-
   const scrub = (t) => {
     let s = String(t || "");
-
-    // 긍정 텍스트 지시 제거 (no subtitles는 남김)
     s = s.replace(/.*\b(add|include|use)\s+(subtitles?|captions?|text|typography)\b.*\n?/gi, "");
     s = s.replace(/.*(자막\s*넣|자막\s*추가|텍스트\s*추가|문구\s*추가|캡션\s*추가).*\n?/g, "");
-
-    // 고어 단어 제거
     s = s.replace(/\b(gore|blood|dismemberment|viscera)\b/gi, "");
     s = s.replace(/(피|유혈|절단|내장|시체)/g, "");
-
     return s.replace(/\s{2,}/g," ").trim();
   };
 
   for(const scene of plan.scenes || []){
     const before = `${scene.image_prompt || ""}\n${scene.video_prompt || ""}`;
-
     if(/\b(add|include|use)\s+(subtitles?|captions?|text|typography)\b/i.test(before) ||
        /(자막\s*넣|자막\s*추가|텍스트\s*추가|문구\s*추가|캡션\s*추가)/.test(before)){
       issues.push({scene: scene.index, type:"TEXT_OVERLAY_POSITIVE"});
     }
-
     if(/\b(gore|blood)\b/i.test(before) || /(피|유혈|절단|내장|시체)/.test(before)){
       issues.push({scene: scene.index, type:"GORE_WORDS"});
     }
-
     scene.image_prompt = scrub(scene.image_prompt);
     scene.video_prompt = scrub(scene.video_prompt);
   }
-
   plan.validator = { issues };
   return plan;
 }
 
 /* =========================================================
- * Build Plan (single: DIRECTOR)
+ * Build Plan
  * ========================================================= */
 function buildPlan(payload){
   const { line, seconds } = payload;
   const total = Number(seconds);
   const n = buildSceneCount(total);
 
-  const brain = BRAIN.analyze({ line, seconds: total });
-
+  const brain = BRAIN.analyze({ seconds: total });
   const tpl = beatsForSeconds(line, total);
   const beats = tpl.beats;
 
-  // time slicing
   const base = Math.floor(total / n);
   const times = [];
   let t = 0;
@@ -823,17 +814,11 @@ function buildPlan(payload){
 
     const subtitle = TRANSLATE.subtitle(brain, i, line, flags);
 
-    // ✅ hardLock 전달
     const imagePrompt = TRANSLATE.toImage({
-      brain, line,
-      hardLock: payload.hardLock,
-      beat, idx:i, seconds: total, flags
+      brain, line, hardLock: payload.hardLock, beat, idx:i, seconds: total
     });
-
     const videoPrompt = TRANSLATE.toVideo({
-      brain, line,
-      hardLock: payload.hardLock,
-      beat, idx:i, seconds: total, flags
+      brain, line, hardLock: payload.hardLock, beat, idx:i, seconds: total
     });
 
     scenes.push({
@@ -876,7 +861,7 @@ function buildPlan(payload){
       dialogue_policy: brain.preset?.rules?.dialogue || "NO_SPEECH",
       look_lock_token: brain.look_lock
     },
-    payload: { ...payload }, // ✅ payload.spec / payload.hardLock 포함
+    payload: { ...payload },
     scenes
   };
 
@@ -970,7 +955,7 @@ function download(filename, content, mime){
 }
 
 /* =========================================================
- * ZIP (single plan)
+ * ZIP
  * ========================================================= */
 async function downloadZipPlan(plan){
   if(!plan){ alert("먼저 생성하기를 눌러줘!"); return; }
@@ -1106,7 +1091,6 @@ function renderPlan(plan, serverResult){
   `;
   out.appendChild(srv);
 
-  // Spec Lock 카드
   const spec = plan?.payload?.spec || null;
   const hardLock = plan?.payload?.hardLock || "";
   const specCard = document.createElement("div");
@@ -1132,7 +1116,6 @@ function renderPlan(plan, serverResult){
   `;
   out.appendChild(specCard);
 
-  // 의도/검증 카드
   const issues = plan?.validator?.issues || [];
   const issueSummary = issues.length
     ? issues.slice(0,6).map(it=>`scene ${it.scene}: ${it.type}`).join(" · ")
@@ -1209,7 +1192,6 @@ async function run(){
   const payload = getPayloadFromInputs();
   payload.line = finalLine;
 
-  // ✅ DIRECTOR MODE: Spec Lock (ChatGPT-like)
   if (SPEC_LOCK_ON) {
     const spec = extractSpecStrict(finalLine);
     const hardLock = buildHardLockRules(spec);
@@ -1237,7 +1219,6 @@ async function run(){
  * ========================================================= */
 $("make")?.addEventListener("click", run);
 
-// devOnly buttons
 $("copyAll")?.addEventListener("click", () => {
   if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
   copyText(planToText(latestPlan));
@@ -1319,3 +1300,4 @@ applyServerPolicy();
 </script>
 </body>
 </html>
+```0
