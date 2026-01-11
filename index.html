@@ -3,8 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>원라인 캣무비 V4.3 - Omni Engine (Ultimate Free)</title>
+  <title>One-line Cat Movie — V4.3 Omni + v7-lite+ (A/B/C, Validator, ZIP)</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- ZIP만 필요: 오프라인이면 ZIP 버튼만 동작 안 함 -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
   <style>
@@ -24,7 +26,7 @@
       color:var(--text);
       display:flex; justify-content:center;
     }
-    .wrap{width:100%; max-width:1120px}
+    .wrap{width:100%; max-width:1180px}
     .hero-line{font-size:28px;font-weight:900;text-align:center;margin:10px 0 18px;letter-spacing:-0.03em}
     .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
     .brand{display:flex;flex-direction:column;gap:6px}
@@ -52,7 +54,7 @@
     textarea::placeholder{color:#7b7b86}
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .control{flex:1 1 160px;min-width:150px}
-    select,input[type="text"]{
+    select,input[type="text"],input[type="number"]{
       width:100%;height:44px;border-radius:12px;border:1px solid var(--line);
       background:#0f0f12;color:var(--text);padding:0 12px;outline:none;font-size:14px;
     }
@@ -74,7 +76,7 @@
     .badge.bad{border-color:rgba(239,68,68,.25); color:#fecaca; background:rgba(239,68,68,.10)}
     .badge.warn{border-color:rgba(245,158,11,.25); color:#fde68a; background:rgba(245,158,11,.10)}
     .badge.info{border-color:rgba(96,165,250,.25); color:#bfdbfe; background:rgba(96,165,250,.10)}
-    .outTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+    .outTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02);flex-wrap:wrap}
     .outTop .title{display:flex;flex-direction:column;gap:4px;min-width:0}
     .outTop .title b{font-size:14px}
     .outTop .title span{font-size:12px;color:var(--muted)}
@@ -83,6 +85,8 @@
       height:36px;padding:0 10px;border-radius:12px;font-size:12px;font-weight:900;
       background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line);cursor:pointer;
     }
+    .mini.on{border-color:rgba(34,197,94,.35); opacity:1}
+    .mini.off{opacity:.55}
 
     .out{padding:14px;display:grid;gap:12px}
     .serverCard{background:#0f0f12;border:1px solid var(--line);border-radius:14px;padding:12px}
@@ -90,13 +94,8 @@
     .serverHead b{font-size:14px}
     .serverHead span{font-size:12px;color:var(--muted)}
     .serverRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
-    .serverUrl{
-      flex:1 1 220px;font-size:12px;color:var(--muted);padding:8px 10px;border-radius:12px;
-      border:1px solid var(--line);background:#0b0b0c;overflow-wrap:anywhere;
-    }
-
     .scene{background:#0f0f12;border:1px solid var(--line);border-radius:14px;padding:12px}
-    .sceneHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .sceneHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
     .sceneHead .left{display:flex;flex-direction:column;gap:4px}
     .sceneHead .left b{font-size:14px}
     .sceneHead .left span{font-size:12px;color:var(--muted)}
@@ -131,10 +130,7 @@
       background:rgba(96,165,250,.08);
     }
     .advancedLock .k{margin-top:0}
-    .advancedLock textarea{
-      min-height:92px;
-      font-size:13px;
-    }
+    .advancedLock textarea{min-height:92px;font-size:13px}
   </style>
 </head>
 
@@ -145,23 +141,24 @@
 
     <div class="top">
       <div class="brand">
-        <h1>🐾🎬 원라인 캣무비 <span style="opacity:.65">V4.3 Omni Engine · Ultimate Free</span></h1>
+        <h1>🐾🎬 원라인 캣무비 <span style="opacity:.65">V4.3 Omni + v7-lite+</span></h1>
         <p>
-          ✅ 의도 우선(입력 헌법) · ✅ 추천은 제안만 · ✅ 룩 고정/리텐션 옵션<br/>
-          ✅ ZIP: JSON/SRT/TXT/prompts_image.txt 포함 · ✅ 자동저장/백업/복구 · ✅ 안전모드
+          ✅ A/B/C 3안 자동 생성 · ✅ 60초 템플릿10 자동선택 · ✅ Validator(룩락/현실/텍스트) · ✅ Auto-fix · ✅ ZIP(A/B/C 폴더)<br/>
+          ✅ 오프라인 기본 · ZIP만 인터넷 필요(JSZip)
         </p>
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
         <div class="pill" id="modePill">🧠 모드: 오프라인(0원)</div>
-        <div class="pill" id="serverPill">🛰 서버: 확인중…</div>
+        <div class="pill" id="serverPill">🛰 서버: 오프라인(고정)</div>
         <div class="pill" id="intentPill">🗣 통역사: -</div>
         <div class="pill" id="autosavePill">💾 자동저장: ON</div>
         <div class="pill" id="healthPill">🛡 안전모드: ON</div>
-        <div class="pill" id="buildPill">🏷 버전: v4.3-omni-free-cat</div>
+        <div class="pill" id="buildPill">🏷 버전: v4.3-omni-v7lite-plus</div>
       </div>
     </div>
 
     <div class="grid">
+      <!-- LEFT -->
       <div class="card">
         <div class="cardHeader">
           <h2>입력</h2>
@@ -208,16 +205,15 @@
             </div>
           </div>
 
-          <!-- ✅ NEW: 사용자 의도 우선 토글 2개 -->
           <div class="row" style="margin-top:10px">
             <div class="control">
               <div class="k">🐾 캐릭터 자동 등장</div>
               <select id="autoCharacter">
-                <option value="on" selected>ON (추천만 / 자동적용X)</option>
+                <option value="on" selected>ON (추천/자동적용은 조건부)</option>
                 <option value="off">OFF (내가 쓴 것만)</option>
               </select>
               <div class="hint" style="margin-top:6px">
-                ON이어도 <b>입력에 고양이 언급이 없으면 자동 적용 안 함</b> (추천 카드만 뜸)
+                ON이어도 <b>입력에 고양이 언급이 없으면 자동 적용 안 함</b> (추천만)
               </div>
             </div>
             <div class="control">
@@ -227,7 +223,7 @@
                 <option value="on">ON (연출/흐름 강화)</option>
               </select>
               <div class="hint" style="margin-top:6px">
-                OFF면 앱이 <b>장르/톤/주인공을 바꾸지 않음</b>
+                OFF면 앱이 <b>장르/톤/주인공을 과하게 바꾸지 않음</b>
               </div>
             </div>
           </div>
@@ -236,17 +232,17 @@
             <div class="control">
               <div class="k">캐릭터 프리셋(선택)</div>
               <select id="preset">
-                <option value="auto" selected>자동(추천 카드)</option>
+                <option value="auto" selected>자동(조건부 적용)</option>
                 <option value="nabi">나비 (침묵·감각·정적 훅)</option>
                 <option value="coco">코코 (따뜻·보호·감정 리텐션)</option>
                 <option value="tiger">타이거 (행동·리더·스토리 추진)</option>
-                <option value="custom">커스텀(주인공/배경 그대로)</option>
+                <option value="custom">커스텀</option>
               </select>
             </div>
 
             <div class="control">
               <div class="k">주인공(선택)</div>
-              <input id="hero" type="text" placeholder="예: 말 없는 주인공(사람/고양이/목격자 등)" />
+              <input id="hero" type="text" placeholder="예: 말 없는 주인공(고양이/사람/목격자 등)" />
             </div>
           </div>
 
@@ -257,7 +253,6 @@
             </div>
           </div>
 
-          <!-- 룩락/시리즈는 그대로 유지 -->
           <div class="row" style="margin-top:10px">
             <div class="control">
               <div class="k">모드</div>
@@ -277,77 +272,73 @@
             </div>
           </div>
 
+          <div class="advancedLock" id="tigerLockBox">
+            <div class="k">🔒 타이거 “초강력 룩락 문장”(선택)</div>
+            <textarea id="tigerDetailLock" placeholder="예) TIGER REAL-DETAIL LOCK: exact fur pattern (brown tabby), exact ear shape, eye color, keep identical in every scene."></textarea>
+          </div>
+
           <div class="hint" id="liveHint" style="margin-top:10px"></div>
           <div class="hint" id="predictHint" style="margin-top:6px; opacity:.9"></div>
 
-          <div class="advancedLock" id="tigerLockBox">
-            <div class="k">🔒 타이거 “초강력 룩락 문장”(선택)</div>
-            <textarea id="tigerDetailLock" placeholder="예) TIGER REAL-DETAIL LOCK: exact fur pattern (brown tabby), exact ear shape (triangular), eye color (gold), keep identical in every scene."></textarea>
+          <div class="split">
+            <button class="primary" id="make">⚡ 생성하기(A/B/C)</button>
+            <button class="ghost" id="copyAll">📋 Copy Active</button>
           </div>
 
           <div class="split">
-            <button class="primary" id="make">⚡ 생성하기</button>
-            <button class="ghost" id="copyAll">📋 Copy All</button>
-          </div>
-
-          <div class="split">
-            <button class="ghost" id="downloadZip">📦 ZIP(필수파일)</button>
+            <button class="ghost" id="downloadZip">📦 ZIP(A/B/C)</button>
             <button class="warn" id="backupBtn">🧰 백업(내보내기)</button>
             <button class="info" id="restoreBtn">🧩 복구(가져오기)</button>
             <button class="danger" id="reset">🧹 초기화</button>
           </div>
 
           <div class="hint">
-            ✅ <b>의도 우선</b>: 입력에 없는 캐릭터/동물/세계관을 앱이 멋대로 추가하지 않음<br/>
-            ✅ <b>ZIP</b>에는 prompts_image.txt / prompts_video.txt가 항상 포함됩니다.
+            ✅ 60초는 템플릿 10개 중 자동선택(v7-lite).<br/>
+            ✅ REAL_WORLD 사건이면 과장/판타지 표현을 자동 약화 + serious 강제.<br/>
+            ✅ Validator: (1) 텍스트 오버레이 유도 제거 (2) 고어 단어 제거 (3) 룩락 누락/변조 경고.
           </div>
         </div>
       </div>
 
+      <!-- RIGHT -->
       <div class="card" id="outCard" style="display:none">
         <div class="outTop">
           <div class="title">
             <b id="outTitle">원라인</b>
-            <span id="outMeta">설계 생성 완료</span>
+            <span id="outMeta">-</span>
           </div>
-          <div class="outActions">
-            <button class="mini" id="downloadJson">⬇️ JSON</button>
-            <button class="mini" id="downloadSrt">🧾 SRT</button>
-            <button class="mini" id="downloadTxt">📄 TXT</button>
-            <button class="mini" id="recoveryBtn">🧯 복구 모드</button>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <!-- ABC tabs injected here -->
+            <div id="abcTabs" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"></div>
+            <div class="outActions">
+              <button class="mini" id="downloadJson">⬇️ JSON</button>
+              <button class="mini" id="downloadSrt">🧾 SRT</button>
+              <button class="mini" id="downloadTxt">📄 TXT</button>
+              <button class="mini" id="downloadImagePrompts">🖼 prompts_image.txt</button>
+              <button class="mini" id="downloadVideoPrompts">🎥 prompts_video.txt</button>
+              <button class="mini" id="recoveryBtn">🧯 복구 모드</button>
+            </div>
           </div>
         </div>
         <div class="out" id="out"></div>
       </div>
     </div>
 
-    <div class="footerNote">© One-Line Cat Movie V4.3 Omni Engine · 의도 우선 · 오프라인 기본 0원</div>
+    <div class="footerNote">© One-Line Cat Movie V4.3 Omni + v7-lite+ · single file · offline-first</div>
   </div>
 
 <script>
-/* ==========================
- * V4.3 Omni Engine (CAT)
- * 핵심: 1) 캐릭터 자동 등장은 "추천만" 2) 자동 상상은 OFF면 입력 그대로
- * ========================== */
+/* =========================================================
+ * V4.3 Omni + v7-lite+ (single file)
+ * - A/B/C variants
+ * - 60s template library (10)
+ * - Validator: text overlay + gore + look lock consistency + real world audit
+ * - Auto-fix: remove "add subtitles" etc
+ * - ZIP: A_safe / B_cinematic / C_retention
+ * ========================================================= */
 
-const BUILD = "v4.3-omni-free-cat";
-
-let ENABLE_LOOK_LOCK = false;
-let ENABLE_RETENTION = true;
-
-// ✅ NEW 토글
-let ENABLE_AUTO_CHARACTER = true;     // 캐릭터 자동 "추천"
-let ENABLE_AUTO_IMAGINATION = false;  // 자동 상상(연출)
-
-// Server URL (optional)
-const DEFAULT_WORKER_URL = "";
-const TIGER_DETAIL_LOCK_DEFAULT = "";
-
-// Storage
-const LS_KEY = "olm_v43_cat_state";
-const LS_LAST_PLAN = "olm_v43_cat_last_plan";
-const LS_LAST_BACKUP = "olm_v43_cat_last_backup";
-
+const BUILD = "v4.3-omni-v7lite-plus";
 const $ = (id) => document.getElementById(id);
 const safeTrim = (v) => (v || "").toString().trim();
 
@@ -363,7 +354,6 @@ function escapeHtml(str){
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;");
 }
-
 function setBanner(html, show=true){
   const b = $("banner");
   if(!b) return;
@@ -371,26 +361,13 @@ function setBanner(html, show=true){
   b.style.display = show ? "block" : "none";
 }
 
-function pad2(n){ return String(n).padStart(2,"0"); }
-function srtTime(seconds){
-  const ms = Math.max(0, Math.floor(seconds * 1000));
-  const h = Math.floor(ms / 3600000);
-  const m = Math.floor((ms % 3600000) / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  const milli = ms % 1000;
-  return `${pad2(h)}:${pad2(m)}:${pad2(s)},${String(milli).padStart(3,"0")}`;
-}
-
-function genreLabel(key){
-  return {
-    thriller:"스릴러", mystery:"미스터리", horror:"공포", action:"액션",
-    drama:"드라마", romance:"로맨스", fantasy:"판타지", sf:"SF", comedy:"코미디"
-  }[key] || key;
-}
-function toneLabel(key){
-  return {
-    serious:"건조·진지", cinematic:"시네마틱", noir:"느와르", warm:"따뜻한", dark:"어두운"
-  }[key] || key;
+/* ---------- Offline server scaffold (kept) */
+let serverState = { status:"OFFLINE", message:"오프라인 고정", until:"" };
+function setServerPill(text){ const el=$("serverPill"); if(el) el.textContent = text; }
+async function fetchServerStatus(){ setServerPill("🛰 서버: 오프라인(고정)"); return serverState; }
+function applyServerPolicy(){
+  setBanner(`<b>📴 오프라인 모드</b><div style="margin-top:6px">ZIP만 인터넷 필요(JSZip). 그 외는 전부 오프라인 동작.</div>`, true);
+  $("modePill") && ($("modePill").textContent = "🧠 모드: 오프라인(0원)");
 }
 
 /* ---------- Safety */
@@ -403,10 +380,7 @@ const SENSITIVE_PATTERNS = [
 function applySafety(line){
   const raw = safeTrim(line);
   if(!raw) return { ok:false, line:"" };
-
-  if(raw.length > 240){
-    return { ok:true, line: raw.slice(0, 240) + "…", note:"입력이 길어서 자동 축약됨" };
-  }
+  if(raw.length > 240) return { ok:true, line: raw.slice(0, 240) + "…", note:"입력이 길어서 자동 축약됨" };
 
   for(const p of SENSITIVE_PATTERNS){
     if(p.test(raw)){
@@ -421,7 +395,7 @@ function applySafety(line){
 }
 
 /* =========================================================
- * INTENT TRANSLATOR (현실/스토리 판정 + 인도(India) 오판 방지)
+ * INTENT TRANSLATOR (REAL_WORLD audit + 인도(India) 오판 방지)
  * ========================================================= */
 function intentTranslator(text){
   const raw = (text || "").toString();
@@ -465,16 +439,11 @@ function intentTranslator(text){
     "If violence: keep it non-graphic, no gore, no explicit injury close-ups."
   ] : [];
 
-  const realityStyle = isRealIncident
-    ? "ultra realistic, documentary, CCTV-like, grounded"
-    : "cinematic";
-
   return {
     reality: isRealIncident ? "REAL_WORLD" : "STORY",
-    mood,
-    character,
+    mood, character,
     hardRules,
-    realityStyle
+    realityStyle: isRealIncident ? "ultra realistic, documentary, CCTV-like, grounded" : "cinematic"
   };
 }
 function joinHardRules(intent){
@@ -483,67 +452,20 @@ function joinHardRules(intent){
   return "HARD RULES: " + rules.join(" ");
 }
 
-/* ---------- Server (optional) */
-let serverState = { status: "UNKNOWN", message: "", until: "" };
-function setServerPill(text){ const el=$("serverPill"); if(el) el.textContent = text; }
-
-function normalizeBase(url){
-  const u = safeTrim(url);
-  if(!u) return "";
-  return u.endsWith("/") ? u.slice(0,-1) : u;
+/* ---------- labels */
+function genreLabel(key){
+  return {
+    thriller:"스릴러", mystery:"미스터리", horror:"공포", action:"액션",
+    drama:"드라마", romance:"로맨스", fantasy:"판타지", sf:"SF", comedy:"코미디"
+  }[key] || key;
 }
-function getWorkerUrl(){ return normalizeBase(DEFAULT_WORKER_URL); }
-
-async function fetchServerStatus(){
-  const base = getWorkerUrl();
-  if(!base){
-    serverState = { status:"OFFLINE", message:"서버 주소 미설정(오프라인)", until:"" };
-    setServerPill("🛰 서버: 오프라인(고정)");
-    return serverState;
-  }
-  try{
-    const res = await fetch(base + "/status", { cache:"no-store" });
-    const data = await res.json().catch(()=>null);
-    if(!data?.status){
-      serverState = { status:"UNKNOWN", message:"서버 응답 형식 오류", until:"" };
-      setServerPill("🛰 서버: 오류");
-      return serverState;
-    }
-    serverState = { status: data.status, message: data.message || "", until: data.until || "" };
-    if(data.status === "ON") setServerPill("🛰 서버: ON");
-    else if(data.status === "MAINTENANCE") setServerPill("🛰 서버: 점검중");
-    else if(data.status === "UPGRADE") setServerPill("🛰 서버: 업그레이드중");
-    else if(data.status === "OFF") setServerPill("🛰 서버: OFF");
-    else setServerPill("🛰 서버: UNKNOWN");
-    return serverState;
-  }catch(e){
-    serverState = { status:"DOWN", message:"서버 연결 실패(오프라인)", until:"" };
-    setServerPill("🛰 서버: DOWN");
-    return serverState;
-  }
-}
-function applyServerPolicy(){
-  const st = serverState.status;
-  if(st === "MAINTENANCE" || st === "UPGRADE"){
-    const title = st === "MAINTENANCE" ? "🔧 서비스 점검 중" : "🧠 엔진 업그레이드 중";
-    const msg = serverState.message || "잠시 후 다시 시도해 주세요.";
-    setBanner(`<b>${title}</b><div style="margin-top:6px">${escapeHtml(msg)}</div>`, true);
-    $("make") && ($("make").disabled = true);
-    $("modePill") && ($("modePill").textContent = "🧠 모드: 점검/업그레이드");
-    return;
-  }
-  if(st === "OFF" || st === "DOWN" || st === "OFFLINE"){
-    setBanner(`<b>📴 서버 연결 없음</b><div style="margin-top:6px">오프라인(0원) 모드로 계속 사용 가능합니다.</div>`, true);
-    $("make") && ($("make").disabled = false);
-    $("modePill") && ($("modePill").textContent = "🧠 모드: 오프라인(0원)");
-    return;
-  }
-  setBanner("", false);
-  $("make") && ($("make").disabled = false);
-  $("modePill") && ($("modePill").textContent = base ? "🧠 모드: 서버연결" : "🧠 모드: 오프라인(0원)");
+function toneLabel(key){
+  return {
+    serious:"건조·진지", cinematic:"시네마틱", noir:"느와르", warm:"따뜻한", dark:"어두운"
+  }[key] || key;
 }
 
-/* ---------- Style helper */
+/* ---------- style helper */
 function cinematicStyle(tone){
   const map = {
     serious: "realistic, restrained, dry, minimal camera movement, documentary-like tension",
@@ -555,81 +477,37 @@ function cinematicStyle(tone){
   return map[tone] || map.serious;
 }
 
-function buildSceneCount(seconds){
-  const s = Number(seconds);
-  if(s <= 30) return 7;
-  if(s <= 60) return 9;
-  return 12;
-}
+/* =========================================================
+ * Engine flags + mode policy
+ * ========================================================= */
+let ENABLE_LOOK_LOCK = false;
+let ENABLE_RETENTION = true;
 
-function beatsForGenre(genre){
-  const base = [
-    "오프닝 훅 — 한 컷에 상황 박기",
-    "이상 징후 — 평범이 깨진다",
-    "위협 제시 — 위험이 보인다",
-    "첫 행동 — 주인공이 움직인다",
-    "규칙/단서 — 조건이 드러난다",
-    "최대 위기 — 실패 직전",
-    "실마리 — 작은 힌트",
-    "반전 — 진짜 원인/적",
-    "엔딩 — 여운/다음 떡밥"
-  ];
-  const map = {
-    mystery: [
-      "오프닝 훅 — 수상한 단서 한 컷",
-      "이상 징후 — 말이 안 되는 점",
-      "의심 — 용의자/장소 등장",
-      "첫 조사 — 단서 확대",
-      "규칙/퍼즐 — 숨은 연결고리",
-      "최대 위기 — 오해/함정",
-      "실마리 — 결정적 힌트",
-      "반전 — 진범/진실",
-      "엔딩 — 여운/다음 사건"
-    ],
-    thriller: [
-      "오프닝 훅 — 숨막히는 긴장 한 컷",
-      "추적 시작 — 누가 누구를 쫓나",
-      "위협 확대 — 점점 가까워진다",
-      "노출 — 들켰다",
-      "룰/조건 — 도망칠 수 없는 이유",
-      "최대 위기 — 코앞에서 잡힘",
-      "미끼 — 판을 뒤집는 한 수",
-      "클라이맥스 — 도망/대치",
-      "엔딩 — 아직 끝나지 않음"
-    ],
-    action: [
-      "오프닝 훅 — 폭발적 시작",
-      "목표 제시 — 무엇을 지켜야 하나",
-      "추격 — 속도감",
-      "전투 — 첫 충돌",
-      "전술 — 한 수",
-      "최대 위기 — 포위",
-      "역전 — 반격",
-      "결착 — 승부",
-      "엔딩 — 다음 미션"
-    ]
-  };
-  return map[genre] || base;
-}
+// NEW toggles
+let ENABLE_AUTO_CHARACTER = true;     // 추천/조건부 적용
+let ENABLE_AUTO_IMAGINATION = false;  // 연출 추가
 
-function extractKeywords(line){
-  const hints = [];
-  const L = (line || "").toLowerCase();
-  const add=(k)=>{ if(!hints.includes(k)) hints.push(k); };
-  if(L.includes("비") || L.includes("rain")) add("rainy");
-  if(L.includes("밤") || L.includes("night")) add("night");
-  if(L.includes("새벽") || L.includes("dawn")) add("dawn");
-  if(L.includes("골목") || L.includes("alley")) add("alley");
-  if(L.includes("네온") || L.includes("neon")) add("neon");
-  if(L.includes("추격") || L.includes("chase")) add("chase");
-  if(L.includes("침묵") || L.includes("silent")) add("silence tension");
-  if(L.includes("고양이") || L.includes("cat") || L.includes("냥")) add("cat");
-  if(L.includes("사람") || L.includes("human") || L.includes("목격자")) add("human");
-  return hints.slice(0,7);
+function getAppMode(){ return ($("appMode")?.value || "free"); }
+function getLockMode(){ return ($("lockMode")?.value || "auto"); }
+
+function applyModePolicyToEngine(){
+  const mode = getAppMode();
+  const lockMode = getLockMode();
+  if(lockMode === "on") ENABLE_LOOK_LOCK = true;
+  else if(lockMode === "off") ENABLE_LOOK_LOCK = false;
+  else ENABLE_LOOK_LOCK = (mode === "series");
+
+  ENABLE_AUTO_CHARACTER = ($("autoCharacter")?.value || "on") === "on";
+  ENABLE_AUTO_IMAGINATION = ($("autoImagination")?.value || "off") === "on";
+}
+function updatePresetHint(){
+  const v = $("preset")?.value || "auto";
+  const lockBox = $("tigerLockBox");
+  if(lockBox) lockBox.style.display = (v === "tiger") ? "block" : "none";
 }
 
 /* =========================================================
- * LOOK LOCK TOKENS (CAT)
+ * Look Lock DB (CAT)
  * ========================================================= */
 const LOOK_LOCK_DB = {
   nabi: [
@@ -657,11 +535,9 @@ const LOOK_LOCK_DB = {
     "STRICT RULE: do NOT change outfit colors mid-story."
   ]
 };
-
 function getTigerDetailLock(){
   const el = $("tigerDetailLock");
-  const v = safeTrim(el ? el.value : "");
-  return v || safeTrim(TIGER_DETAIL_LOCK_DEFAULT);
+  return safeTrim(el ? el.value : "");
 }
 function lookLockText(presetId){
   if(!ENABLE_LOOK_LOCK) return "";
@@ -674,7 +550,9 @@ function lookLockText(presetId){
   return base;
 }
 
-/* ---------- Character Presets (CAT) */
+/* =========================================================
+ * Character presets
+ * ========================================================= */
 const CHAR_DB = {
   nabi: {
     id: "nabi", label: "나비",
@@ -682,7 +560,7 @@ const CHAR_DB = {
     setting_bias: "조용한 실내/새벽/부드러운 자연광/소리와 촉감 중심",
     tone_bias: "serious",
     genre_bias: "mystery",
-    rules: { dialogue:"NO_SPEECH", hook:"SILENCE_HOOK", camera:"CLOSE_SENSE", movement:"MINIMAL", reveal:"LATE", subtitle:"MINIMAL_POETIC" },
+    rules: { dialogue:"NO_SPEECH", camera:"CLOSE_SENSE", movement:"MINIMAL", subtitle:"MINIMAL_POETIC" },
     prompt_add: ["the cat does NOT speak, communicates with subtle movements","focus on ears, paws, breathing, tiny head tilt","gentle realism, documentary tension"]
   },
   coco: {
@@ -691,7 +569,7 @@ const CHAR_DB = {
     setting_bias: "따뜻한 실내/담요/주방/포근한 조명/보호받는 분위기",
     tone_bias: "warm",
     genre_bias: "drama",
-    rules: { dialogue:"LOW_SPEECH", hook:"EMOTION_HOOK", camera:"WARM_CLOSE", movement:"SLOW", reveal:"MID", subtitle:"HEART_PULL" },
+    rules: { dialogue:"LOW_SPEECH", camera:"WARM_CLOSE", movement:"SLOW", subtitle:"HEART_PULL" },
     prompt_add: ["protective, warm atmosphere","subtle emotional close-ups","slow breathing, gentle paws"]
   },
   tiger: {
@@ -700,7 +578,7 @@ const CHAR_DB = {
     setting_bias: "집/골목/가게/현장감/동선이 보이는 공간",
     tone_bias: "cinematic",
     genre_bias: "thriller",
-    rules: { dialogue:"NO_SPEECH", hook:"ACTION_HOOK", camera:"WIDE_TO_CLOSE", movement:"DYNAMIC", reveal:"EARLY", subtitle:"COMMAND" },
+    rules: { dialogue:"NO_SPEECH", camera:"WIDE_TO_CLOSE", movement:"DYNAMIC", subtitle:"COMMAND" },
     prompt_add: ["purposeful actions, clear blocking","wide establishing then punch-in close-ups","cinematic urgency, grounded realism"]
   }
 };
@@ -710,9 +588,7 @@ function shouldUseCatPreset(line){
   const catKeywords = ["고양이","냥","냥이","코리안숏헤어","샴","페르시안","스코티시","캣","cat","kitten","nabi","coco","tiger","나비","코코","타이거"];
   return catKeywords.some(k => L.includes(k));
 }
-
 function autoRecommendPreset(line){
-  // 통역사/키워드 기반 "추천"
   const L = (line || "").toLowerCase();
   if(L.includes("치유") || L.includes("따뜻") || L.includes("보호")) return "coco";
   if(L.includes("추격") || L.includes("도주") || L.includes("구조") || L.includes("위험")) return "tiger";
@@ -721,60 +597,319 @@ function autoRecommendPreset(line){
 }
 
 /* =========================================================
- * MVP UX POLICY
+ * v7-lite: 60초 템플릿 10개 (A/B/C마다 자동선택 분산)
  * ========================================================= */
-function getAppMode(){ return ($("appMode")?.value || "free"); }
-function getLockMode(){ return ($("lockMode")?.value || "auto"); }
-
-function applyModePolicyToEngine(){
-  // 룩락
-  const mode = getAppMode();
-  const lockMode = getLockMode();
-  if(lockMode === "on") ENABLE_LOOK_LOCK = true;
-  else if(lockMode === "off") ENABLE_LOOK_LOCK = false;
-  else ENABLE_LOOK_LOCK = (mode === "series");
-
-  // ✅ NEW 토글 반영
-  ENABLE_AUTO_CHARACTER = ($("autoCharacter")?.value || "on") === "on";
-  ENABLE_AUTO_IMAGINATION = ($("autoImagination")?.value || "off") === "on";
+function hashInt(str){
+  const s = String(str || "");
+  let h = 2166136261;
+  for(let i=0;i<s.length;i++){
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h >>> 0);
+}
+const TEMPLATES_60 = [
+  { id:"T01", name:"정적 훅 → 단서 확대", beats:[
+    "0–3초 훅 — 정적 속 ‘이상한 1컷’",
+    "상황 확정 — 장소/시간 감각",
+    "미세 단서 — 작은 변화 포착",
+    "긴장 상승 — 시선이 움직인다",
+    "규칙 등장 — ‘이러면 안 된다’",
+    "최대 위기 — 코앞까지 온다",
+    "결정 단서 — 한 가지가 보인다",
+    "행동 — 주인공이 움직인다",
+    "엔딩 — 여운/질문"
+  ]},
+  { id:"T02", name:"추적형(리텐션 강)", beats:[
+    "0–3초 훅 — ‘지금 누가 보고 있다’",
+    "추적 시작 — 발소리/시선",
+    "위협 확대 — 더 가까워짐",
+    "노출 — 들킨 느낌",
+    "룰/조건 — 도망칠 수 없는 이유",
+    "최대 위기 — 정지된 순간",
+    "역전 실마리 — 작은 힌트",
+    "결정 — 따라간다/신고한다",
+    "엔딩 — 아직 끝나지 않음"
+  ]},
+  { id:"T03", name:"증거 수집 다큐", beats:[
+    "0–3초 훅 — ‘증거 같은 1컷’",
+    "관찰 — 현실감(디테일)",
+    "증거1 — 사소하지만 이상",
+    "증거2 — 연결고리",
+    "긴장 — 누가 나타날 듯",
+    "사건 순간 — 절제된 묘사",
+    "사후 — 조용한 충격",
+    "결론 직전 — 마지막 증거",
+    "엔딩 — 확신/여운"
+  ]},
+  { id:"T04", name:"따뜻→불안 반전", beats:[
+    "0–3초 훅 — 평온한 시작",
+    "일상 — 안전한 분위기",
+    "미세 균열 — 소리/빛 변화",
+    "불안 — 시선이 멈춤",
+    "위기 — 갑자기 바뀜",
+    "정적 — 숨 멎는 공백",
+    "단서 — ‘이게 원인’",
+    "행동 — 보호/대응",
+    "엔딩 — 질문"
+  ]},
+  { id:"T05", name:"느와르 60초", beats:[
+    "0–3초 훅 — 네온/비/그림자 1컷",
+    "시선 — 누군가를 본다",
+    "거리감 — 멀리서 접근",
+    "긴장 — 반사/소리",
+    "사건 — 현실적 위협(비고어)",
+    "여운 — 텅 빈 프레임",
+    "단서 — 남겨진 것",
+    "결정 — 따라가거나 멈춘다",
+    "엔딩 — 미해결"
+  ]},
+  { id:"T06", name:"CCTV 관찰형", beats:[
+    "0–3초 훅 — CCTV 같은 고정 1컷",
+    "정상 — 평범한 흐름",
+    "이상 — 규칙에서 벗어남",
+    "접근 — 빠르게 가까워짐",
+    "사건 — 절제된 순간",
+    "공백 — 잠깐 멈춘다",
+    "단서 — 프레임 구석의 힌트",
+    "대응 — 신고/추적 시작",
+    "엔딩 — 사이렌/발소리"
+  ]},
+  { id:"T07", name:"침묵 인터뷰형", beats:[
+    "0–3초 훅 — ‘말 없는 주인공’",
+    "정적 — 질문이 들리는 듯",
+    "반응 — 아주 작은 제스처",
+    "압박 — 가까워진다",
+    "침묵 피크 — 아무 말 없음",
+    "단서 — 손/물건/각도",
+    "깨달음 — 표정이 바뀜",
+    "행동 — 움직인다",
+    "엔딩 — 대답 대신 여운"
+  ]},
+  { id:"T08", name:"원인 역추적", beats:[
+    "0–3초 훅 — 결과(이상한 장면)",
+    "역추적1 — 직전의 흔적",
+    "역추적2 — 더 이전의 조각",
+    "연결 — 퍼즐이 맞춰짐",
+    "위기 — ‘지금’으로 복귀",
+    "사건 — 짧고 절제",
+    "사후 — 고요",
+    "결론 — 원인 확정",
+    "엔딩 — 질문"
+  ]},
+  { id:"T09", name:"한 컷 롱테이크", beats:[
+    "0–3초 훅 — 거의 움직임 없는 1컷",
+    "미세 변화 — 소리/빛/숨",
+    "시선 이동 — 프레임 안 이동",
+    "접근 — 가까워짐",
+    "위기 — 컷 없이 압박",
+    "사건 — 절제된 순간",
+    "정적 — 뒤늦은 충격",
+    "단서 — 남은 흔적",
+    "엔딩 — 멀어지는 소리"
+  ]},
+  { id:"T10", name:"리텐션 최적(훅 강화)", beats:[
+    "0–3초 훅 — ‘뭔가 잘못됐다’",
+    "즉시 긴장 — 숨/정적",
+    "접근 — 소리/빛이 스친다",
+    "근접 — 바로 앞",
+    "사건 — 짧게/명확하게",
+    "정적 — 멈춘다",
+    "단서 — 딱 1개로 정리",
+    "행동 — 시작한다",
+    "엔딩 — 선택 질문"
+  ]}
+];
+function pickTemplate60(line, genre, variantTag){
+  const h = hashInt(`${line}::${genre}::${variantTag}`);
+  return TEMPLATES_60[h % TEMPLATES_60.length];
+}
+function beatsForGenreFallback(genre){
+  const base = [
+    "오프닝 훅 — 한 컷에 상황 박기",
+    "이상 징후 — 평범이 깨진다",
+    "위협 제시 — 위험이 보인다",
+    "첫 행동 — 주인공이 움직인다",
+    "규칙/단서 — 조건이 드러난다",
+    "최대 위기 — 실패 직전",
+    "실마리 — 작은 힌트",
+    "반전 — 진짜 원인/적",
+    "엔딩 — 여운/다음 떡밥"
+  ];
+  const map = {
+    mystery: [
+      "오프닝 훅 — 수상한 단서 한 컷","이상 징후 — 말이 안 되는 점","의심 — 용의자/장소 등장","첫 조사 — 단서 확대",
+      "규칙/퍼즐 — 숨은 연결고리","최대 위기 — 오해/함정","실마리 — 결정적 힌트","반전 — 진범/진실","엔딩 — 여운"
+    ],
+    thriller: [
+      "오프닝 훅 — 숨막히는 긴장 한 컷","추적 시작 — 누가 누구를 쫓나","위협 확대 — 점점 가까워진다","노출 — 들켰다",
+      "룰/조건 — 도망칠 수 없는 이유","최대 위기 — 코앞에서 잡힘","미끼 — 판을 뒤집는 한 수","클라이맥스 — 도망/대치","엔딩 — 아직 끝나지 않음"
+    ],
+    action: [
+      "오프닝 훅 — 폭발적 시작","목표 제시 — 무엇을 지켜야 하나","추격 — 속도감","전투 — 첫 충돌",
+      "전술 — 한 수","최대 위기 — 포위","역전 — 반격","결착 — 승부","엔딩 — 다음 미션"
+    ],
+  };
+  return map[genre] || base;
+}
+function beatsForGenreV7(genre, seconds, line, variantTag){
+  const s = Number(seconds);
+  if(s === 60){
+    const tpl = pickTemplate60(line, genre, variantTag);
+    return { beats: tpl.beats, template: { id: tpl.id, name: tpl.name } };
+  }
+  return { beats: beatsForGenreFallback(genre), template: null };
 }
 
-function updatePresetHint(){
-  const v = $("preset")?.value || "auto";
-  const lockBox = $("tigerLockBox");
-  if(lockBox) lockBox.style.display = (v === "tiger") ? "block" : "none";
+/* =========================================================
+ * Scene sizing
+ * ========================================================= */
+function buildSceneCount(seconds){
+  const s = Number(seconds);
+  if(s <= 30) return 7;
+  if(s <= 60) return 9;
+  return 12;
+}
+function findFirstTwistIndex(times){
+  const target = 12;
+  for(let i=0;i<times.length;i++){
+    const t = times[i];
+    if(t.start <= target && target < t.end) return i;
+  }
+  return Math.max(1, Math.floor(times.length * 0.35));
 }
 
-function updateLiveHints(){
-  const line = safeTrim($("line")?.value || "");
-  const live = $("liveHint");
-  const predict = $("predictHint");
-  if(!live || !predict) return;
+/* =========================================================
+ * Real-world audit cleanup (light)
+ * - REAL_WORLD일 때, 과장/판타지 단어를 프롬프트에서 약화/제거
+ * ========================================================= */
+function scrubRealWorldExaggeration(text){
+  let s = String(text || "");
+  // "판타지/마법/초현실/비유/상징" 계열 약화
+  s = s.replace(/\b(magic|magical|fantasy|surreal|metaphor|symbolic|mythic|dreamlike)\b/gi, "");
+  s = s.replace(/(마법|판타지|초현실|비유|상징|신화적|꿈같은|초능력|마법같은)/g, "");
+  return s.replace(/\s{2,}/g," ").trim();
+}
 
-  if(!line){
-    live.textContent = "";
-    predict.textContent = "";
-    return;
+/* =========================================================
+ * Extract keywords for look-lock validator
+ * - 간단하게 LOOK LOCK 텍스트에서 "색/의상/소품" 토큰을 뽑아 '모든 씬에 존재' 체크
+ * ========================================================= */
+function extractLockKeywords(lookLockText){
+  const t = String(lookLockText || "").toLowerCase();
+  const bag = new Set();
+
+  // 색상
+  ["sky-blue","yellow","red","black","green","white","brown tabby","tabby","korean shorthair"].forEach(k=>{
+    if(t.includes(k)) bag.add(k);
+  });
+
+  // 의상/소품 핵심
+  ["padded jacket","padded pants","mittens","boots","scarf","ribbon","hairpins","heart-shaped","no hood","no hat"].forEach(k=>{
+    if(t.includes(k)) bag.add(k);
+  });
+
+  // 사용자가 tigerDetailLock에 적는 핵심도 "token:" 형태가 있으면 끌어오기(대충)
+  const tokenMatches = t.match(/(exact|keep|identical)[^\.]{0,80}/g);
+  if(tokenMatches){
+    tokenMatches.slice(0,4).forEach(x=> bag.add(x.trim()));
   }
 
-  const hasCat = shouldUseCatPreset(line);
-  const ac = ENABLE_AUTO_CHARACTER ? "ON" : "OFF";
-  const ai = ENABLE_AUTO_IMAGINATION ? "ON" : "OFF";
-
-  if(!ENABLE_AUTO_CHARACTER && hasCat){
-    live.textContent = "ℹ 지금은 ‘캐릭터 자동 등장 OFF’ 입니다. 고양이를 원하면 입력에 ‘고양이’라고 적거나 프리셋을 직접 선택하세요.";
-  } else if(ENABLE_AUTO_CHARACTER && !hasCat){
-    live.textContent = "✅ 입력에 고양이 언급이 없어요. 자동으로 고양이를 ‘추가하지 않고’, 아래에서 ‘추천만’ 합니다.";
-  } else if(ENABLE_AUTO_CHARACTER && hasCat){
-    live.textContent = "✅ 입력에 고양이 언급이 있어요. (원하면 프리셋 추천을 적용할 수 있어요)";
-  } else {
-    live.textContent = "✅ 의도 우선 모드입니다.";
-  }
-
-  predict.textContent = `토글 상태: 캐릭터자동=${ac}, 자동상상=${ai} · 예상: "${line}"을 1순위로 반영`;
+  return [...bag].slice(0,14);
 }
 
-/* ---------- TRANSLATE */
+/* =========================================================
+ * BRAIN
+ * ========================================================= */
+const BRAIN = {
+  analyze({ line, genre, tone, seconds, presetId, hero, setting, intent }){
+    const total = Number(seconds);
+    const n = buildSceneCount(total);
+
+    // tension curve
+    const curve = [];
+    for(let i=0;i<n;i++){
+      const x = i/(n-1 || 1);
+      let v = (total <= 60)
+        ? (x < 0.25 ? x*2 : (x < 0.8 ? 0.55 + (x-0.25)*0.5 : 0.9))
+        : (x < 0.2 ? x*2 : (x < 0.75 ? 0.5 + (x-0.2)*0.7 : 0.9 - (x-0.75)*0.6));
+      curve.push(Math.max(0.08, Math.min(0.98, v)));
+    }
+
+    // preset resolution (조건부 자동 적용)
+    let pid = presetId;
+    const hasCat = shouldUseCatPreset(line);
+    const recommended = intent?.character || autoRecommendPreset(line);
+
+    if(pid === "auto"){
+      if(ENABLE_AUTO_CHARACTER && hasCat) pid = recommended;
+      else pid = "custom";
+    }
+    if(!ENABLE_AUTO_CHARACTER){
+      pid = "custom";
+    }
+    const preset = (pid && pid !== "custom") ? CHAR_DB[pid] : null;
+
+    let finalTone = tone;
+    let finalGenre = genre;
+
+    // 자동 상상 ON일 때만 bias 허용
+    if(ENABLE_AUTO_IMAGINATION && preset){
+      finalTone = preset.tone_bias || tone;
+      finalGenre = preset.genre_bias || genre;
+    }
+
+    // REAL_WORLD 사건이면: 톤 serious 강제 + 장르 극단(판타지/코미디 등) 억제
+    if(intent?.reality === "REAL_WORLD"){
+      finalTone = "serious";
+      if(["fantasy","sf","romance","comedy"].includes(finalGenre)) finalGenre = "thriller";
+    }
+
+    const camera_policy = preset?.rules?.camera || "WIDE_TO_CLOSE";
+    const movement_policy = preset?.rules?.movement || "MINIMAL";
+    const subtitle_policy = preset?.rules?.subtitle || "MINIMAL";
+    const dialogue_policy = preset?.rules?.dialogue || "NO_SPEECH";
+
+    const finalHero =
+      hero || (ENABLE_AUTO_IMAGINATION ? (preset?.hero_default || "주인공") : "주인공");
+    const finalSetting =
+      setting || (ENABLE_AUTO_IMAGINATION ? (preset?.setting_bias || "기본 배경") : "기본 배경");
+
+    const hardRulesExtra = (!ENABLE_AUTO_CHARACTER)
+      ? ["NO animals unless explicitly in the input. Do NOT introduce cats/dogs/creatures. Keep it literal to the user input."]
+      : [];
+
+    const mergedIntent = {
+      ...(intent || {}),
+      hardRules: [...(intent?.hardRules || []), ...hardRulesExtra]
+    };
+
+    const look_lock = lookLockText(pid || "custom");
+
+    return {
+      presetId: pid || "custom",
+      presetLabel: preset?.label || "커스텀",
+      preset,
+      finalTone, finalGenre,
+      curve,
+      camera_policy,
+      movement_policy,
+      subtitle_policy,
+      dialogue_policy,
+      hero: finalHero,
+      setting: finalSetting,
+      look_lock,
+      intent: mergedIntent,
+      hard_rules_text: joinHardRules(mergedIntent),
+      recommendedPreset: recommended,
+      hasCat
+    };
+  }
+};
+
+/* =========================================================
+ * TRANSLATE
+ * ========================================================= */
 const TRANSLATE = {
   cameraLine(brain, idx){
     const cam = brain.camera_policy;
@@ -795,13 +930,12 @@ const TRANSLATE = {
   },
 
   subtitle(brain, idx, line, flags){
-    // 자동 상상 OFF면: 자막도 "입력 기반 최소"로
+    // 자동 상상 OFF면: 자막 최소/의도 기반
     if(!ENABLE_AUTO_IMAGINATION){
       if(idx === 0) return `“${line}”`;
       if(flags?.isEnding) return "너라면… 어떻게 할래?";
       return "…";
     }
-
     if(idx === 0) return `“${line}”`;
     if(flags?.isFirstTwist) return "지금부터 판이 바뀐다";
     if(flags?.isEnding) return "너라면… 어떻게 할래?";
@@ -817,7 +951,6 @@ const TRANSLATE = {
   },
 
   toImage({ brain, line, beat, idx, seconds, tone, genre, flags }){
-    const style = cinematicStyle(tone);
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
     const noText = "no subtitles, no captions, no text, no watermark, no logo, no letters, no typography";
 
@@ -827,19 +960,16 @@ const TRANSLATE = {
                                          "quiet tension, restrained";
 
     const add = brain.preset?.prompt_add?.join(", ") || "";
-    const kw = extractKeywords(line).join(", ");
     const cam = this.cameraLine(brain, idx).replace("Camera:", "").trim();
     const look = ENABLE_LOOK_LOCK ? `LOOK LOCK: ${brain.look_lock}` : "";
     const hard = brain?.hard_rules_text ? brain.hard_rules_text : "";
 
-    // ✅ 자동 상상 OFF면: 스타일 과잉 억제
-    const styleLine = ENABLE_AUTO_IMAGINATION ? style : "realistic, simple, literal, do not add extra story elements";
+    const styleLine = ENABLE_AUTO_IMAGINATION ? cinematicStyle(tone) : "realistic, simple, literal, do not add extra story elements";
 
-    return `Vertical 9:16, ${timeHint}, ${genreLabel(genre)} vibe,
+    let prompt = `Vertical 9:16, ${timeHint}, ${genreLabel(genre)} vibe,
 Beat: ${beat},
 Protagonist: ${brain.hero},
 Setting: ${brain.setting},
-Keywords: ${kw || "literal scene"},
 Mood: ${toneLabel(tone)}, ${tensionWords},
 Framing: ${cam},
 Style: ${styleLine}, ultra realistic, sharp focus, detailed, high quality,
@@ -847,6 +977,12 @@ ${look}
 ${add ? "Extra: " + add + "," : ""}
 ${noText}
 ${hard}`.trim();
+
+    // REAL_WORLD면 과장 단어 약화
+    if(brain?.intent?.reality === "REAL_WORLD"){
+      prompt = scrubRealWorldExaggeration(prompt);
+    }
+    return prompt;
   },
 
   toVideo({ brain, line, beat, idx, seconds, tone, genre, flags }){
@@ -864,10 +1000,9 @@ ${hard}`.trim();
 
     const look = ENABLE_LOOK_LOCK ? `LOOK LOCK: ${brain.look_lock}` : "";
     const hard = brain?.hard_rules_text ? brain.hard_rules_text : "";
-
     const styleLine = ENABLE_AUTO_IMAGINATION ? `Make it feel like a real movie shot.` : `Be literal to the input. Do not invent extra characters/props.`;
 
-    return `Vertical 9:16, ${timeHint}, ${genreLabel(genre)}.
+    let prompt = `Vertical 9:16, ${timeHint}, ${genreLabel(genre)}.
 Scene ${idx+1}: ${beat}
 Input line: ${line}
 Character: ${brain.hero}
@@ -879,125 +1014,103 @@ Continuity: match the same character look across scenes (consistent fur/outfit/p
 ${look}
 ${styleLine} ${noText}
 ${hard}`.trim();
+
+    if(brain?.intent?.reality === "REAL_WORLD"){
+      prompt = scrubRealWorldExaggeration(prompt);
+    }
+    return prompt;
   }
 };
 
-/* ---------- BRAIN */
-const BRAIN = {
-  analyze({ line, genre, tone, seconds, presetId, hero, setting, intent }){
-    const total = Number(seconds);
-    const n = buildSceneCount(total);
+/* =========================================================
+ * VALIDATOR + AUTO-FIX
+ * - 긍정 텍스트 오버레이 지시 제거
+ * - 고어 단어 제거
+ * - 룩락 키워드 누락 체크
+ * - REAL_WORLD면 환상/상징 단어 잔존 체크
+ * ========================================================= */
+function validateAndFixPlan(plan, payload){
+  const issues = [];
+  const userLine = String(payload?.line || "").toLowerCase();
 
-    // tension curve
-    const curve = [];
-    for(let i=0;i<n;i++){
-      const x = i/(n-1 || 1);
-      let v = (total <= 60) ? (x < 0.25 ? x*2 : (x < 0.8 ? 0.55 + (x-0.25)*0.5 : 0.9)) :
-                              (x < 0.2 ? x*2 : (x < 0.75 ? 0.5 + (x-0.2)*0.7 : 0.9 - (x-0.75)*0.6));
-      curve.push(Math.max(0.08, Math.min(0.98, v)));
+  const userHasCat = /고양이|cat|냥/.test(userLine);
+  const userHasDog = /강아지|dog|개/.test(userLine);
+  const userHasAnimal = userHasCat || userHasDog;
+
+  const strictAnimal = !ENABLE_AUTO_CHARACTER;
+  const isRealWorld = plan?.brain?.intent?.reality === "REAL_WORLD";
+
+  const lockKeywords = (ENABLE_LOOK_LOCK && plan?.brain?.look_lock_token)
+    ? extractLockKeywords(plan.brain.look_lock_token)
+    : [];
+
+  const scrub = (t) => {
+    let s = String(t || "");
+
+    // 긍정 텍스트 지시 제거 (no subtitles는 남김)
+    s = s.replace(/.*\b(add|include|use)\s+(subtitles?|captions?|text|typography)\b.*\n?/gi, "");
+    s = s.replace(/.*(자막\s*넣|자막\s*추가|텍스트\s*추가|문구\s*추가|캡션\s*추가).*\n?/g, "");
+
+    // 고어 단어 제거
+    s = s.replace(/\b(gore|blood|dismemberment|viscera)\b/gi, "");
+    s = s.replace(/(피|유혈|절단|내장|시체)/g, "");
+
+    // 동물 임의 삽입 단어 제거 (strictAnimal && 입력에 동물 없음)
+    if(strictAnimal && !userHasAnimal){
+      s = s.replace(/\b(cat|dog|kitten|puppy)\b/gi, "");
+      s = s.replace(/(고양이|강아지|냥이|개)/g, "");
     }
 
-    // ✅ preset 결정: "자동"은 추천만. 자동 적용 조건:
-    // - 사용자가 프리셋 직접 선택하면 그거
-    // - preset=auto 인 경우: (입력에 고양이 키워드가 있을 때만) 추천을 적용
-    // - 그 외는 custom
-    let pid = presetId;
+    // REAL_WORLD 과장 단어 약화
+    if(isRealWorld){
+      s = scrubRealWorldExaggeration(s);
+    }
 
-    const hasCat = shouldUseCatPreset(line);
-    const recommended = intent?.character || autoRecommendPreset(line);
+    return s.replace(/\s{2,}/g," ").trim();
+  };
 
-    if(pid === "auto"){
-      if(ENABLE_AUTO_CHARACTER && hasCat){
-        pid = recommended; // 고양이 언급이 있을 때만 자동 적용
-      } else {
-        pid = "custom";    // 고양이 언급 없으면 자동으로 고양이 넣지 않음
+  for(const scene of plan.scenes || []){
+    const before = `${scene.image_prompt || ""}\n${scene.video_prompt || ""}`;
+
+    if(/\b(add|include|use)\s+(subtitles?|captions?|text|typography)\b/i.test(before) ||
+       /(자막\s*넣|자막\s*추가|텍스트\s*추가|문구\s*추가|캡션\s*추가)/.test(before)){
+      issues.push({scene: scene.index, type:"TEXT_OVERLAY_POSITIVE"});
+    }
+
+    if(!plan?.payload?.autoCharacter && !userHasAnimal && /(cat|dog|고양이|강아지|냥이|개)/i.test(before)){
+      issues.push({scene: scene.index, type:"SPONTANEOUS_ANIMAL_WORDS"});
+    }
+
+    if(/\b(gore|blood)\b/i.test(before) || /(피|유혈|절단|내장|시체)/.test(before)){
+      issues.push({scene: scene.index, type:"GORE_WORDS"});
+    }
+
+    if(isRealWorld && /\b(magic|fantasy|surreal|metaphor|symbolic)\b/i.test(before)){
+      issues.push({scene: scene.index, type:"REAL_WORLD_EXAGGERATION_WORDS"});
+    }
+
+    // 룩락 키워드 누락 탐지(간단)
+    if(lockKeywords.length){
+      const lower = before.toLowerCase();
+      const missing = lockKeywords.filter(k => !lower.includes(k));
+      // 너무 엄격하면 피곤하니까 "절반 이상" 누락일 때만 경고
+      if(missing.length >= Math.ceil(lockKeywords.length * 0.5)){
+        issues.push({scene: scene.index, type:"LOOK_LOCK_MISSING_KEYWORDS", detail: missing.slice(0,6)});
       }
     }
 
-    // ✅ 캐릭터 자동 등장 OFF면 무조건 custom (사용자 입력이 헌법)
-    if(!ENABLE_AUTO_CHARACTER){
-      pid = (presetId === "custom") ? "custom" : "custom";
-    }
-
-    const preset = (pid && pid !== "custom") ? CHAR_DB[pid] : null;
-
-    // ✅ 자동 상상 OFF면: 장르/톤 바이어스 적용 금지
-    let finalTone = tone;
-    let finalGenre = genre;
-
-    if(ENABLE_AUTO_IMAGINATION && preset){
-      if(!tone || tone === "serious") finalTone = preset.tone_bias || tone;
-      if(!genre || genre === "mystery") finalGenre = preset.genre_bias || genre;
-    }
-
-    // ✅ 현실 사건이면: 현실 고정은 "상상 여부와 무관" (신뢰/안전)
-    if(intent?.reality === "REAL_WORLD"){
-      finalTone = "serious";
-      if(["fantasy","sf","romance","comedy"].includes(finalGenre)) finalGenre = "thriller";
-    }
-
-    const reveal_policy = preset?.rules?.reveal || "MID";
-    const revealIndex =
-      reveal_policy === "EARLY" ? Math.max(1, Math.floor(n*0.25)) :
-      reveal_policy === "LATE"  ? Math.max(2, Math.floor(n*0.65)) :
-                                  Math.max(2, Math.floor(n*0.45));
-
-    const camera_policy = preset?.rules?.camera || "WIDE_TO_CLOSE";
-    const movement_policy = preset?.rules?.movement || "MINIMAL";
-    const subtitle_policy = preset?.rules?.subtitle || "MINIMAL";
-    const dialogue_policy = preset?.rules?.dialogue || "NO_SPEECH";
-
-    // ✅ 주인공/배경: 자동 상상 OFF면 bias를 강제로 쓰지 않음
-    const finalHero = hero || (ENABLE_AUTO_IMAGINATION ? (preset?.hero_default || "주인공") : "주인공");
-    const finalSetting = setting || (ENABLE_AUTO_IMAGINATION ? (preset?.setting_bias || "기본 배경") : "기본 배경");
-
-    // ✅ 캐릭터 자동 등장 OFF면: 프롬프트 하드룰로 "동물 금지"를 더 박아줌
-    const hardRulesExtra = (!ENABLE_AUTO_CHARACTER)
-      ? ["NO animals unless explicitly in the input. Do NOT introduce cats/dogs/creatures. Keep it literal to the user input."]
-      : [];
-
-    const mergedIntent = {
-      ...(intent || {}),
-      hardRules: [...(intent?.hardRules || []), ...hardRulesExtra]
-    };
-
-    const look_lock = lookLockText(pid || "custom");
-
-    return {
-      presetId: pid || "custom",
-      presetLabel: preset?.label || "커스텀",
-      preset,
-      finalTone,
-      finalGenre,
-      curve,
-      revealIndex,
-      camera_policy,
-      movement_policy,
-      subtitle_policy,
-      dialogue_policy,
-      hero: finalHero,
-      setting: finalSetting,
-      look_lock,
-      intent: mergedIntent,
-      hard_rules_text: joinHardRules(mergedIntent),
-      recommendedPreset: recommended,
-      hasCat
-    };
+    scene.image_prompt = scrub(scene.image_prompt);
+    scene.video_prompt = scrub(scene.video_prompt);
   }
-};
 
-/* ---------- Retention */
-function findFirstTwistIndex(times){
-  const target = 12;
-  for(let i=0;i<times.length;i++){
-    const t = times[i];
-    if(t.start <= target && target < t.end) return i;
-  }
-  return Math.max(1, Math.floor(times.length * 0.35));
+  plan.validator = { issues };
+  return plan;
 }
 
-/* ---------- buildPlan */
-function buildPlan(payload){
+/* =========================================================
+ * Build Plan (single)
+ * ========================================================= */
+function buildPlan(payload, variantTag){
   const { line, genre, tone, seconds, hero, setting } = payload;
   const total = Number(seconds);
   const n = buildSceneCount(total);
@@ -1005,8 +1118,11 @@ function buildPlan(payload){
   const presetId = $("preset")?.value || "auto";
   const brain = BRAIN.analyze({ line, genre, tone, seconds: total, presetId, hero, setting, intent: payload.intent });
 
-  const beats = beatsForGenre(brain.finalGenre || genre);
+  // v7-lite template beats
+  const tpl = beatsForGenreV7(brain.finalGenre || genre, total, line, variantTag || "C_RETENTION");
+  const beats = tpl.beats;
 
+  // time slicing
   const base = Math.floor(total / n);
   const times = [];
   let t = 0;
@@ -1060,6 +1176,7 @@ function buildPlan(payload){
     version: BUILD,
     title: line,
     created_at: new Date().toISOString(),
+    v7: { variant: variantTag || "C_RETENTION", template: tpl.template || null },
     meta: {
       genre: genreLabel(brain.finalGenre || genre),
       tone: toneLabel(brain.finalTone || tone),
@@ -1081,23 +1198,81 @@ function buildPlan(payload){
       presetId: brain.presetId,
       recommendedPreset: brain.recommendedPreset,
       input_has_cat_keyword: brain.hasCat,
-      revealIndex: brain.revealIndex,
       camera_policy: brain.camera_policy,
       movement_policy: brain.movement_policy,
       subtitle_policy: brain.subtitle_policy,
       dialogue_policy: brain.dialogue_policy,
       look_lock_token: brain.look_lock,
-      hard_rules_text: brain.hard_rules_text || ""
+      hard_rules_text: brain.hard_rules_text || "",
+      intent: brain.intent
     },
-    payload: {...payload, presetId, hero: brain.hero, setting: brain.setting, genre: brain.finalGenre, tone: brain.finalTone},
+    payload: {
+      ...payload,
+      presetId,
+      hero: brain.hero,
+      setting: brain.setting,
+      genre: brain.finalGenre,
+      tone: brain.finalTone,
+      autoCharacter: ENABLE_AUTO_CHARACTER
+    },
     scenes
   };
 }
 
-/* ---------- Export text builders */
+/* =========================================================
+ * A/B/C generator (variant-specific behavior)
+ * - A_SAFE: auto imagination OFF, retention OFF
+ * - B_CINEMATIC: auto imagination ON, retention OFF, tone cinematic
+ * - C_RETENTION: auto imagination ON, retention ON
+ * ========================================================= */
+function withTempFlags(temp, fn){
+  const snap = { ENABLE_AUTO_IMAGINATION, ENABLE_RETENTION };
+  try{
+    if(typeof temp.ENABLE_AUTO_IMAGINATION === "boolean") ENABLE_AUTO_IMAGINATION = temp.ENABLE_AUTO_IMAGINATION;
+    if(typeof temp.ENABLE_RETENTION === "boolean") ENABLE_RETENTION = temp.ENABLE_RETENTION;
+    return fn();
+  } finally {
+    ENABLE_AUTO_IMAGINATION = snap.ENABLE_AUTO_IMAGINATION;
+    ENABLE_RETENTION = snap.ENABLE_RETENTION;
+  }
+}
+function buildPlanABC(payload){
+  const planA = withTempFlags({ENABLE_AUTO_IMAGINATION:false, ENABLE_RETENTION:false}, () => {
+    const p = {...payload, tone:"serious"};
+    return buildPlan(p, "A_SAFE");
+  });
+  const planB = withTempFlags({ENABLE_AUTO_IMAGINATION:true, ENABLE_RETENTION:false}, () => {
+    const p = {...payload, tone:"cinematic"};
+    return buildPlan(p, "B_CINEMATIC");
+  });
+  const planC = withTempFlags({ENABLE_AUTO_IMAGINATION:true, ENABLE_RETENTION:true}, () => {
+    const p = {...payload};
+    return buildPlan(p, "C_RETENTION");
+  });
+
+  validateAndFixPlan(planA, payload);
+  validateAndFixPlan(planB, payload);
+  validateAndFixPlan(planC, payload);
+
+  return { A_SAFE: planA, B_CINEMATIC: planB, C_RETENTION: planC };
+}
+
+/* =========================================================
+ * Export builders
+ * ========================================================= */
+function pad2(n){ return String(n).padStart(2,"0"); }
+function srtTime(sec){
+  const ms = Math.max(0, Math.floor((Number(sec)||0) * 1000));
+  const h = Math.floor(ms/3600000);
+  const m = Math.floor((ms%3600000)/60000);
+  const s = Math.floor((ms%60000)/1000);
+  const milli = ms%1000;
+  return `${pad2(h)}:${pad2(m)}:${pad2(s)},${String(milli).padStart(3,"0")}`;
+}
 function planToText(plan){
   let txt = `🐾🎬 원라인: ${plan.title}\n`;
   txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · preset: ${plan.meta.preset}\n`;
+  txt += `VARIANT:${plan?.v7?.variant || "-"} · TEMPLATE:${plan?.v7?.template ? (plan.v7.template.id+":"+plan.v7.template.name) : "-"}\n`;
   txt += `AUTO_CHARACTER:${plan.meta.auto_character} · AUTO_IMAGINATION:${plan.meta.auto_imagination}\n`;
   txt += `룩고정:${plan.meta.look_lock} · 리텐션강제:${plan.meta.retention_force} · 첫반전:${plan.meta.first_twist_at || "-"}\n`;
   txt += `통역사:${plan.meta.intent_reality || "-"} · mood:${plan.meta.intent_mood || "-"}\n`;
@@ -1112,6 +1287,11 @@ function planToText(plan){
     txt += `[영상 프롬프트]\n${s.video_prompt}\n\n`;
     txt += "----------------------------------------\n\n";
   });
+
+  const issues = plan?.validator?.issues || [];
+  txt += `VALIDATOR ISSUES (${issues.length}):\n`;
+  if(!issues.length) txt += "- none\n";
+  else issues.forEach(it => txt += `- scene ${it.scene}: ${it.type}${it.detail ? " ("+JSON.stringify(it.detail)+")" : ""}\n`);
   return txt;
 }
 function planToSrt(plan){
@@ -1126,24 +1306,15 @@ function planToSrt(plan){
   return srt.trim() + "\n";
 }
 function planToImagePromptsTxt(plan){
-  let txt = "";
-  for(const s of plan.scenes){
-    txt += `SCENE ${s.index} (${s.time})\n${s.image_prompt}\n\n`;
-    txt += "----------------------------------------\n\n";
-  }
-  return txt.trim() + "\n";
+  return plan.scenes.map(s=>`SCENE ${s.index} (${s.time})\n${s.image_prompt}\n\n----------------------------------------\n`).join("\n").trim()+"\n";
 }
 function planToVideoPromptsTxt(plan){
-  let txt = "";
-  for(const s of plan.scenes){
-    txt += `SCENE ${s.index} (${s.time})\n${s.video_prompt}\n\n`;
-    txt += "----------------------------------------\n\n";
-  }
-  return txt.trim() + "\n";
+  return plan.scenes.map(s=>`SCENE ${s.index} (${s.time})\n${s.video_prompt}\n\n----------------------------------------\n`).join("\n").trim()+"\n";
 }
 function planToScenePlanTxt(plan){
   let txt = `TITLE: ${plan.title}\n`;
   txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes\n`;
+  txt += `VARIANT:${plan?.v7?.variant || "-"} · TEMPLATE:${plan?.v7?.template ? (plan.v7.template.id+":"+plan.v7.template.name) : "-"}\n`;
   txt += `AUTO_CHARACTER:${plan.meta.auto_character} · AUTO_IMAGINATION:${plan.meta.auto_imagination}\n`;
   txt += `LOOK_LOCK:${plan.meta.look_lock} · RETENTION:${plan.meta.retention_force} · FIRST_TWIST:${plan.meta.first_twist_at || "-"}\n`;
   txt += `INTENT:${plan.meta.intent_reality || "-"} · MOOD:${plan.meta.intent_mood || "-"}\n`;
@@ -1152,6 +1323,8 @@ function planToScenePlanTxt(plan){
     txt += `SCENE ${s.index} (${s.time}) — ${s.beat}\n`;
     txt += `SUBTITLE: ${s.subtitle}\n\n`;
   });
+  const issues = plan?.validator?.issues || [];
+  txt += `VALIDATOR: ${issues.length} issue(s)\n`;
   return txt.trim() + "\n";
 }
 
@@ -1183,9 +1356,248 @@ function download(filename, content, mime){
   URL.revokeObjectURL(url);
 }
 
-/* ---------- Render */
-let latestPlan = null;
+/* =========================================================
+ * State / backup
+ * ========================================================= */
+const LS_KEY = "olm_v43_v7plus_state";
+const LS_LAST_PLANS = "olm_v43_v7plus_last_plans_abc";
+const LS_LAST_BACKUP = "olm_v43_v7plus_last_backup";
 
+function getPayloadFromInputs(){
+  return {
+    line: safeTrim($("line")?.value),
+    genre: $("genre")?.value,
+    tone: $("tone")?.value,
+    seconds: $("length")?.value,
+    hero: safeTrim($("hero")?.value),
+    setting: safeTrim($("setting")?.value),
+    preset: $("preset")?.value || "auto",
+    appMode: $("appMode")?.value || "free",
+    lockMode: $("lockMode")?.value || "auto",
+    tigerDetailLock: safeTrim($("tigerDetailLock")?.value || ""),
+    autoCharacter: $("autoCharacter")?.value || "on",
+    autoImagination: $("autoImagination")?.value || "off",
+  };
+}
+function saveState(){
+  const state = getPayloadFromInputs();
+  try{
+    localStorage.setItem(LS_KEY, JSON.stringify({version:BUILD, saved_at:Date.now(), state}));
+    $("autosavePill") && ($("autosavePill").textContent = "💾 자동저장: ON");
+  }catch(e){
+    $("autosavePill") && ($("autosavePill").textContent = "💾 자동저장: 실패");
+  }
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return;
+    const obj = JSON.parse(raw);
+    const s = obj?.state;
+    if(!s) return;
+
+    $("line") && ($("line").value = s.line || "");
+    $("genre") && ($("genre").value = s.genre || "mystery");
+    $("tone") && ($("tone").value = s.tone || "serious");
+    $("length") && ($("length").value = s.seconds || "60");
+    $("preset") && ($("preset").value = s.preset || "auto");
+    $("hero") && ($("hero").value = s.hero || "");
+    $("setting") && ($("setting").value = s.setting || "");
+    $("appMode") && ($("appMode").value = s.appMode || "free");
+    $("lockMode") && ($("lockMode").value = s.lockMode || "auto");
+    $("tigerDetailLock") && ($("tigerDetailLock").value = s.tigerDetailLock || "");
+    $("autoCharacter") && ($("autoCharacter").value = s.autoCharacter || "on");
+    $("autoImagination") && ($("autoImagination").value = s.autoImagination || "off");
+  }catch(e){}
+}
+function saveLastPlansABC(plansABC){
+  try{ localStorage.setItem(LS_LAST_PLANS, JSON.stringify(plansABC)); }catch(e){}
+}
+function loadLastPlansABC(){
+  try{ return JSON.parse(localStorage.getItem(LS_LAST_PLANS) || "null"); }catch(e){ return null; }
+}
+function exportBackup(){
+  const state = getPayloadFromInputs();
+  const lastPlans = loadLastPlansABC();
+  const backup = {
+    type: "olm_backup_abc",
+    version: BUILD,
+    exported_at: new Date().toISOString(),
+    state,
+    lastPlans
+  };
+  const text = JSON.stringify(backup, null, 2);
+  try{ localStorage.setItem(LS_LAST_BACKUP, text); }catch(e){}
+  download(`olm_cat_backup_abc_${Date.now()}.json`, text, "application/json;charset=utf-8");
+  setStatus("백업 저장됨", "good");
+}
+async function importBackup(){
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "application/json";
+  input.onchange = async () => {
+    const file = input.files?.[0];
+    if(!file) return;
+    const text = await file.text();
+    let backup;
+    try{ backup = JSON.parse(text); }catch(e){ alert("JSON이 아니야!"); return; }
+    if(backup?.type !== "olm_backup_abc"){ alert("이 파일은 ABC 백업 파일이 아니야!"); return; }
+
+    const s = backup.state || {};
+    $("line") && ($("line").value = s.line || "");
+    $("genre") && ($("genre").value = s.genre || "mystery");
+    $("tone") && ($("tone").value = s.tone || "serious");
+    $("length") && ($("length").value = s.seconds || "60");
+    $("preset") && ($("preset").value = s.preset || "auto");
+    $("hero") && ($("hero").value = s.hero || "");
+    $("setting") && ($("setting").value = s.setting || "");
+    $("appMode") && ($("appMode").value = s.appMode || "free");
+    $("lockMode") && ($("lockMode").value = s.lockMode || "auto");
+    $("tigerDetailLock") && ($("tigerDetailLock").value = s.tigerDetailLock || "");
+    $("autoCharacter") && ($("autoCharacter").value = s.autoCharacter || "on");
+    $("autoImagination") && ($("autoImagination").value = s.autoImagination || "off");
+
+    applyModePolicyToEngine();
+    updatePresetHint();
+    updateLiveHints();
+
+    if(backup.lastPlans){
+      latestPlansABC = backup.lastPlans;
+      activeVariant = "C_RETENTION";
+      renderPlanABC(latestPlansABC, {ok:false, text:"(복구) 백업에서 A/B/C 결과를 불러옴"}, "C_RETENTION");
+      saveLastPlansABC(latestPlansABC);
+    }
+
+    saveState();
+    setStatus("복구 완료", "good");
+  };
+  input.click();
+}
+function recoveryMode(){
+  const ok = confirm("복구 모드: 입력을 정리하고, 마지막 A/B/C 결과를 살려볼까?");
+  if(!ok) return;
+
+  const lastPlans = loadLastPlansABC();
+  $("line") && ($("line").value = "");
+  $("hero") && ($("hero").value = "");
+  $("setting") && ($("setting").value = "");
+  $("tigerDetailLock") && ($("tigerDetailLock").value = "");
+  $("genre") && ($("genre").value = "mystery");
+  $("tone") && ($("tone").value = "serious");
+  $("length") && ($("length").value = "60");
+  $("preset") && ($("preset").value = "auto");
+  $("appMode") && ($("appMode").value = "free");
+  $("lockMode") && ($("lockMode").value = "auto");
+  $("autoCharacter") && ($("autoCharacter").value = "on");
+  $("autoImagination") && ($("autoImagination").value = "off");
+  $("intentPill") && ($("intentPill").textContent = "🗣 통역사: -");
+
+  const out = $("out"); if(out) out.innerHTML = "";
+  const outCard = $("outCard"); if(outCard) outCard.style.display = "none";
+  latestPlansABC = null;
+
+  if(lastPlans){
+    latestPlansABC = lastPlans;
+    activeVariant = "C_RETENTION";
+    renderPlanABC(latestPlansABC, {ok:false, text:"(복구 모드) 마지막 A/B/C 결과를 복원했어."}, "C_RETENTION");
+  }
+
+  applyModePolicyToEngine();
+  updatePresetHint();
+  updateLiveHints();
+  saveState();
+}
+
+/* =========================================================
+ * UI live hints
+ * ========================================================= */
+function updateLiveHints(){
+  const line = safeTrim($("line")?.value || "");
+  const live = $("liveHint");
+  const predict = $("predictHint");
+  if(!live || !predict) return;
+
+  if(!line){
+    live.textContent = "";
+    predict.textContent = "";
+    return;
+  }
+
+  const intent = intentTranslator(line);
+  const hasCat = shouldUseCatPreset(line);
+
+  const ac = ENABLE_AUTO_CHARACTER ? "ON" : "OFF";
+  const ai = ENABLE_AUTO_IMAGINATION ? "ON" : "OFF";
+  const rw = intent.reality;
+
+  if(!ENABLE_AUTO_CHARACTER && hasCat){
+    live.textContent = "ℹ 지금은 ‘캐릭터 자동 등장 OFF’ 입니다. (입력에 고양이를 직접 쓰면 반영되지만 자동 추가는 안 함)";
+  } else if(ENABLE_AUTO_CHARACTER && !hasCat){
+    live.textContent = "✅ 입력에 고양이 언급이 없어요. 앱이 고양이를 ‘자동으로 추가하지 않고’, 추천만 합니다.";
+  } else if(ENABLE_AUTO_CHARACTER && hasCat){
+    live.textContent = "✅ 입력에 고양이 언급이 있어요. (프리셋 자동/선택이 자연스럽게 동작)";
+  } else {
+    live.textContent = "✅ 의도 우선 모드입니다.";
+  }
+
+  if(rw === "REAL_WORLD"){
+    predict.textContent = `토글: 캐릭터자동=${ac}, 자동상상=${ai} · 통역사=REAL_WORLD → 과장/판타지 제거 + serious 강제`;
+  } else {
+    predict.textContent = `토글: 캐릭터자동=${ac}, 자동상상=${ai} · 통역사=STORY → 템플릿/연출이 자연스럽게 강화`;
+  }
+}
+
+/* =========================================================
+ * ABC Tabs
+ * ========================================================= */
+let latestPlansABC = null;
+let activeVariant = "C_RETENTION";
+
+function variantLabel(tag){
+  return tag === "A_SAFE" ? "A(안전)" : tag === "B_CINEMATIC" ? "B(시네마)" : "C(리텐션)";
+}
+function ensureABCTabs(){
+  const root = $("abcTabs");
+  if(!root) return;
+  if(root.dataset.ready === "1") return;
+
+  const mk = (tag) => {
+    const b = document.createElement("button");
+    b.className = "mini";
+    b.textContent = variantLabel(tag);
+    b.dataset.tag = tag;
+    b.onclick = () => {
+      activeVariant = tag;
+      paintABCTabActive();
+      if(latestPlansABC && latestPlansABC[tag]){
+        renderPlanABC(latestPlansABC, {ok:false, text:"A/B/C 변형 전환"}, tag);
+      }
+    };
+    return b;
+  };
+
+  root.appendChild(mk("A_SAFE"));
+  root.appendChild(mk("B_CINEMATIC"));
+  root.appendChild(mk("C_RETENTION"));
+  root.dataset.ready = "1";
+}
+function paintABCTabActive(){
+  const root = $("abcTabs");
+  if(!root) return;
+  [...root.querySelectorAll("button")].forEach(btn=>{
+    const isOn = btn.dataset.tag === activeVariant;
+    btn.classList.toggle("on", isOn);
+    btn.classList.toggle("off", !isOn);
+  });
+}
+function getActivePlan(){
+  if(latestPlansABC && latestPlansABC[activeVariant]) return latestPlansABC[activeVariant];
+  return null;
+}
+
+/* =========================================================
+ * Render
+ * ========================================================= */
 function injectExplainCard(plan){
   const out = $("out");
   if(!out) return;
@@ -1193,13 +1605,16 @@ function injectExplainCard(plan){
   const old = document.getElementById("explainCard");
   if(old) old.remove();
 
-  const rec = plan?.brain?.recommendedPreset || "nabi";
   const hasCat = plan?.brain?.input_has_cat_keyword;
   const presetNow = plan?.brain?.presetId;
-
   const needsSuggestion = ( ($("preset")?.value || "auto") === "auto" )
     && ENABLE_AUTO_CHARACTER
-    && !hasCat; // 입력에 고양이 언급이 없으면 "자동 적용" 금지 + 추천만 보여줌
+    && !hasCat;
+
+  const issues = plan?.validator?.issues || [];
+  const issueSummary = issues.length
+    ? issues.slice(0,6).map(it=>`scene ${it.scene}: ${it.type}`).join(" · ")
+    : "none";
 
   const card = document.createElement("div");
   card.id = "explainCard";
@@ -1211,19 +1626,17 @@ function injectExplainCard(plan){
 
   card.innerHTML = `
     <div class="serverHead">
-      <b>🔍 의도 확인</b>
-      <span>preset:${escapeHtml(presetNow || "custom")}</span>
+      <b>🔍 의도/검증</b>
+      <span>preset:${escapeHtml(presetNow || "custom")} · issues:${issues.length}</span>
     </div>
-    <div class="box">${escapeHtml(msg)}</div>
+    <div class="box">${escapeHtml(msg)}\n\nVALIDATOR: ${escapeHtml(issueSummary)}</div>
     ${needsSuggestion ? `
       <div class="serverRow">
         <button class="mini" id="applyNabi">추천 적용: 나비</button>
         <button class="mini" id="applyCoco">추천 적용: 코코</button>
         <button class="mini" id="applyTiger">추천 적용: 타이거</button>
       </div>
-      <div class="hint" style="margin-top:8px">
-        ✅ “추천 적용”은 <b>사용자가 누를 때만</b> 반영됩니다. (자동 강제 X)
-      </div>
+      <div class="hint" style="margin-top:8px">✅ “추천 적용”은 <b>사용자가 누를 때만</b> 반영됩니다.</div>
     ` : ``}
   `;
   out.prepend(card);
@@ -1244,19 +1657,15 @@ function renderPlan(plan, serverResult){
   const outCard = $("outCard");
   if(outCard) outCard.style.display = "block";
 
-  const outTitle = $("outTitle");
-  if(outTitle) outTitle.textContent = `🐾🎬 원라인: ${plan.title}`;
+  $("outTitle").textContent = `🐾🎬 원라인: ${plan.title}`;
 
-  const outMeta = $("outMeta");
-  if(outMeta){
-    outMeta.textContent =
-      `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · preset: ${plan.meta.preset}
-       · AUTO_CHAR:${plan.meta.auto_character} · AUTO_IMAG:${plan.meta.auto_imagination}
-       · 통역사:${plan.meta.intent_reality || "-"}`;
-  }
+  const tpl = plan?.v7?.template ? `${plan.v7.template.id}:${plan.v7.template.name}` : "-";
+  $("outMeta").textContent =
+    `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · preset:${plan.meta.preset}
+     · VARIANT:${variantLabel(plan?.v7?.variant)} · TEMPLATE:${tpl}
+     · 룩락:${plan.meta.look_lock} · REALITY:${plan.meta.intent_reality || "-"}`;
 
   const out = $("out");
-  if(!out) return;
   out.innerHTML = "";
 
   const srv = document.createElement("div");
@@ -1297,193 +1706,67 @@ function renderPlan(plan, serverResult){
   injectExplainCard(plan);
 }
 
-/* ---------- Inputs -> payload */
-function getPayloadFromInputs(){
-  return {
-    line: safeTrim($("line")?.value),
-    genre: $("genre")?.value,
-    tone: $("tone")?.value,
-    seconds: $("length")?.value,
-    hero: safeTrim($("hero")?.value),
-    setting: safeTrim($("setting")?.value),
-    preset: $("preset")?.value || "auto",
-    appMode: $("appMode")?.value || "free",
-    lockMode: $("lockMode")?.value || "auto",
-    tigerDetailLock: safeTrim($("tigerDetailLock")?.value || ""),
-    autoCharacter: $("autoCharacter")?.value || "on",
-    autoImagination: $("autoImagination")?.value || "off",
-    worker: getWorkerUrl()
-  };
+function renderPlanABC(plansABC, serverResult, defaultTag){
+  latestPlansABC = plansABC;
+  if(defaultTag) activeVariant = defaultTag;
+
+  ensureABCTabs();
+  paintABCTabActive();
+
+  const plan = plansABC[activeVariant] || plansABC.C_RETENTION;
+  renderPlan(plan, serverResult);
+
+  saveLastPlansABC(plansABC);
 }
 
-/* ---------- Save/Load/Backup */
-function saveState(){
-  const state = getPayloadFromInputs();
-  try{
-    localStorage.setItem(LS_KEY, JSON.stringify({version:BUILD, saved_at:Date.now(), state}));
-    $("autosavePill") && ($("autosavePill").textContent = "💾 자동저장: ON");
-  }catch(e){
-    $("autosavePill") && ($("autosavePill").textContent = "💾 자동저장: 실패");
-  }
-}
-function loadState(){
-  try{
-    const raw = localStorage.getItem(LS_KEY);
-    if(!raw) return;
-    const obj = JSON.parse(raw);
-    const s = obj?.state;
-    if(!s) return;
-
-    $("line") && ($("line").value = s.line || "");
-    $("genre") && ($("genre").value = s.genre || "mystery");
-    $("tone") && ($("tone").value = s.tone || "serious");
-    $("length") && ($("length").value = s.seconds || "60");
-    $("preset") && ($("preset").value = s.preset || "auto");
-    $("hero") && ($("hero").value = s.hero || "");
-    $("setting") && ($("setting").value = s.setting || "");
-    $("appMode") && ($("appMode").value = s.appMode || "free");
-    $("lockMode") && ($("lockMode").value = s.lockMode || "auto");
-    $("tigerDetailLock") && ($("tigerDetailLock").value = s.tigerDetailLock || "");
-    $("autoCharacter") && ($("autoCharacter").value = s.autoCharacter || "on");
-    $("autoImagination") && ($("autoImagination").value = s.autoImagination || "off");
-  }catch(e){}
-}
-function saveLastPlan(plan){
-  try{ localStorage.setItem(LS_LAST_PLAN, JSON.stringify(plan)); }catch(e){}
-}
-function exportBackup(){
-  const state = getPayloadFromInputs();
-  let lastPlan = null;
-  try{ lastPlan = JSON.parse(localStorage.getItem(LS_LAST_PLAN) || "null"); }catch(e){}
-  const backup = {
-    type: "olm_backup",
-    version: BUILD,
-    exported_at: new Date().toISOString(),
-    state,
-    lastPlan
-  };
-  const text = JSON.stringify(backup, null, 2);
-  try{ localStorage.setItem(LS_LAST_BACKUP, text); }catch(e){}
-  download(`olm_cat_backup_${Date.now()}.json`, text, "application/json;charset=utf-8");
-  setStatus("백업 저장됨", "good");
-}
-async function importBackup(){
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "application/json";
-  input.onchange = async () => {
-    const file = input.files?.[0];
-    if(!file) return;
-    const text = await file.text();
-    let backup;
-    try{ backup = JSON.parse(text); }catch(e){ alert("JSON이 아니야!"); return; }
-    if(backup?.type !== "olm_backup"){ alert("이 파일은 백업 파일이 아니야!"); return; }
-
-    const s = backup.state || {};
-    $("line") && ($("line").value = s.line || "");
-    $("genre") && ($("genre").value = s.genre || "mystery");
-    $("tone") && ($("tone").value = s.tone || "serious");
-    $("length") && ($("length").value = s.seconds || "60");
-    $("preset") && ($("preset").value = s.preset || "auto");
-    $("hero") && ($("hero").value = s.hero || "");
-    $("setting") && ($("setting").value = s.setting || "");
-    $("appMode") && ($("appMode").value = s.appMode || "free");
-    $("lockMode") && ($("lockMode").value = s.lockMode || "auto");
-    $("tigerDetailLock") && ($("tigerDetailLock").value = s.tigerDetailLock || "");
-    $("autoCharacter") && ($("autoCharacter").value = s.autoCharacter || "on");
-    $("autoImagination") && ($("autoImagination").value = s.autoImagination || "off");
-
-    updatePresetHint();
-    applyModePolicyToEngine();
-    updateLiveHints();
-
-    if(backup.lastPlan){
-      latestPlan = backup.lastPlan;
-      renderPlan(latestPlan, {ok:false, text:"(복구) 백업에서 마지막 결과를 불러옴"});
-      $("outCard")?.scrollIntoView({behavior:"smooth", block:"start"});
-      saveLastPlan(latestPlan);
-    }
-    saveState();
-    setStatus("복구 완료", "good");
-  };
-  input.click();
-}
-function recoveryMode(){
-  const ok = confirm("복구 모드: 앱 상태를 정리하고, 가능한 마지막 결과를 살려볼까?");
-  if(!ok) return;
-
-  let lastPlan = null;
-  try{ lastPlan = JSON.parse(localStorage.getItem(LS_LAST_PLAN) || "null"); }catch(e){}
-  $("line") && ($("line").value = "");
-  $("hero") && ($("hero").value = "");
-  $("setting") && ($("setting").value = "");
-  $("tigerDetailLock") && ($("tigerDetailLock").value = "");
-  $("genre") && ($("genre").value = "mystery");
-  $("tone") && ($("tone").value = "serious");
-  $("length") && ($("length").value = "60");
-  $("preset") && ($("preset").value = "auto");
-  $("appMode") && ($("appMode").value = "free");
-  $("lockMode") && ($("lockMode").value = "auto");
-  $("autoCharacter") && ($("autoCharacter").value = "on");
-  $("autoImagination") && ($("autoImagination").value = "off");
-  $("intentPill") && ($("intentPill").textContent = "🗣 통역사: -");
-
-  const out = $("out"); if(out) out.innerHTML = "";
-  const outCard = $("outCard"); if(outCard) outCard.style.display = "none";
-  latestPlan = null;
-
-  if(lastPlan){
-    latestPlan = lastPlan;
-    renderPlan(latestPlan, {ok:false, text:"(복구 모드) 마지막 생성 결과를 복원했어."});
-    if(outCard) outCard.style.display = "block";
-  }
-  updatePresetHint();
-  applyModePolicyToEngine();
-  updateLiveHints();
-  saveState();
-}
-
-/* ---------- ZIP */
-async function downloadZipPackage(plan){
-  if(!plan) { alert("먼저 생성하기를 눌러줘!"); return; }
-  if(typeof JSZip === "undefined"){ alert("JSZip 로딩이 안 됐어. 인터넷 연결 확인!"); return; }
+/* =========================================================
+ * ZIP (A/B/C folders)
+ * ========================================================= */
+async function downloadZipABC(plansABC){
+  if(!plansABC){ alert("먼저 생성하기를 눌러줘!"); return; }
+  if(typeof JSZip === "undefined"){ alert("JSZip 로딩이 안 됐어. ZIP만 인터넷 필요해!"); return; }
 
   const zip = new JSZip();
+  const addPlanFiles = (folder, p) => {
+    folder.file("one-line-cat-movie.json", JSON.stringify(p, null, 2));
+    folder.file("one-line-cat-movie.srt", planToSrt(p));
+    folder.file("one-line-cat-movie.txt", planToText(p));
+    folder.file("prompts_image.txt", planToImagePromptsTxt(p));
+    folder.file("prompts_video.txt", planToVideoPromptsTxt(p));
+    folder.file("scene_plan.txt", planToScenePlanTxt(p));
+    folder.file("validator.json", JSON.stringify({issues: (p?.validator?.issues||[])}, null, 2));
+  };
 
-  zip.file("one-line-cat-movie.json", JSON.stringify(plan, null, 2));
-  zip.file("one-line-cat-movie.srt", planToSrt(plan));
-  zip.file("one-line-cat-movie.txt", planToText(plan));
+  addPlanFiles(zip.folder("A_safe"), plansABC.A_SAFE);
+  addPlanFiles(zip.folder("B_cinematic"), plansABC.B_CINEMATIC);
+  addPlanFiles(zip.folder("C_retention"), plansABC.C_RETENTION);
 
-  // ✅ 사용자가 찾던 파일들
-  zip.file("prompts_image.txt", planToImagePromptsTxt(plan));
-  zip.file("prompts_video.txt", planToVideoPromptsTxt(plan));
-  zip.file("scene_plan.txt", planToScenePlanTxt(plan));
+  const active = plansABC[activeVariant] || plansABC.C_RETENTION;
+  addPlanFiles(zip.folder(`ACTIVE_${variantLabel(activeVariant).replace(/[()]/g,"")}`), active);
 
   const blob = await zip.generateAsync({type:"blob"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "one-line-cat-movie_pack.zip";
+  a.download = "one-line-cat-movie_ABC_pack.zip";
   a.click();
   URL.revokeObjectURL(url);
   setStatus("ZIP 생성 완료", "good");
 }
 
-/* ---------- Run */
+/* =========================================================
+ * Run
+ * ========================================================= */
 async function run(){
   applyModePolicyToEngine();
-  updateLiveHints();
   updatePresetHint();
+  updateLiveHints();
 
   const rawLine = safeTrim($("line")?.value);
   if(!rawLine){ alert("한 줄 써줘!"); return; }
 
   await fetchServerStatus();
   applyServerPolicy();
-  if(serverState.status === "MAINTENANCE" || serverState.status === "UPGRADE"){
-    alert("지금은 점검/업그레이드 중이라 생성이 잠시 막혀 있어요.");
-    return;
-  }
 
   setStatus("생성중…", "info");
 
@@ -1502,48 +1785,63 @@ async function run(){
   payload.line = finalLine;
 
   payload.intent = intentTranslator(finalLine);
-  const ip = $("intentPill");
-  if(ip && payload.intent){
-    ip.textContent = `🗣 통역사: ${payload.intent.reality} · ${payload.intent.mood} · ${payload.intent.character}`;
+  if($("intentPill") && payload.intent){
+    $("intentPill").textContent = `🗣 통역사: ${payload.intent.reality} · ${payload.intent.mood} · ${payload.intent.character}`;
   }
 
-  latestPlan = buildPlan(payload);
-  saveLastPlan(latestPlan);
+  // A/B/C 생성
+  latestPlansABC = buildPlanABC(payload);
 
-  let serverResult = { ok:false, text:"오프라인/서버 없음: 설계는 정상 생성됨" };
+  let serverResult = { ok:false, text:"오프라인: 설계는 정상 생성됨" };
   if(safetyNote){
     serverResult.text = `🛡 안전모드 메모: ${safetyNote}\n\n${serverResult.text}`.trim();
   }
 
-  renderPlan(latestPlan, serverResult);
+  renderPlanABC(latestPlansABC, serverResult, "C_RETENTION");
   setStatus("완료", "good");
 
   saveState();
   setTimeout(()=> $("outCard")?.scrollIntoView({behavior:"smooth", block:"start"}), 60);
 }
 
-/* ---------- Buttons */
+/* =========================================================
+ * Buttons
+ * ========================================================= */
 $("make")?.addEventListener("click", run);
 
 $("copyAll")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  copyText(planToText(latestPlan));
+  const p = getActivePlan();
+  if(!p){ alert("먼저 생성하기를 눌러줘!"); return; }
+  copyText(planToText(p));
 });
 
 $("downloadJson")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download("one-line-cat-movie.json", JSON.stringify(latestPlan, null, 2), "application/json;charset=utf-8");
+  const p = getActivePlan();
+  if(!p){ alert("먼저 생성하기를 눌러줘!"); return; }
+  download(`one-line-cat-movie_${activeVariant}.json`, JSON.stringify(p, null, 2), "application/json;charset=utf-8");
 });
 $("downloadSrt")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download("one-line-cat-movie.srt", planToSrt(latestPlan), "text/plain;charset=utf-8");
+  const p = getActivePlan();
+  if(!p){ alert("먼저 생성하기를 눌러줘!"); return; }
+  download(`one-line-cat-movie_${activeVariant}.srt`, planToSrt(p), "text/plain;charset=utf-8");
 });
 $("downloadTxt")?.addEventListener("click", () => {
-  if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download("one-line-cat-movie.txt", planToText(latestPlan), "text/plain;charset=utf-8");
+  const p = getActivePlan();
+  if(!p){ alert("먼저 생성하기를 눌러줘!"); return; }
+  download(`one-line-cat-movie_${activeVariant}.txt`, planToText(p), "text/plain;charset=utf-8");
 });
-$("downloadZip")?.addEventListener("click", () => downloadZipPackage(latestPlan));
+$("downloadImagePrompts")?.addEventListener("click", () => {
+  const p = getActivePlan();
+  if(!p){ alert("먼저 생성하기를 눌러줘!"); return; }
+  download(`prompts_image_${activeVariant}.txt`, planToImagePromptsTxt(p), "text/plain;charset=utf-8");
+});
+$("downloadVideoPrompts")?.addEventListener("click", () => {
+  const p = getActivePlan();
+  if(!p){ alert("먼저 생성하기를 눌러줘!"); return; }
+  download(`prompts_video_${activeVariant}.txt`, planToVideoPromptsTxt(p), "text/plain;charset=utf-8");
+});
 
+$("downloadZip")?.addEventListener("click", () => downloadZipABC(latestPlansABC));
 $("backupBtn")?.addEventListener("click", exportBackup);
 $("restoreBtn")?.addEventListener("click", importBackup);
 $("recoveryBtn")?.addEventListener("click", recoveryMode);
@@ -1566,9 +1864,10 @@ $("reset")?.addEventListener("click", () => {
   $("intentPill") && ($("intentPill").textContent = "🗣 통역사: -");
   const out = $("out"); if(out) out.innerHTML = "";
   const outCard = $("outCard"); if(outCard) outCard.style.display = "none";
-  latestPlan = null;
-  updatePresetHint();
+  latestPlansABC = null;
+  activeVariant = "C_RETENTION";
   applyModePolicyToEngine();
+  updatePresetHint();
   updateLiveHints();
   setStatus("대기중", "info");
   saveState();
@@ -1585,7 +1884,6 @@ $("reset")?.addEventListener("click", () => {
     updatePresetHint();
   });
 });
-
 document.addEventListener("keydown", (e) => {
   if((e.ctrlKey || e.metaKey) && e.key === "Enter") run();
 });
@@ -1596,8 +1894,9 @@ applyModePolicyToEngine();
 updatePresetHint();
 updateLiveHints();
 setStatus("대기중", "info");
-fetchServerStatus().then(applyServerPolicy);
-
+applyServerPolicy();
+ensureABCTabs();
+paintABCTabActive();
 </script>
 </body>
 </html>
