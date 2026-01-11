@@ -201,87 +201,129 @@
       opacity:.85;
     }
 
-    /* ===== UX Help (Onboarding / Quick Start) ===== */
-    .uxCard{
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
-      padding: 14px 14px;
-      margin: 14px 0 18px;
-      box-shadow: var(--shadow);
+    /* ===== Quick Start (초보용 안내) ===== */
+    .qsCard{
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:14px 14px;
+      margin:0 0 12px;
     }
-    .uxTitle{
-      font-weight: 900;
-      letter-spacing: -.2px;
-      margin-bottom: 8px;
-      font-size: 15px;
-    }
-    .uxDesc{
-      opacity: .9;
-      line-height: 1.55;
-      margin-bottom: 10px;
-      color: var(--muted);
-    }
-    .uxExamples{
-      display: grid;
-      gap: 8px;
-    }
-    .uxExampleBtn{
-      width: 100%;
-      text-align: left;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 12px;
-      padding: 10px 12px;
-      cursor: pointer;
-      color: var(--text);
-      font-weight: 800;
-      letter-spacing: -.2px;
-    }
-    .uxExampleBtn:active{ transform: scale(.99); }
-
-    .uxMiniRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-    .uxPill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      font-size:12px;
-      color: var(--muted);
-    }
-    .uxToggleBtn{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      cursor:pointer;
-      font-weight: 900;
-      color: var(--text);
-    }
-    .uxTooltip{
-      display:none;
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
+    .qsTitle{font-weight:900; letter-spacing:-.2px; margin-bottom:8px;}
+    .qsDesc{color:var(--muted); font-size:13px; line-height:1.55; margin-bottom:10px;}
+    .qsGrid{display:grid; gap:8px;}
+    .qsBtn{
+      width:100%;
+      text-align:left;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.25);
-      line-height:1.55;
-      color: var(--muted);
+      background:rgba(255,255,255,.04);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
     }
-    .uxTooltip b{ color: var(--text); font-weight: 900; }
+    .qsBtn:active{transform:scale(.99)}
+    .qsMiniRow{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      margin-top:10px;
+    }
+    .qsPill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      font-size:12px;
+      color:var(--muted);
+      flex:1;
+      min-width:0;
+    }
+    .qsToggle{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .qsBox{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.22);
+      color:var(--muted);
+      line-height:1.6;
+      font-size:13px;
+    }
+    .qsBox b{color:#ffe7a3}
+
+    /* ===== First-run overlay (3초 한 번만) ===== */
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.58);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+    .overlayCard{
+      width:min(720px, 100%);
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(15,22,32,.95), rgba(10,16,24,.92));
+      box-shadow:0 18px 50px rgba(0,0,0,.45);
+      padding:14px;
+    }
+    .overlayTitle{
+      font-weight:900;
+      letter-spacing:-.2px;
+      margin-bottom:8px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .overlayBody{
+      color:var(--muted);
+      line-height:1.65;
+      font-size:13.5px;
+    }
+    .overlayRow{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      margin-top:12px;
+    }
+    .overlaySmall{
+      color:rgba(170,182,197,.85);
+      font-size:12px;
+    }
+    .overlayBtn{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      font-weight:800;
+    }
   </style>
 </head>
 <body>
+  <!-- First-run overlay -->
+  <div class="overlay" id="firstOverlay" aria-hidden="true">
+    <div class="overlayCard">
+      <div class="overlayTitle">👋 처음 오셨죠? 10초면 끝나요</div>
+      <div class="overlayBody">
+        1) <b>예시 버튼</b>을 누르거나, 한 줄을 적어요<br/>
+        2) 자동으로 <b>⚡ 생성하기</b>가 실행돼요<br/>
+        3) 저장은 <b>📋 Copy All</b>(복사) 또는 <b>📦 ZIP</b>(파일 다운로드)<br/><br/>
+        <b>🧸 유치원 모드</b> ON이면 “시체/피/상처/트렁크” 같은 표현은<br/>
+        절대 보여주지 않고, <b>경찰선·CCTV·구급차 불빛</b> 같은 “단서 장면”으로 바뀝니다.
+      </div>
+      <div class="overlayRow">
+        <div class="overlaySmall">이 안내는 처음 1번만 뜹니다. (3초 후 자동 종료)</div>
+        <button class="overlayBtn" id="overlayCloseBtn">닫기</button>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <div class="hero">
       <h1>한 줄을 쓰면, 그 순간 “영화 설계”가 된다.</h1>
@@ -293,40 +335,6 @@
       <div><b id="serverMsg">서버 연결 없음</b> · 오프라인(0원) 모드로 계속 사용 가능합니다. (ZIP만 인터넷 필요)</div>
     </div>
 
-    <!-- ===== Quick Start (NEW) ===== -->
-    <div class="uxCard" id="uxQuickStart">
-      <div class="uxTitle">✍️ 한 줄 쓰면 → 60초 영화 설계가 됩니다</div>
-      <div class="uxDesc">
-        한 줄 사건/상황을 입력하면 <b>9장면(60초)</b> 기준으로
-        <b>이미지·영상 프롬프트 + SRT</b>가 자동으로 만들어집니다.
-        (옵션을 바꾸면 아래 “현재 스타일”이 즉시 바뀜)
-      </div>
-
-      <div class="uxExamples">
-        <button class="uxExampleBtn" type="button" data-example="비 오는 밤, 골목에서 누군가가 사라졌다.">
-          예시 1) 비 오는 밤, 골목에서 누군가가 사라졌다
-        </button>
-        <button class="uxExampleBtn" type="button" data-example="편의점 앞에서 의문의 사고가 발생했다. 단서는 떨어진 휴대폰뿐이다.">
-          예시 2) 편의점 앞 의문의 사고… 단서는 휴대폰
-        </button>
-        <button class="uxExampleBtn" type="button" data-example="세 마리 강아지가 도시를 구하는 60초 짧은 이야기.">
-          예시 3) 세 마리 강아지가 도시를 구한다
-        </button>
-      </div>
-
-      <div class="uxMiniRow">
-        <div class="uxPill" id="uxNowStyle">🎬 현재 스타일: (옵션을 고르면 자동 표시)</div>
-        <button class="uxToggleBtn" type="button" id="uxToggleGuide">가이드 보기</button>
-      </div>
-
-      <div class="uxTooltip" id="uxGuideBox">
-        <b>🧸 유치원 모드</b>: 시체/피/상처/트렁크 같은 표현은 <b>경찰선·구급차·CCTV·타이어 자국</b> 같은 “단서 연출”로 바뀝니다.<br/>
-        <b>🐾 캐릭터 자동 등장</b>: ON이면 앱이 주인공을 “추천”할 수 있어요. OFF면 내가 쓴 것만 나옵니다.<br/>
-        <b>🧠 자동 상상(연출 추가)</b>: ON이면 카메라/조명/분위기를 풍부하게 붙입니다. OFF면 입력 그대로 갑니다.<br/>
-        <b>🎭 프리셋</b>: 자동등장 OFF여도 <b>내가 직접 고른 프리셋</b>은 항상 적용됩니다.
-      </div>
-    </div>
-
     <div class="grid">
       <!-- LEFT -->
       <div class="card">
@@ -335,6 +343,48 @@
           <div class="small">한 줄 사건/상황을 입력하면, 60초 기준 9비트(씬)로 분해해서 이미지/영상 프롬프트를 생성합니다.</div>
         </div>
         <div class="bd">
+
+          <!-- Quick Start -->
+          <div class="qsCard" id="quickStart">
+            <div class="qsTitle">✍️ 초보용: 예시 한 번만 눌러보세요 (원클릭 실행)</div>
+            <div class="qsDesc">
+              예시 버튼을 누르면 입력이 자동으로 들어가고 <b>⚡ 생성하기</b>까지 바로 실행됩니다.<br/>
+              저장은 <b>📋 Copy All</b> 또는 <b>📦 ZIP</b>을 누르면 됩니다.
+            </div>
+            <div class="qsGrid">
+              <button class="qsBtn" data-example="비 오는 밤, 골목에서 누군가가 사라졌다. 단서는 떨어진 휴대폰뿐이다.">
+                예시 1) 비 오는 밤 실종… 단서는 휴대폰 (미스터리)
+              </button>
+              <button class="qsBtn" data-example="편의점 앞에서 의문의 사고가 발생했다. 현장에는 경찰선과 CCTV 화면만 남아 있다.">
+                예시 2) 편의점 앞 사고… 경찰선과 CCTV (다큐 느낌)
+              </button>
+              <button class="qsBtn" data-example="세 마리 강아지가 도시를 구하는 60초 짧은 이야기. 위험은 단서로만 암시한다.">
+                예시 3) 강아지 3마리 60초 히어로 (유튜브용)
+              </button>
+            </div>
+
+            <div class="qsMiniRow">
+              <div class="qsPill" id="qsNowStyle">🎬 현재 설정: (옵션을 고르면 자동 표시)</div>
+              <button class="qsToggle" id="qsToggle">사용 방법 보기</button>
+            </div>
+
+            <div class="qsBox" id="qsBox">
+              <b>🧸 유치원 모드</b>: 시체/피/상처/트렁크 같은 표현은 <b>절대 화면에 안 나오고</b>, 경찰선·구급차 불빛·CCTV·타이어 자국 같은 <b>단서 장면</b>으로 바뀝니다.<br/>
+              <b>🐾 캐릭터 자동 등장</b>: ON이면 앱이 “추천”을 제안할 수 있어요. OFF면 내가 쓴 것만 나옵니다.<br/>
+              <b>🎨 자동 상상(연출 추가)</b>: ON이면 카메라/조명/분위기를 더 풍부하게 붙입니다.<br/>
+              <div class="divider"></div>
+              <b>📦 ZIP 다운로드 위치</b><br/>
+              - 안드로이드: <b>내 파일 → 다운로드</b><br/>
+              - 아이폰: <b>파일 앱 → 다운로드</b><br/>
+              - PC: <b>다운로드(Downloads)</b> 폴더<br/>
+              <div class="divider"></div>
+              <b>🎨 이미지 생성 방법</b><br/>
+              1) 출력창에서 <b>--- prompts_image.txt ---</b> 아래를 복사<br/>
+              2) 이미지 생성 툴에 <b>SCENE 1부터</b> 순서대로 붙여넣고 생성<br/>
+              3) 영상은 <b>prompts_video.txt</b>, 자막은 <b>srt.txt</b>를 사용
+            </div>
+          </div>
+
           <textarea id="line" placeholder="예: 사람이 다닐 수 있는 인도를 걷는데 갑자기 차가 인도 위로 돌진해 치고 도주한 사건"></textarea>
 
           <div class="row">
@@ -548,88 +598,6 @@
       alert(msg);
     }
 
-    // ====== Quick Start / Onboarding (NEW) ======
-    function initUXHelp(){
-      // 1) 예시 버튼 클릭 → 입력칸(#line)에 자동 채우기
-      const root = $("uxQuickStart");
-      if(root){
-        root.querySelectorAll("[data-example]").forEach(btn=>{
-          btn.addEventListener("click", ()=>{
-            const ex = btn.getAttribute("data-example") || "";
-            const inputEl = $("line"); // ✅ 너 코드 확정 id
-            if(inputEl){
-              inputEl.value = safeText(ex);
-              inputEl.focus();
-              inputEl.dispatchEvent(new Event("input", { bubbles: true }));
-            }
-            refreshNowStylePill();
-          });
-        });
-      }
-
-      // 2) 가이드 보기 토글
-      const tg = $("uxToggleGuide");
-      const box = $("uxGuideBox");
-      if(tg && box){
-        tg.addEventListener("click", ()=>{
-          box.style.display = (box.style.display === "block") ? "none" : "block";
-        });
-      }
-
-      // 3) 현재 스타일 Pill 표시
-      refreshNowStylePill();
-
-      // 4) 옵션이 바뀔 때마다 갱신
-      const ids = ["genre","len","tone","reality","kinderMode","autoCharacter","autoImprov","presetId","charLock","bg","protagonist"];
-      ids.forEach(id=>{
-        const el = $(id);
-        if(!el) return;
-        el.addEventListener("change", refreshNowStylePill);
-        el.addEventListener("input", refreshNowStylePill);
-      });
-    }
-
-    function readSelectText(id){
-      const el = $(id);
-      if(el && el.tagName === "SELECT"){
-        const opt = el.options[el.selectedIndex];
-        return opt ? safeText(opt.textContent) : "";
-      }
-      return "";
-    }
-
-    function refreshNowStylePill(){
-      const pill = $("uxNowStyle");
-      if(!pill) return;
-
-      const reality = readSelectText("reality");
-      const tone = readSelectText("tone");
-      const genre = readSelectText("genre");
-      const len = readSelectText("len");
-      const kinder = readSelectText("kinderMode");
-      const autoChar = readSelectText("autoCharacter");
-      const autoImprov = readSelectText("autoImprov");
-      const preset = readSelectText("presetId");
-      const lock = readSelectText("charLock");
-      const protag = readSelectText("protagonist");
-
-      const parts = [];
-      if(reality) parts.push(reality);
-      if(tone) parts.push(tone);
-      if(genre) parts.push(genre);
-      if(len) parts.push(len);
-      if(protag) parts.push("주인공:" + protag);
-      if(kinder) parts.push("유치원:" + kinder);
-      if(autoChar) parts.push("자동등장:" + autoChar);
-      if(autoImprov) parts.push("자동상상:" + autoImprov);
-      if(preset) parts.push("프리셋:" + preset);
-      if(lock) parts.push("고정:" + lock);
-
-      pill.textContent = parts.length
-        ? ("🎬 현재 스타일: " + parts.join(" · "))
-        : "🎬 현재 스타일: (옵션을 고르면 자동 표시)";
-    }
-
     // ====== Server policy (fix: no 'base' var) ======
     function getWorkerUrl(){
       // 오프라인 기본: 빈 문자열
@@ -717,26 +685,10 @@
 
     // ====== Presets ======
     const PRESETS = {
-      custom: {
-        name:"커스텀",
-        protagonist:"person",
-        desc:"사용자가 주인공/배경을 직접 제어"
-      },
-      nabi: {
-        name:"나비(고양이 탐정)",
-        protagonist:"cat",
-        desc:"도시 탐정물, 단서 수집, 미스터리"
-      },
-      coco: {
-        name:"코코(감성 고양이)",
-        protagonist:"cat",
-        desc:"잔잔한 감정선, 따뜻한 관찰"
-      },
-      tiger: {
-        name:"타이거(액션 고양이)",
-        protagonist:"cat",
-        desc:"빠른 추적/액션, 하지만 비고어"
-      }
+      custom: { name:"커스텀", protagonist:"person", desc:"사용자가 주인공/배경을 직접 제어" },
+      nabi:   { name:"나비(고양이 탐정)", protagonist:"cat", desc:"도시 탐정물, 단서 수집, 미스터리" },
+      coco:   { name:"코코(감성 고양이)", protagonist:"cat", desc:"잔잔한 감정선, 따뜻한 관찰" },
+      tiger:  { name:"타이거(액션 고양이)", protagonist:"cat", desc:"빠른 추적/액션, 하지만 비고어" }
     };
 
     function autoRecommendPreset(line){
@@ -749,12 +701,9 @@
 
     function resolvePresetId({ presetId, enableAutoCharacter, line, intent }){
       let pid = presetId;
-
-      // 1) 사용자가 수동으로 특정 프리셋을 고르면 무조건 존중
       const userPickedSpecific = (pid === "nabi" || pid === "coco" || pid === "tiger" || pid === "custom");
       if(userPickedSpecific) return pid;
 
-      // 2) AUTO일 때만 자동 추천 가능
       if(pid === "auto"){
         if(enableAutoCharacter){
           const recommended = intent?.character || autoRecommendPreset(line);
@@ -767,7 +716,6 @@
 
     // ====== Engine ======
     function beatsForGenre(genre, n){
-      // 기본(허구/일반) 비트
       const base = {
         mystery: ["훅", "사건 암시", "단서", "목격", "추적", "막다른 길", "새 단서", "반전", "여운"],
         thriller:["훅", "긴장", "추적", "숨김", "근접", "도주", "단서", "결정적 순간", "여운"],
@@ -777,7 +725,6 @@
         documentary:["오프닝", "현장", "단서", "기록", "관찰", "증언", "정리", "추정", "결말"]
       }[genre] || ["훅","상황","전개","단서","전환","추적","긴장","클라이맥스","엔딩"];
 
-      // n에 맞추기
       const beats = base.slice();
       if(n <= beats.length) return beats.slice(0,n);
       while(beats.length < n) beats.push("추가 비트");
@@ -802,12 +749,11 @@
       const bg = safeText(input.bg);
       const protagonist = input.protagonist;
 
-      // 씬 개수 규칙(간단 안정형)
       let n = 9;
       if(len <= 20) n = 5;
       else if(len <= 30) n = 6;
       else if(len <= 60) n = 9;
-      else n = 12; // 3분
+      else n = 12;
 
       const intent = {
         reality,
@@ -818,7 +764,6 @@
         ]
       };
 
-      // 프리셋 결정(정답 UX)
       const enableAutoCharacter = (input.autoCharacter === "on");
       const pid = resolvePresetId({
         presetId: input.presetId,
@@ -829,10 +774,8 @@
 
       const preset = PRESETS[pid] || PRESETS.custom;
 
-      // 비트 결정
       let beats = beatsForGenre(genre, n);
 
-      // ✅ 현실 사건 + 유치원 모드면 비트 강제 치환(고어 설계 자체 차단)
       if(ENABLE_KINDER_MODE && reality === "REAL_WORLD"){
         beats = safeBeatsForRealIncident(n);
       }
@@ -981,6 +924,7 @@
 
     // ====== Persistence ======
     const STORE_KEY = "V43_OMNI_SAFE_STATE";
+    const FIRST_OVERLAY_KEY = "V43_FIRST_OVERLAY_SEEN";
 
     function saveState(){
       const state = collectUI();
@@ -1045,8 +989,6 @@
         safeP.classList.toggle("warn", !on);
         safeP.innerHTML = `<span class="dot"></span><strong>🛡 안전:</strong> ${on ? "유치원 모드 ON" : "유치원 모드 OFF"}`;
       }
-      // QuickStart 현재 스타일도 같이 갱신
-      refreshNowStylePill();
     }
 
     // ====== Output rendering ======
@@ -1054,10 +996,12 @@
 
     function renderOutput(outputs){
       const meta = LAST?.plan?.meta || {};
+      const modeText = (meta.kinderMode === true) ? "KINDER" : "NORMAL";
+
       const header = [
         `# One-line Movie Output`,
         `- created: ${new Date().toLocaleString()}`,
-        `- mode: ${ENABLE_KINDER_MODE ? "KINDER" : "NORMAL"}`,
+        `- mode: ${modeText}`,
         `- genre: ${meta.genre || ""}`,
         `- tone: ${meta.tone || ""}`,
         `- len: ${meta.len || ""}s`,
@@ -1088,6 +1032,119 @@
           box.style.display = (box.style.display === "none") ? "block" : "none";
         });
       });
+    }
+
+    // ====== Quick Start (원클릭 예시 + 사용방법) ======
+    function getSelectedText(selectId){
+      const el = $(selectId);
+      if(!el || el.tagName !== "SELECT") return "";
+      const opt = el.options[el.selectedIndex];
+      return opt ? safeText(opt.textContent) : "";
+    }
+
+    function refreshQuickStyle(){
+      const pill = $("qsNowStyle");
+      if(!pill) return;
+
+      const parts = [];
+      parts.push(getSelectedText("reality"));
+      parts.push(getSelectedText("tone"));
+      parts.push(getSelectedText("genre"));
+      parts.push("길이:" + getSelectedText("len"));
+      parts.push("유치원:" + getSelectedText("kinderMode"));
+      parts.push("자동등장:" + getSelectedText("autoCharacter"));
+      parts.push("자동연출:" + getSelectedText("autoImprov"));
+      parts.push("프리셋:" + getSelectedText("presetId"));
+
+      pill.textContent = "🎬 현재 설정: " + parts.filter(Boolean).join(" · ");
+    }
+
+    function bindQuickStart(){
+      const root = $("quickStart");
+      if(!root) return;
+
+      root.querySelectorAll("[data-example]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const ex = btn.getAttribute("data-example") || "";
+          $("line").value = safeText(ex);
+
+          // 초보 데모는 안정적으로: 현실 + 유치원 ON 유지
+          $("reality").value = "REAL_WORLD";
+          $("kinderMode").value = "on";
+          ENABLE_KINDER_MODE = true;
+
+          // 첫 데모는 보기 쉬운 60초로
+          $("len").value = "60";
+
+          // 미리보기 느낌 강화(선택): 다큐 예시는 documentary, 나머지는 mystery
+          const text = safeText(ex);
+          if(text.includes("CCTV") || text.includes("현장") || text.includes("기록")){
+            $("genre").value = "documentary";
+            $("tone").value = "dry_serious";
+          } else if(text.includes("강아지")){
+            $("genre").value = "drama";
+            $("tone").value = "warm";
+          } else {
+            $("genre").value = "mystery";
+            $("tone").value = "tense";
+          }
+
+          refreshPills();
+          refreshQuickStyle();
+          saveState();
+
+          // ✅ 원클릭: 생성까지 자동 실행
+          generate();
+
+          // 출력으로 살짝 스크롤(모바일 배려)
+          try{
+            $("out").scrollIntoView({behavior:"smooth", block:"start"});
+          }catch(e){}
+        });
+      });
+
+      const toggle = $("qsToggle");
+      const box = $("qsBox");
+      if(toggle && box){
+        toggle.addEventListener("click", ()=>{
+          box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
+        });
+      }
+
+      // 옵션 바뀌면 현재 설정 문구 갱신
+      ["genre","len","tone","reality","kinderMode","autoCharacter","autoImprov","presetId"].forEach(id=>{
+        const el = $(id);
+        if(el) el.addEventListener("change", refreshQuickStyle);
+      });
+      refreshQuickStyle();
+    }
+
+    // ====== First-run overlay (3초, 1회) ======
+    function showFirstOverlayOnce(){
+      let seen = false;
+      try{
+        seen = (localStorage.getItem(FIRST_OVERLAY_KEY) === "1");
+      }catch(e){}
+
+      if(seen) return;
+
+      const ov = $("firstOverlay");
+      const closeBtn = $("overlayCloseBtn");
+      if(!ov) return;
+
+      ov.style.display = "flex";
+      ov.setAttribute("aria-hidden","false");
+
+      const close = ()=>{
+        ov.style.display = "none";
+        ov.setAttribute("aria-hidden","true");
+        try{ localStorage.setItem(FIRST_OVERLAY_KEY, "1"); }catch(e){}
+      };
+
+      if(closeBtn) closeBtn.addEventListener("click", close);
+
+      // 3초 후 자동 종료
+      setTimeout(close, 3000);
     }
 
     // ====== Actions ======
@@ -1257,9 +1314,6 @@
       bindAutoSave();
       updateZipButtonState();
 
-      // NEW: Quick Start init
-      initUXHelp();
-
       // load saved state
       const st = loadState();
       if(st) applyState(st);
@@ -1267,6 +1321,9 @@
       // sync kinder toggle from state
       ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
       refreshPills();
+
+      // Quick Start bindings
+      bindQuickStart();
 
       $("genBtn").addEventListener("click", generate);
       $("copyBtn").addEventListener("click", copyAll);
@@ -1282,8 +1339,8 @@
         }
       });
 
-      // 첫 진입에 스타일 표시 즉시 반영
-      refreshNowStylePill();
+      // First-run overlay (3초, 1회)
+      showFirstOverlayOnce();
     });
   </script>
 </body>
