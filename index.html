@@ -31,11 +31,10 @@
       color:var(--text);
     }
     .wrap{max-width:980px; margin:0 auto; padding:22px 16px 60px;}
-    .hero{
-      text-align:center; margin:22px 0 18px;
-    }
+    .hero{ text-align:center; margin:22px 0 18px; }
     .hero h1{margin:0; font-size:32px; letter-spacing:-.5px; line-height:1.2}
     .hero p{margin:10px 0 0; color:var(--muted); line-height:1.55}
+
     .banner{
       display:flex; gap:10px; align-items:center; justify-content:center;
       background:linear-gradient(90deg, rgba(255,209,102,.18), rgba(74,163,255,.10));
@@ -46,12 +45,14 @@
       max-width:760px;
     }
     .banner b{color:#ffe7a3}
+
     .grid{
       display:grid;
       grid-template-columns: 1.2fr .8fr;
       gap:14px;
     }
     @media (max-width: 920px){ .grid{grid-template-columns:1fr} }
+
     .card{
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
       border:1px solid rgba(255,255,255,.06);
@@ -66,6 +67,7 @@
     }
     .card .hd .title{font-weight:800; letter-spacing:-.3px}
     .card .bd{padding:14px}
+
     textarea{
       width:100%; min-height:120px; resize:vertical;
       padding:12px 12px; border-radius:14px;
@@ -76,8 +78,10 @@
       font-size:15px;
     }
     textarea:focus{border-color:rgba(74,163,255,.45); box-shadow:0 0 0 3px rgba(74,163,255,.12)}
+
     .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
     @media (max-width: 520px){ .row{grid-template-columns:1fr} }
+
     select, input[type="text"]{
       width:100%;
       padding:12px 12px;
@@ -89,9 +93,8 @@
       font-size:14px;
     }
     select:focus, input[type="text"]:focus{border-color:rgba(74,163,255,.45); box-shadow:0 0 0 3px rgba(74,163,255,.12)}
-    .pills{
-      display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
-    }
+
+    .pills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
     .pill{
       background:rgba(16,27,40,.7);
       border:1px solid rgba(255,255,255,.08);
@@ -110,6 +113,7 @@
     .pill.ok .dot{background:rgba(46,204,113,.85)}
     .pill.warn .dot{background:rgba(255,209,102,.90)}
     .pill.bad .dot{background:rgba(255,92,119,.90)}
+
     .btnRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
     button{
       padding:12px 14px;
@@ -137,7 +141,9 @@
       color:#1b0509;
     }
     button:disabled{opacity:.55; cursor:not-allowed}
+
     .small{color:var(--muted); font-size:12.8px; line-height:1.5}
+
     .out{
       width:100%;
       min-height:280px;
@@ -154,9 +160,7 @@
       outline:none;
     }
 
-    .optGroup{
-      display:flex; flex-direction:column; gap:10px;
-    }
+    .optGroup{ display:flex; flex-direction:column; gap:10px; }
     .optRow{
       display:grid; grid-template-columns: 1.1fr .9fr;
       gap:10px;
@@ -305,6 +309,7 @@
     }
   </style>
 </head>
+
 <body>
   <!-- First-run overlay -->
   <div class="overlay" id="firstOverlay" aria-hidden="true">
@@ -315,7 +320,7 @@
         2) 자동으로 <b>⚡ 생성하기</b>가 실행돼요<br/>
         3) 저장은 <b>📋 Copy All</b>(복사) 또는 <b>📦 ZIP</b>(파일 다운로드)<br/><br/>
         <b>🧸 유치원 모드</b> ON이면 “시체/피/상처/트렁크” 같은 표현은<br/>
-        절대 보여주지 않고, <b>경찰선·CCTV·구급차 불빛</b> 같은 “단서 장면”으로 바뀝니다.
+        절대 보여주지 않고, <b>경찰차·CCTV·구급차 불빛</b> 같은 “단서 장면”으로 바뀝니다.
       </div>
       <div class="overlayRow">
         <div class="overlaySmall">이 안내는 처음 1번만 뜹니다. (3초 후 자동 종료)</div>
@@ -355,8 +360,8 @@
               <button class="qsBtn" data-example="비 오는 밤, 골목에서 누군가가 사라졌다. 단서는 떨어진 휴대폰뿐이다.">
                 예시 1) 비 오는 밤 실종… 단서는 휴대폰 (미스터리)
               </button>
-              <button class="qsBtn" data-example="편의점 앞에서 의문의 사고가 발생했다. 현장에는 경찰선과 CCTV 화면만 남아 있다.">
-                예시 2) 편의점 앞 사고… 경찰선과 CCTV (다큐 느낌)
+              <button class="qsBtn" data-example="편의점 앞에서 의문의 사고가 발생했다. 현장에는 경찰차와 CCTV 화면만 남아 있다.">
+                예시 2) 편의점 앞 사고… 경찰차와 CCTV (다큐 느낌)
               </button>
               <button class="qsBtn" data-example="세 마리 강아지가 도시를 구하는 60초 짧은 이야기. 위험은 단서로만 암시한다.">
                 예시 3) 강아지 3마리 60초 히어로 (유튜브용)
@@ -369,7 +374,7 @@
             </div>
 
             <div class="qsBox" id="qsBox">
-              <b>🧸 유치원 모드</b>: 시체/피/상처/트렁크 같은 표현은 <b>절대 화면에 안 나오고</b>, 경찰선·구급차 불빛·CCTV·타이어 자국 같은 <b>단서 장면</b>으로 바뀝니다.<br/>
+              <b>🧸 유치원 모드</b>: 시체/피/상처/트렁크 같은 표현은 <b>절대 화면에 안 나오고</b>, 경찰차·구급차 불빛·CCTV·타이어 자국 같은 <b>단서 장면</b>으로 바뀝니다.<br/>
               <b>🐾 캐릭터 자동 등장</b>: ON이면 앱이 “추천”을 제안할 수 있어요. OFF면 내가 쓴 것만 나옵니다.<br/>
               <b>🎨 자동 상상(연출 추가)</b>: ON이면 카메라/조명/분위기를 더 풍부하게 붙입니다.<br/>
               <div class="divider"></div>
@@ -432,7 +437,6 @@
           <div class="divider"></div>
 
           <div class="optGroup">
-
             <div class="optRow">
               <div>
                 <div class="optLabel">🧸 유치원 모드 <span class="hint" data-hint="kinder">ⓘ</span></div>
@@ -440,8 +444,8 @@
                 <div class="hintBox" id="hint-kinder" style="display:none;">
                   <b style="color:#ffe7a3">유치원 모드(기본 ON)</b><br/>
                   “피/시신/상처/트렁크” 같은 장면은 절대 보여주지 않고,<br/>
-                  <b>경찰선·경광등·CCTV·타이어 자국·떨어진 물건</b> 같은 <b>안전 단서</b>로만 사건을 보여줍니다.<br/>
-                  예시) “사망/시신” 입력 → “구급차 불빛 원경 + 경찰선 + 떨어진 휴대폰”
+                  <b>경찰차·경광등·CCTV·타이어 자국·떨어진 물건</b> 같은 <b>안전 단서</b>로만 사건을 보여줍니다.<br/>
+                  예시) “사망/시신” 입력 → “구급차 불빛 원경 + 경찰차 + 떨어진 휴대폰”
                 </div>
               </div>
               <select id="kinderMode">
@@ -533,7 +537,6 @@
                 <option value="dog">강아지</option>
               </select>
             </div>
-
           </div>
 
           <div class="pills" style="margin-top:14px;">
@@ -591,18 +594,14 @@
       return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"_"+pad(d.getHours())+pad(d.getMinutes())+pad(d.getSeconds());
     }
 
-    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-
     function toast(msg){
       try{ navigator.vibrate && navigator.vibrate(10); }catch(e){}
       alert(msg);
     }
 
-    // ====== Server policy (fix: no 'base' var) ======
+    // ====== Server policy ======
     function getWorkerUrl(){
-      // 오프라인 기본: 빈 문자열
-      // 서버 연결형으로 확장할 경우 여기에서 URL을 반환하면 됨.
-      return "";
+      return ""; // 오프라인 기본
     }
 
     function applyServerPolicy(){
@@ -640,8 +639,10 @@
       "피","고어","시체","시신","사체","토막","장기","절단","훼손","피웅덩이","트렁크","상처","절개","목이 잘린"
     ];
 
+    // ✅ 경찰선(폴리스테이프) 제거 → 경찰차/경찰서 중심
     const SAFE_EVIDENCE_VISUALS = [
-      "police tape and flashing lights in the distance",
+      "police car with flashing lights in the distance",
+      "police station exterior at night, calm documentary mood",
       "evidence marker cones near a curb, no person visible",
       "a dropped phone or broken glasses on wet pavement",
       "tire marks and rain reflections on asphalt",
@@ -654,7 +655,7 @@
         "밤길 원경(사건 암시만, 인물은 멀리)",
         "놀란 얼굴 클로즈업(상처/피 없음)",
         "떨어진 물건(휴대폰/안경) 클로즈업",
-        "경찰선 + 경광등 원경",
+        "경찰차 + 경광등 원경",
         "증거 마킹(숫자/기호만, 인체 윤곽 금지)",
         "타이어 자국/젖은 도로 반사",
         "CCTV/블랙박스 화면(픽셀 처리, 비그래픽)",
@@ -666,14 +667,13 @@
       return beats;
     }
 
+    // ✅ 씬마다 길어지지 않게 짧게만
     function joinHardRules(intent){
       const rules = (intent?.hardRules || []).map(safeText);
       let out = rules.length ? ("HARD RULES: " + rules.join(" ")) : "";
-
       if(ENABLE_KINDER_MODE && intent?.reality === "REAL_WORLD"){
         out += (out ? " " : "");
-        out += "KINDER MODE: absolutely no gore/blood/corpses/injuries. Use only safe evidence clues.";
-        out += " FORBID: " + FORBID_GORE_TOKENS.join(", ") + ".";
+        out += "KINDER: NON-GRAPHIC CLUES ONLY.";
       }
       return out.trim();
     }
@@ -785,14 +785,7 @@
 
       return {
         meta:{
-          line,
-          genre,
-          tone,
-          len,
-          n,
-          reality,
-          bg,
-          protagonist,
+          line, genre, tone, len, n, reality, bg, protagonist,
           presetId: pid,
           presetName: preset.name,
           autoCharacter: enableAutoCharacter,
@@ -928,9 +921,7 @@
 
     function saveState(){
       const state = collectUI();
-      try{
-        localStorage.setItem(STORE_KEY, JSON.stringify(state));
-      }catch(e){}
+      try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
     }
 
     function loadState(){
@@ -998,6 +989,12 @@
       const meta = LAST?.plan?.meta || {};
       const modeText = (meta.kinderMode === true) ? "KINDER" : "NORMAL";
 
+      // ✅ FORBID는 "출력 상단"에 1번만
+      const globalSafety =
+        (ENABLE_KINDER_MODE && (meta.reality === "REAL_WORLD"))
+          ? `GLOBAL SAFETY (KINDER): FORBID: ${FORBID_GORE_TOKENS.join(", ")}`
+          : "";
+
       const header = [
         `# One-line Movie Output`,
         `- created: ${new Date().toLocaleString()}`,
@@ -1007,6 +1004,7 @@
         `- len: ${meta.len || ""}s`,
         `- reality: ${meta.reality || ""}`,
         `- preset: ${meta.presetName || ""} (${meta.presetId || ""})`,
+        globalSafety ? globalSafety : "",
         ``,
         `--- prompts_image.txt ---`,
         outputs.prompts_image_txt,
@@ -1076,7 +1074,7 @@
           // 첫 데모는 보기 쉬운 60초로
           $("len").value = "60";
 
-          // 미리보기 느낌 강화(선택): 다큐 예시는 documentary, 나머지는 mystery
+          // 미리보기 느낌 강화
           const text = safeText(ex);
           if(text.includes("CCTV") || text.includes("현장") || text.includes("기록")){
             $("genre").value = "documentary";
@@ -1096,10 +1094,7 @@
           // ✅ 원클릭: 생성까지 자동 실행
           generate();
 
-          // 출력으로 살짝 스크롤(모바일 배려)
-          try{
-            $("out").scrollIntoView({behavior:"smooth", block:"start"});
-          }catch(e){}
+          try{ $("out").scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){}
         });
       });
 
@@ -1111,7 +1106,6 @@
         });
       }
 
-      // 옵션 바뀌면 현재 설정 문구 갱신
       ["genre","len","tone","reality","kinderMode","autoCharacter","autoImprov","presetId"].forEach(id=>{
         const el = $(id);
         if(el) el.addEventListener("change", refreshQuickStyle);
@@ -1122,10 +1116,7 @@
     // ====== First-run overlay (3초, 1회) ======
     function showFirstOverlayOnce(){
       let seen = false;
-      try{
-        seen = (localStorage.getItem(FIRST_OVERLAY_KEY) === "1");
-      }catch(e){}
-
+      try{ seen = (localStorage.getItem(FIRST_OVERLAY_KEY) === "1"); }catch(e){}
       if(seen) return;
 
       const ov = $("firstOverlay");
@@ -1142,8 +1133,6 @@
       };
 
       if(closeBtn) closeBtn.addEventListener("click", close);
-
-      // 3초 후 자동 종료
       setTimeout(close, 3000);
     }
 
@@ -1270,9 +1259,7 @@
       $("out").textContent = "";
       LAST = null;
 
-      try{
-        localStorage.removeItem(STORE_KEY);
-      }catch(e){}
+      try{ localStorage.removeItem(STORE_KEY); }catch(e){}
 
       refreshPills();
       saveState();
@@ -1314,15 +1301,12 @@
       bindAutoSave();
       updateZipButtonState();
 
-      // load saved state
       const st = loadState();
       if(st) applyState(st);
 
-      // sync kinder toggle from state
       ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
       refreshPills();
 
-      // Quick Start bindings
       bindQuickStart();
 
       $("genBtn").addEventListener("click", generate);
@@ -1332,14 +1316,12 @@
       $("restoreBtn").addEventListener("click", restore);
       $("resetBtn").addEventListener("click", resetAll);
 
-      // quick UX: Enter+Ctrl to generate (desktop)
       $("line").addEventListener("keydown", (e)=>{
         if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
           generate();
         }
       });
 
-      // First-run overlay (3초, 1회)
       showFirstOverlayOnce();
     });
   </script>
