@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>One-line Movie V4.3 Omni (Safe)</title>
+  <title>One-line Movie V4.3 Omni (Safe) + v7-lite</title>
 
   <style>
     :root{
@@ -262,6 +262,40 @@
     }
     .qsBox b{color:#ffe7a3}
 
+    /* ===== v7-lite: 60초 템플릿 10 ===== */
+    .tplWrap{ margin-top:12px; }
+    .tplHead{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      cursor:pointer;
+      user-select:none;
+    }
+    .tplHead b{ letter-spacing:-.2px; }
+    .tplBody{
+      display:none;
+      margin-top:10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(0,0,0,.18);
+      padding:10px;
+    }
+    .tplGrid{ display:grid; gap:8px; }
+    .tplBtn{
+      width:100%;
+      text-align:left;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:800;
+    }
+    .tplBtn:active{transform:scale(.99)}
+    .tplNote{ margin-top:8px; color:rgba(170,182,197,.92); font-size:12.5px; line-height:1.6; }
+
     /* ===== First-run overlay (3초 한 번만) ===== */
     .overlay{
       position:fixed; inset:0;
@@ -451,6 +485,57 @@
       margin:10px 0;
     }
     .devH{ font-weight:1000; margin-bottom:6px; }
+
+    /* ===== v7-lite: ABC output tabs ===== */
+    .tabsRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:10px;
+    }
+    .tabs{
+      display:flex; gap:8px; align-items:center;
+      flex-wrap:wrap;
+    }
+    .tabBtn{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      cursor:pointer;
+      font-weight:900;
+      letter-spacing:-.2px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+    .tabBtn.active{
+      background:linear-gradient(180deg, rgba(74,163,255,.95), rgba(74,163,255,.70));
+      border-color:rgba(74,163,255,.35);
+      color:#06101a;
+    }
+    .miniBtns{ display:flex; gap:8px; flex-wrap:wrap; }
+    .miniBtn{
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      cursor:pointer;
+      font-weight:900;
+      font-size:12.5px;
+      color:var(--text);
+    }
+    .miniBtn.secondary{
+      background:linear-gradient(180deg, rgba(46,204,113,.95), rgba(46,204,113,.70));
+      border-color:rgba(46,204,113,.35);
+      color:#07110b;
+    }
+    .miniBtn.warn{
+      background:linear-gradient(180deg, rgba(255,209,102,.95), rgba(255,209,102,.70));
+      border-color:rgba(255,209,102,.35);
+      color:#1a1202;
+    }
   </style>
 </head>
 
@@ -460,11 +545,12 @@
     <div class="overlayCard">
       <div class="overlayTitle">👋 처음 오셨죠? 10초면 끝나요</div>
       <div class="overlayBody">
-        1) <b>예시 버튼</b>을 누르거나, 한 줄을 적어요<br/>
+        1) <b>예시</b> 또는 <b>60초 템플릿</b>을 눌러요<br/>
         2) 자동으로 <b>⚡ 생성하기</b>가 실행돼요<br/>
-        3) 저장은 <b>📋 Copy All</b>(복사) 또는 <b>📦 ZIP</b>(파일 다운로드)<br/><br/>
+        3) 저장은 <b>📋 Copy</b>(복사) 또는 <b>📦 ZIP</b>(다운로드)<br/><br/>
         <b>🧸 유치원 모드</b> ON이면 “시체/피/상처/트렁크” 같은 표현은<br/>
-        절대 보여주지 않고, <b>경찰차·CCTV·구급차 불빛</b> 같은 “단서 장면”으로 바뀝니다.
+        절대 보여주지 않고, <b>경찰차·CCTV·구급차 불빛</b> 같은 “단서 장면”으로 바뀝니다.<br/>
+        <b>v7-lite</b>: 한 번 생성하면 <b>A/B/C 3안</b>이 같이 생성됩니다.
       </div>
       <div class="overlayRow">
         <div class="overlaySmall">이 안내는 처음 1번만 뜹니다. (3초 후 자동 종료)</div>
@@ -476,7 +562,7 @@
   <div class="wrap">
     <div class="hero">
       <h1 id="appTitle">한 줄을 쓰면, 그 순간 “영화 설계”가 된다.</h1>
-      <p>V4.3 Omni · 단일 파일 · 오프라인 기본 · 의도 우선(추천은 제안만) · 기본값: 🧸 유치원 모드</p>
+      <p>V4.3 Omni · 단일 파일 · 오프라인 기본 · 기본값: 🧸 유치원 모드 · v7-lite: A/B/C + 템플릿10 + Validator</p>
     </div>
 
     <div class="banner" id="serverBanner">
@@ -489,7 +575,7 @@
       <div class="card">
         <div class="hd">
           <div class="title">입력</div>
-          <div class="small">한 줄 사건/상황을 입력하면, 60초 기준 9비트(씬)로 분해해서 이미지/영상 프롬프트를 생성합니다.</div>
+          <div class="small">한 줄 사건/상황 → 60초 기준 9비트(씬) 분해 → 이미지/영상 프롬프트 + SRT + JSON</div>
         </div>
         <div class="bd">
 
@@ -498,7 +584,7 @@
             <div class="qsTitle">✍️ 초보용: 예시 한 번만 눌러보세요 (원클릭 실행)</div>
             <div class="qsDesc">
               예시 버튼을 누르면 입력이 자동으로 들어가고 <b>⚡ 생성하기</b>까지 바로 실행됩니다.<br/>
-              저장은 <b>📋 Copy All</b> 또는 <b>📦 ZIP</b>을 누르면 됩니다.
+              저장은 <b>📋 Copy</b> 또는 <b>📦 ZIP</b>을 누르면 됩니다.
             </div>
             <div class="qsGrid">
               <button class="qsBtn" data-example="비 오는 밤, 골목에서 누군가가 사라졌다. 단서는 떨어진 휴대폰뿐이다.">
@@ -520,7 +606,22 @@
             <div class="qsBox" id="qsBox">
               <b>🧸 유치원 모드</b>: 무서운 장면 대신 <b>경찰차·CCTV·단서</b>로만 보여줘요.<br/>
               <b>📦 ZIP 위치</b>: 안드로이드=내 파일→다운로드 / 아이폰=파일앱→다운로드 / PC=Downloads<br/>
-              <b>사용 방법 전체</b>는 아래 버튼 <b>📘 사용 방법</b>을 눌러주세요.
+              <b>v7-lite</b>: 출력이 <b>A/B/C 3안</b>으로 나와요(탭으로 전환).
+            </div>
+          </div>
+
+          <!-- 60s Templates 10 -->
+          <div class="tplWrap" id="tplWrap">
+            <div class="tplHead" id="tplHead">
+              <b>🧩 60초 템플릿 10 (원클릭 입력+세팅+즉시 생성)</b>
+              <span style="color:var(--muted);font-weight:900;">열기/닫기</span>
+            </div>
+            <div class="tplBody" id="tplBody">
+              <div class="tplGrid" id="tplGrid"></div>
+              <div class="tplNote">
+                ※ 템플릿은 <b>길이=60초</b>로 자동 설정됩니다.<br/>
+                ※ 현실 사건 + 유치원 모드면 “비그래픽 단서”로 자동 치환됩니다.
+              </div>
             </div>
           </div>
 
@@ -589,21 +690,6 @@
 
             <div class="optRow">
               <div>
-                <div class="optLabel">🐾 캐릭터 자동 등장 <span class="hint" data-hint="autoChar">ⓘ</span></div>
-                <div class="small">ON이면 앱이 “추천 캐릭터”를 제안(자동 확정 X)</div>
-                <div class="hintBox" id="hint-autoChar" style="display:none;">
-                  OFF: 내가 쓴 것만.<br/>
-                  ON: 앱이 추천을 “제안”할 수 있어요.
-                </div>
-              </div>
-              <select id="autoCharacter">
-                <option value="off">OFF (내가 쓴 것만)</option>
-                <option value="on">ON (추천 제안)</option>
-              </select>
-            </div>
-
-            <div class="optRow">
-              <div>
                 <div class="optLabel">🧠 자동 상상(연출 추가) <span class="hint" data-hint="autoImprov">ⓘ</span></div>
                 <div class="small">ON이면 카메라/조명/분위기를 더 풍부하게</div>
                 <div class="hintBox" id="hint-autoImprov" style="display:none;">
@@ -619,10 +705,27 @@
 
             <div class="optRow">
               <div>
+                <div class="optLabel">🎛 A/B/C 3안 생성 <span class="hint" data-hint="abc">ⓘ</span></div>
+                <div class="small">ON이면 생성할 때 A/B/C 3안이 함께 만들어짐(연출만 다름)</div>
+                <div class="hintBox" id="hint-abc" style="display:none;">
+                  A: 다큐/현장감<br/>
+                  B: 시네마/감정선<br/>
+                  C: 긴장/스릴(비고어)<br/>
+                  (유치원+현실은 항상 비그래픽 단서 중심)
+                </div>
+              </div>
+              <select id="abcMode">
+                <option value="on">ON (추천)</option>
+                <option value="off">OFF (단일)</option>
+              </select>
+            </div>
+
+            <div class="optRow">
+              <div>
                 <div class="optLabel">🎭 캐릭터 프리셋(선택) <span class="hint" data-hint="preset">ⓘ</span></div>
                 <div class="small">내가 고르면 무조건 적용(의도)</div>
                 <div class="hintBox" id="hint-preset" style="display:none;">
-                  자동등장 OFF여도, 내가 프리셋을 고르면 그건 “내 의도”라서 적용됩니다.
+                  프리셋을 고르면 그건 “내 의도”라서 그대로 적용됩니다.
                 </div>
               </div>
               <select id="presetId">
@@ -673,8 +776,9 @@
 
           <div class="btnRow">
             <button class="primary" id="genBtn">⚡ 생성하기</button>
-            <button class="secondary" id="copyBtn">📋 Copy All</button>
-            <button id="zipBtn">📦 ZIP(필수파일)</button>
+            <button class="secondary" id="copyBtn">📋 Copy(현재 탭)</button>
+            <button class="secondary" id="copyAllBtn">📋 Copy(A+B+C)</button>
+            <button id="zipBtn">📦 ZIP(A/B/C 폴더)</button>
             <button id="backupBtn">🧰 백업(내보내기)</button>
             <button id="restoreBtn">🧩 복구(가져오기)</button>
             <button class="danger" id="resetBtn">🧹 초기화</button>
@@ -682,7 +786,7 @@
           </div>
 
           <div class="small" style="margin-top:10px;">
-            ✅ 순서: <b>한 줄 쓰기 → ⚡ 생성하기 → Copy 또는 ZIP → 이미지 만들기 → 영상 만들기 → 자막 넣기</b><br/>
+            ✅ 순서: <b>한 줄 쓰기 → ⚡ 생성하기 → 탭(A/B/C) 확인 → Copy 또는 ZIP → 이미지 만들기 → 영상 만들기 → 자막 넣기</b><br/>
             ⚠️ 유치원 모드 ON이면 무서운 표현은 자동으로 안전 단서로 바뀝니다.
           </div>
 
@@ -693,11 +797,22 @@
       <div class="card">
         <div class="hd">
           <div class="title">출력</div>
-          <div class="small">prompts_image.txt / prompts_video.txt / srt.txt / json 포함</div>
+          <div class="small">A/B/C 탭 · prompts_image.txt / prompts_video.txt / srt.txt / json 포함</div>
         </div>
         <div class="bd">
+          <div class="tabsRow">
+            <div class="tabs">
+              <button class="tabBtn active" data-tab="A" id="tabA">A</button>
+              <button class="tabBtn" data-tab="B" id="tabB">B</button>
+              <button class="tabBtn" data-tab="C" id="tabC">C</button>
+            </div>
+            <div class="miniBtns">
+              <button class="miniBtn warn" id="validateBtn">🛠 Validator</button>
+              <button class="miniBtn secondary" id="autofixBtn">✨ Auto-fix</button>
+            </div>
+          </div>
           <div class="out" id="out" contenteditable="true" spellcheck="false"></div>
-          <div class="footer">© One-Line Movie V4.3 Omni Engine · Safe Edition</div>
+          <div class="footer">© One-Line Movie V4.3 Omni Engine · Safe Edition · v7-lite</div>
         </div>
       </div>
     </div>
@@ -730,99 +845,15 @@
             이 앱이 알아서 <b>장면 나누고</b>,
             <b>사진 만드는 글</b> 만들고,
             <b>영상 만드는 글</b> 만들고,
-            <b>자막</b>도 만들어 줘.
-          </p>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">1️⃣ 제일 먼저 할 일</div>
-          <p>위에 있는 큰 칸에 하고 싶은 이야기 한 줄을 써.</p>
-          <div class="helpCode">비 오는 밤 골목에서 누군가가 사라졌다</div>
-          <p class="helpMini">또는</p>
-          <div class="helpCode">강아지 세 마리가 도시를 구한다</div>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">2️⃣ ⚡ 생성하기 누르면 뭐가 되냐?</div>
-          <p>
-            ⚡ 생성하기를 누르면
-            아래쪽에 <b>검은 창(출력)</b>이 생기면서<br/>
-            장면 1, 장면 2, 장면 3… 이런 식으로 <b>영화 설계도</b>가 만들어진다.<br/>
-            이건 아직 영상이 아니라, <b>영화를 만들기 위한 설계서</b>야.
-          </p>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">3️⃣ 이걸 파일로 어떻게 저장해?</div>
-          <ul class="helpList">
-            <li><b>📋 Copy All</b> → 모든 설계도를 글로 복사 → 다른 앱에 붙여넣기 가능</li>
-            <li><b>📦 ZIP</b> → 영화 만들기용 파일 묶음 다운로드</li>
-          </ul>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">4️⃣ ZIP 파일은 어디에 저장되나?</div>
-          <ul class="helpList">
-            <li>📱 <b>안드로이드</b>: <b>내 파일</b> → <b>Download(다운로드)</b></li>
-            <li>🍎 <b>아이폰</b>: <b>파일 앱</b> → <b>다운로드</b></li>
-            <li>💻 <b>PC</b>: <b>Downloads(다운로드)</b></li>
-          </ul>
-          <p class="helpMini">ZIP이 안 열리면 “압축 풀기”를 하면 돼.</p>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">5️⃣ ZIP 안에는 뭐가 들어있어?</div>
-          <ul class="helpList">
-            <li><b>prompts_image.txt</b> : 사진 만드는 글</li>
-            <li><b>prompts_video.txt</b> : 영상 만드는 글</li>
-            <li><b>srt.txt</b> : 자막 파일</li>
-            <li><b>plan.json</b> : 영화 시간표</li>
-          </ul>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">6️⃣ 진짜 이미지 만드는 법</div>
-          <ol class="helpList">
-            <li>ZIP 안에서 <b>prompts_image.txt</b>를 연다</li>
-            <li><b>SCENE 1</b> 글을 복사한다</li>
-            <li><b>나노바나나 / 미드저니 / 이미지 AI</b>에 붙여넣고 만든다</li>
-            <li><b>SCENE 2, 3…</b>도 반복한다</li>
-          </ol>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">7️⃣ 진짜 영상 만드는 법</div>
-          <ol class="helpList">
-            <li>ZIP 안에서 <b>prompts_video.txt</b>를 연다</li>
-            <li><b>SCENE 1</b>을 복사한다</li>
-            <li><b>VEO / Runway / Sora</b> 같은 영상 AI에 붙여넣고 만든다</li>
-            <li><b>SCENE 2, 3…</b>도 이어서 만든다</li>
-          </ol>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">8️⃣ 자막 넣기</div>
-          <p>
-            ZIP 안에 있는 <b>srt.txt</b>를<br/>
-            영상 편집 앱(캡컷/프리미어 등)에 넣으면<br/>
-            <b>자동으로 자막</b>이 들어간다.
-          </p>
-        </div>
-
-        <div class="helpSection">
-          <div class="helpH">🧸 유치원 모드란?</div>
-          <p>
-            유치원 모드가 켜져 있으면<br/>
-            <b>피 / 시체 / 상처 / 트렁크</b> 같은 건 나오지 않고<br/>
-            대신 <b>경찰차 / CCTV / 떨어진 휴대폰</b> 같은<br/>
-            <b>안전한 단서</b>로 바꿔서 보여줘.
+            <b>자막</b>도 만들어 줘.<br/><br/>
+            그리고 <b>v7-lite</b>는 같은 내용으로 <b>A/B/C 3안</b>을 한 번에 만들어 줘.
           </p>
         </div>
 
         <div class="helpSection">
           <div class="helpH">✅ 한 줄 결론</div>
           <p>
-            <b>한 줄 쓰기 → ⚡ 생성하기 → Copy 또는 ZIP → 이미지 만들기 → 영상 만들기 → 자막 넣기</b>
+            <b>한 줄 쓰기 → ⚡ 생성하기 → A/B/C 탭 확인 → Copy 또는 ZIP → 이미지 → 영상 → 자막</b>
           </p>
         </div>
 
@@ -846,8 +877,10 @@
             (열리는 방법: <b>제목 7번 터치</b> + <b>비밀번호 7878</b>)
           </p>
           <p style="color:var(--muted);line-height:1.6;margin:8px 0;">
-            나중에 여기 안에 개발자용 설정/로그/테스트 버튼 넣을 수 있어.
+            v7-lite 테스트/로그/실험 버튼을 나중에 여기 넣으면 돼.
           </p>
+          <div class="divider"></div>
+          <button class="miniBtn" id="devDumpBtn">📦 현재 상태 덤프(alert)</button>
         </div>
       </div>
     </div>
@@ -877,9 +910,7 @@
     }
 
     // ====== Server policy ======
-    function getWorkerUrl(){
-      return ""; // 오프라인 기본
-    }
+    function getWorkerUrl(){ return ""; } // 오프라인 기본
 
     function applyServerPolicy(){
       const workerUrl = (typeof getWorkerUrl === "function") ? getWorkerUrl() : "";
@@ -910,10 +941,22 @@
     // ====== Safety (Kinder Mode) ======
     let ENABLE_KINDER_MODE = true;
 
+    // 금지 토큰(검출용)
     const FORBID_GORE_TOKENS = [
       "blood","gore","corpse","dead body","body bag","mutilation","severed","organs","dismemberment",
       "open trunk","trunk open","dead in trunk","explicit injury","wound close-up","dismembered","decapitation",
       "피","고어","시체","시신","사체","토막","장기","절단","훼손","피웅덩이","트렁크","상처","절개","목이 잘린"
+    ];
+
+    // Auto-fix 치환 테이블(출력에 직접 적용)
+    const AUTO_FIX_MAP = [
+      {re:/\b(blood|gore|corpse|dead body|body bag|mutilation|severed|organs|dismemberment|decapitation)\b/gi, to:"non-graphic clue"},
+      {re:/\b(open trunk|trunk open|dead in trunk)\b/gi, to:"vehicle tail lights in the distance"},
+      {re:/(피|고어|시체|시신|사체|토막|장기|절단|훼손|피웅덩이)/g, to:"비그래픽 단서"},
+      {re:/(트렁크)/g, to:"차량 후미등(원경)"},
+      {re:/(상처|절개|목이 잘린)/g, to:"부상 묘사 금지(단서로 대체)"},
+      // 실제 사건일 때 “과도한 선정성” 완화(기본은 이미 비그래픽)
+      {re:/\b(close-up injuries?)\b/gi, to:"no close-up injuries"},
     ];
 
     // ✅ 경찰선 제거 → 경찰차/경찰서 중심
@@ -975,18 +1018,11 @@
       return "custom";
     }
 
-    function resolvePresetId({ presetId, enableAutoCharacter, line, intent }){
+    function resolvePresetId({ presetId, line }){
       let pid = presetId;
       const userPickedSpecific = (pid === "nabi" || pid === "coco" || pid === "tiger" || pid === "custom");
       if(userPickedSpecific) return pid;
-
-      if(pid === "auto"){
-        if(enableAutoCharacter){
-          const recommended = intent?.character || autoRecommendPreset(line);
-          return recommended || "custom";
-        }
-        return "custom";
-      }
+      if(pid === "auto") return autoRecommendPreset(line);
       return "custom";
     }
 
@@ -1016,7 +1052,39 @@
       return `${pad(h)}:${pad(m)}:${pad(s)},000`;
     }
 
-    function buildPlan(input){
+    function getSceneCount(len){
+      if(len <= 20) return 5;
+      if(len <= 30) return 6;
+      if(len <= 60) return 9;
+      return 12;
+    }
+
+    // v7-lite: ABC variant flavor
+    const VARIANT_FLAVOR = {
+      A: {
+        label:"A(다큐/현장감)",
+        lensOn:"documentary realism, natural lighting, handheld authenticity",
+        camOn:"camera: observational handheld, subtle zoom, documentary",
+        soundOn:"sound: ambient city tone, distant siren (non-graphic), realistic",
+        moodBoost:"documentary, restrained",
+      },
+      B: {
+        label:"B(시네마/감정선)",
+        lensOn:"cinematic lighting, soft bokeh, emotional framing, realistic photography",
+        camOn:"camera: slow dolly-in, gentle push, cinematic",
+        soundOn:"sound: soft ambient, subtle score, emotional",
+        moodBoost:"cinematic, gentle tension",
+      },
+      C: {
+        label:"C(긴장/스릴)",
+        lensOn:"high contrast cinematic, suspense framing, realistic photography",
+        camOn:"camera: slow handheld, tight framing, suspense",
+        soundOn:"sound: minimal drones, tense ambience, non-graphic",
+        moodBoost:"suspense, tense",
+      }
+    };
+
+    function buildBasePlan(input){
       const line = safeText(input.line).trim();
       const genre = input.genre;
       const tone = input.tone;
@@ -1025,11 +1093,7 @@
       const bg = safeText(input.bg);
       const protagonist = input.protagonist;
 
-      let n = 9;
-      if(len <= 20) n = 5;
-      else if(len <= 30) n = 6;
-      else if(len <= 60) n = 9;
-      else n = 12;
+      const n = getSceneCount(len);
 
       const intent = {
         reality,
@@ -1040,14 +1104,7 @@
         ]
       };
 
-      const enableAutoCharacter = (input.autoCharacter === "on");
-      const pid = resolvePresetId({
-        presetId: input.presetId,
-        enableAutoCharacter,
-        line,
-        intent
-      });
-
+      const pid = resolvePresetId({ presetId: input.presetId, line });
       const preset = PRESETS[pid] || PRESETS.custom;
 
       let beats = beatsForGenre(genre, n);
@@ -1055,17 +1112,13 @@
         beats = safeBeatsForRealIncident(n);
       }
 
-      const charLock = (input.charLock === "on");
-      const autoImprov = (input.autoImprov === "on");
-
       return {
         meta:{
           line, genre, tone, len, n, reality, bg, protagonist,
           presetId: pid,
           presetName: preset.name,
-          autoCharacter: enableAutoCharacter,
-          autoImprov,
-          charLock,
+          autoImprov: (input.autoImprov === "on"),
+          charLock: (input.charLock === "on"),
           kinderMode: ENABLE_KINDER_MODE
         },
         intent,
@@ -1073,12 +1126,34 @@
       };
     }
 
+    function buildVariantPlan(basePlan, variantKey){
+      const v = VARIANT_FLAVOR[variantKey] || VARIANT_FLAVOR.A;
+      // basePlan을 깊은 복사
+      const plan = JSON.parse(JSON.stringify(basePlan));
+      plan.meta.variant = variantKey;
+      plan.meta.variantLabel = v.label;
+
+      // variant별 약간의 리듬 변화(과도하게 스토리 바꾸지 않고, 연출만 강화)
+      if(!(ENABLE_KINDER_MODE && plan.meta.reality === "REAL_WORLD")){
+        if(variantKey === "C" && plan.meta.genre === "mystery"){
+          // 미스터리+C면 긴장 비트 강화
+          plan.beats = plan.beats.map((b,i)=> (i===0 ? "훅(불길한 정적)" : b));
+        }
+        if(variantKey === "B" && plan.meta.genre === "drama"){
+          plan.beats = plan.beats.map((b,i)=> (i===plan.beats.length-1 ? "여운(따뜻한 결론)" : b));
+        }
+      }
+      return plan;
+    }
+
     function toImagePrompt(scene, plan){
       const m = plan.meta;
       const hard = joinHardRules(plan.intent);
       const safeEvidence = joinSafeEvidence(plan.intent);
 
-      const lens = m.autoImprov ? "cinematic lighting, realistic photography, shallow depth of field" : "realistic photo style, neutral lighting";
+      const v = VARIANT_FLAVOR[m.variant || "A"] || VARIANT_FLAVOR.A;
+
+      const lens = m.autoImprov ? v.lensOn : "realistic photo style, neutral lighting";
       const mood = ({
         dry_serious:"dry serious mood, restrained",
         calm:"calm mood, subtle",
@@ -1096,10 +1171,11 @@
       return [
         `Vertical 9:16,`,
         `Background: ${m.bg}.`,
+        `Variant: ${m.variantLabel || ""}.`,
         `Genre: ${m.genre}, Tone: ${m.tone}.`,
         `Main subject: ${protag}.`,
         `${sceneDesc}.`,
-        `${lens}, ${mood}.`,
+        `${lens}, ${mood}, ${v.moodBoost}.`,
         lock ? lock + "," : "",
         safeEvidence ? (safeEvidence + ",") : "",
         hard
@@ -1110,15 +1186,10 @@
       const m = plan.meta;
       const hard = joinHardRules(plan.intent);
       const safeEvidence = joinSafeEvidence(plan.intent);
+      const v = VARIANT_FLAVOR[m.variant || "A"] || VARIANT_FLAVOR.A;
 
-      const cam = m.autoImprov
-        ? "camera: slow handheld, subtle push-in, cinematic"
-        : "camera: fixed shot, minimal movement";
-
-      const sound = m.autoImprov
-        ? "sound: ambient city tone, distant siren (non-graphic), subtle tension"
-        : "sound: minimal ambient";
-
+      const cam = m.autoImprov ? v.camOn : "camera: fixed shot, minimal movement";
+      const sound = m.autoImprov ? v.soundOn : "sound: minimal ambient";
       const lock = m.charLock ? "keep the same character identity and outfit" : "";
 
       const sceneDesc = (ENABLE_KINDER_MODE && m.reality === "REAL_WORLD")
@@ -1127,6 +1198,7 @@
 
       return [
         `Vertical 9:16, duration ${scene.dur}s.`,
+        `Variant: ${m.variantLabel || ""}.`,
         `${cam}.`,
         `${sound}.`,
         `Scene: ${sceneDesc}.`,
@@ -1190,13 +1262,43 @@
       };
     }
 
+    // ===== v7-lite: Validator / Auto-fix =====
+    function validateText(txt){
+      const t = safeText(txt);
+      const hits = [];
+      for(const token of FORBID_GORE_TOKENS){
+        const re = new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+        if(re.test(t)) hits.push(token);
+      }
+      return hits;
+    }
+
+    function autoFixText(txt){
+      let out = String(txt || "");
+      for(const rule of AUTO_FIX_MAP){
+        out = out.replace(rule.re, rule.to);
+      }
+      return out;
+    }
+
+    function autoFixOutputs(outs){
+      const o = JSON.parse(JSON.stringify(outs));
+      o.prompts_image_txt = autoFixText(o.prompts_image_txt);
+      o.prompts_video_txt = autoFixText(o.prompts_video_txt);
+      o.srt_txt = autoFixText(o.srt_txt);
+      o.json_txt = autoFixText(o.json_txt);
+      return o;
+    }
+
     // ====== Persistence ======
-    const STORE_KEY = "V43_OMNI_SAFE_STATE";
+    const STORE_KEY = "V43_OMNI_SAFE_STATE_V7";
     const FIRST_OVERLAY_KEY = "V43_FIRST_OVERLAY_SEEN";
+    const TAB_KEY = "V43_ACTIVE_TAB";
 
     function saveState(){
       const state = collectUI();
       try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+      try{ localStorage.setItem(TAB_KEY, ACTIVE_TAB); }catch(e){}
     }
 
     function loadState(){
@@ -1217,7 +1319,6 @@
       if(st.bg != null) $("bg").value = st.bg;
       if(st.protagonist) $("protagonist").value = st.protagonist;
 
-      if(st.autoCharacter) $("autoCharacter").value = st.autoCharacter;
       if(st.autoImprov) $("autoImprov").value = st.autoImprov;
       if(st.presetId) $("presetId").value = st.presetId;
       if(st.charLock) $("charLock").value = st.charLock;
@@ -1225,6 +1326,10 @@
       if(st.kinderMode){
         $("kinderMode").value = st.kinderMode;
         ENABLE_KINDER_MODE = (st.kinderMode === "on");
+      }
+
+      if(st.abcMode){
+        $("abcMode").value = st.abcMode;
       }
     }
 
@@ -1238,12 +1343,12 @@
         bg: safeText($("bg").value),
         protagonist: $("protagonist").value,
 
-        autoCharacter: $("autoCharacter").value,
         autoImprov: $("autoImprov").value,
         presetId: $("presetId").value,
         charLock: $("charLock").value,
 
-        kinderMode: $("kinderMode").value
+        kinderMode: $("kinderMode").value,
+        abcMode: $("abcMode").value
       };
     }
 
@@ -1257,11 +1362,12 @@
       }
     }
 
-    // ====== Output rendering ======
-    let LAST = null;
+    // ====== Output rendering (ABC tabs) ======
+    let LAST = { A:null, B:null, C:null }; // {plan, outs}
+    let ACTIVE_TAB = "A";
 
-    function renderOutput(outputs){
-      const meta = LAST?.plan?.meta || {};
+    function headerFor(tabKey, pack){
+      const meta = pack?.plan?.meta || {};
       const modeText = (meta.kinderMode === true) ? "KINDER" : "NORMAL";
 
       const globalSafety =
@@ -1269,9 +1375,10 @@
           ? `GLOBAL SAFETY (KINDER): FORBID: ${FORBID_GORE_TOKENS.join(", ")}`
           : "";
 
-      const header = [
-        `# One-line Movie Output`,
+      return [
+        `# One-line Movie Output (${tabKey})`,
         `- created: ${new Date().toLocaleString()}`,
+        `- variant: ${meta.variantLabel || ""}`,
         `- mode: ${modeText}`,
         `- genre: ${meta.genre || ""}`,
         `- tone: ${meta.tone || ""}`,
@@ -1281,16 +1388,41 @@
         globalSafety ? globalSafety : "",
         ``,
         `--- prompts_image.txt ---`,
-        outputs.prompts_image_txt,
+        pack?.outs?.prompts_image_txt || "",
         `--- prompts_video.txt ---`,
-        outputs.prompts_video_txt,
+        pack?.outs?.prompts_video_txt || "",
         `--- srt.txt ---`,
-        outputs.srt_txt,
+        pack?.outs?.srt_txt || "",
         `--- json ---`,
-        outputs.json_txt
+        pack?.outs?.json_txt || ""
       ].join("\n");
+    }
 
-      $("out").textContent = header;
+    function renderActiveTab(){
+      const pack = LAST[ACTIVE_TAB];
+      if(!pack){
+        $("out").textContent = "";
+        return;
+      }
+      $("out").textContent = headerFor(ACTIVE_TAB, pack);
+    }
+
+    function setActiveTab(tabKey){
+      ACTIVE_TAB = tabKey;
+      ["A","B","C"].forEach(k=>{
+        const el = $("tab"+k);
+        if(el) el.classList.toggle("active", k===tabKey);
+      });
+      renderActiveTab();
+      saveState();
+    }
+
+    function renderAllCombined(){
+      const blocks = [];
+      for(const k of ["A","B","C"]){
+        if(LAST[k]) blocks.push(headerFor(k, LAST[k]));
+      }
+      return blocks.join("\n\n\n====================\n\n\n").trim() + "\n";
     }
 
     // ====== UI tooltips ======
@@ -1324,8 +1456,8 @@
       parts.push(getSelectedText("genre"));
       parts.push("길이:" + getSelectedText("len"));
       parts.push("유치원:" + getSelectedText("kinderMode"));
-      parts.push("자동등장:" + getSelectedText("autoCharacter"));
       parts.push("자동연출:" + getSelectedText("autoImprov"));
+      parts.push("ABC:" + getSelectedText("abcMode"));
       parts.push("프리셋:" + getSelectedText("presetId"));
 
       pill.textContent = "🎬 현재 설정: " + parts.filter(Boolean).join(" · ");
@@ -1375,11 +1507,62 @@
         });
       }
 
-      ["genre","len","tone","reality","kinderMode","autoCharacter","autoImprov","presetId"].forEach(id=>{
+      ["genre","len","tone","reality","kinderMode","autoImprov","abcMode","presetId"].forEach(id=>{
         const el = $(id);
         if(el) el.addEventListener("change", refreshQuickStyle);
       });
       refreshQuickStyle();
+    }
+
+    // ===== v7-lite: 60초 템플릿 10 =====
+    const TEMPLATES_60 = [
+      { title:"1) 뉴스 인터뷰(침묵)", line:"뉴스 인터뷰 현장. 목격자는 아무 말도 하지 않는다. 단서는 떨어진 물건과 CCTV뿐이다.", genre:"documentary", tone:"dry_serious", reality:"REAL_WORLD", bg:"새벽의 도심 골목", pro:"person" },
+      { title:"2) CCTV 추적(비그래픽)", line:"CCTV 화면에 이상한 장면이 찍혔다. 모두가 놓친 1초의 단서를 따라간다.", genre:"mystery", tone:"tense", reality:"REAL_WORLD", bg:"비 오는 밤", pro:"person" },
+      { title:"3) 강아지 3영웅(유튜브)", line:"세 마리 강아지가 도시를 구한다. 위험은 단서로만 암시하고, 끝에 따뜻한 여운을 남긴다.", genre:"drama", tone:"warm", reality:"FICTION", bg:"저녁 노을의 거리", pro:"dog" },
+      { title:"4) 미스터리 택배", line:"정체불명의 택배가 도착했다. 상자 안은 보여주지 않고, 주변 반응과 단서만으로 긴장감을 만든다.", genre:"mystery", tone:"tense", reality:"FICTION", bg:"현관 앞", pro:"person" },
+      { title:"5) 사라진 열쇠", line:"한순간에 열쇠가 사라졌다. 주변 물건, 발자국, 반사된 빛만으로 이야기를 전개한다.", genre:"mystery", tone:"calm", reality:"REAL_WORLD", bg:"늦은 밤 집 안", pro:"person" },
+      { title:"6) 길 위의 선택", line:"늦은 밤, 주인공은 한 선택을 해야 한다. 큰 사건은 직접 보여주지 않고, 분위기와 소리로만 암시한다.", genre:"drama", tone:"dry_serious", reality:"REAL_WORLD", bg:"텅 빈 도로", pro:"person" },
+      { title:"7) 액션(비고어)", line:"도망치는 사람과 따라오는 그림자. 충돌 장면은 비그래픽. 긴장과 추격만으로 60초를 끌고 간다.", genre:"thriller", tone:"tense", reality:"FICTION", bg:"네온 골목", pro:"person" },
+      { title:"8) 코미디 오해", line:"모두가 같은 장면을 다르게 오해한다. 폭력/상처 없이 리액션과 타이밍으로 웃긴 60초를 만든다.", genre:"comedy", tone:"calm", reality:"FICTION", bg:"밝은 카페", pro:"person" },
+      { title:"9) 판타지 룰 공개", line:"이 세계에는 3가지 룰이 있다. 룰을 보여주고, 작은 단서로 위기를 넘긴다. 화려하지만 안전하게.", genre:"fantasy", tone:"warm", reality:"FICTION", bg:"신비한 숲", pro:"animal" },
+      { title:"10) 다큐 ‘현장 기록’", line:"사건이 아니라 ‘현장을 기록’한다. 경찰차, 경광등, CCTV, 떨어진 물건—단서만으로 사실감을 만든다.", genre:"documentary", tone:"dry_serious", reality:"REAL_WORLD", bg:"새벽 편의점 앞", pro:"person" },
+    ];
+
+    function initTemplates(){
+      const grid = $("tplGrid");
+      if(!grid) return;
+      grid.innerHTML = "";
+      TEMPLATES_60.forEach((t, idx)=>{
+        const b = document.createElement("button");
+        b.className = "tplBtn";
+        b.textContent = t.title;
+        b.addEventListener("click", ()=>{
+          $("line").value = t.line;
+          $("len").value = "60";
+          $("genre").value = t.genre;
+          $("tone").value = t.tone;
+          $("reality").value = t.reality;
+          $("bg").value = t.bg;
+          $("protagonist").value = t.pro;
+          $("kinderMode").value = "on";
+          ENABLE_KINDER_MODE = true;
+          $("abcMode").value = "on";
+          refreshPills();
+          refreshQuickStyle();
+          saveState();
+          generate();
+          try{ $("out").scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){}
+        });
+        grid.appendChild(b);
+      });
+
+      const head = $("tplHead");
+      const body = $("tplBody");
+      if(head && body){
+        head.addEventListener("click", ()=>{
+          body.style.display = (body.style.display === "none" || body.style.display === "") ? "block" : "none";
+        });
+      }
     }
 
     // ====== First-run overlay ======
@@ -1415,16 +1598,49 @@
         return;
       }
 
-      const plan = buildPlan(ui);
-      const outs = buildOutputs(plan);
-      LAST = { plan, outs };
+      const basePlan = buildBasePlan(ui);
 
-      renderOutput(outs);
+      // ABC 생성 여부
+      const abcOn = (ui.abcMode === "on");
+
+      if(abcOn){
+        const planA = buildVariantPlan(basePlan, "A");
+        const planB = buildVariantPlan(basePlan, "B");
+        const planC = buildVariantPlan(basePlan, "C");
+
+        let outsA = buildOutputs(planA);
+        let outsB = buildOutputs(planB);
+        let outsC = buildOutputs(planC);
+
+        // Auto-fix는 기본적으로 적용(안전 우선)
+        outsA = autoFixOutputs(outsA);
+        outsB = autoFixOutputs(outsB);
+        outsC = autoFixOutputs(outsC);
+
+        LAST.A = { plan: planA, outs: outsA };
+        LAST.B = { plan: planB, outs: outsB };
+        LAST.C = { plan: planC, outs: outsC };
+
+      }else{
+        // 단일 생성이면 A만 사용
+        const planA = buildVariantPlan(basePlan, "A");
+        let outsA = buildOutputs(planA);
+        outsA = autoFixOutputs(outsA);
+
+        LAST.A = { plan: planA, outs: outsA };
+        LAST.B = null;
+        LAST.C = null;
+      }
+
+      // 탭 유지: ABC가 꺼져 있으면 A로 강제
+      if(!LAST[ACTIVE_TAB]) ACTIVE_TAB = "A";
+      setActiveTab(ACTIVE_TAB);
+
       refreshPills();
       saveState();
     }
 
-    function copyAll(){
+    function copyCurrent(){
       const txt = $("out").textContent || "";
       if(!txt.trim()){
         toast("복사할 출력이 없어. 먼저 생성하기를 눌러줘.");
@@ -1444,8 +1660,27 @@
       });
     }
 
+    function copyAllABC(){
+      const txt = renderAllCombined();
+      if(!txt.trim()){
+        toast("복사할 출력이 없어. 먼저 생성하기를 눌러줘.");
+        return;
+      }
+      navigator.clipboard.writeText(txt).then(()=>{
+        toast("A+B+C 전체 복사 완료!");
+      }).catch(()=>{
+        const tmp = document.createElement("textarea");
+        tmp.value = txt;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand("copy");
+        document.body.removeChild(tmp);
+        toast("A+B+C 전체 복사 완료(대체 방식)!");
+      });
+    }
+
     async function makeZip(){
-      if(!LAST){
+      if(!LAST.A){
         toast("ZIP 만들려면 먼저 생성하기를 눌러줘.");
         return;
       }
@@ -1455,11 +1690,24 @@
       }
 
       const zip = new JSZip();
-      const folder = zip.folder("one_line_movie");
-      folder.file("prompts_image.txt", LAST.outs.prompts_image_txt);
-      folder.file("prompts_video.txt", LAST.outs.prompts_video_txt);
-      folder.file("srt.txt", LAST.outs.srt_txt);
-      folder.file("plan.json", LAST.outs.json_txt);
+      const root = zip.folder("one_line_movie");
+
+      const addVariant = (k)=>{
+        const pack = LAST[k];
+        if(!pack) return;
+        const f = root.folder(k);
+        f.file("prompts_image.txt", pack.outs.prompts_image_txt);
+        f.file("prompts_video.txt", pack.outs.prompts_video_txt);
+        f.file("srt.txt", pack.outs.srt_txt);
+        f.file("plan.json", pack.outs.json_txt);
+      };
+
+      addVariant("A");
+      addVariant("B");
+      addVariant("C");
+
+      // 전체 합본도 추가
+      root.file("ALL_combined.txt", renderAllCombined());
 
       const blob = await zip.generateAsync({type:"blob"});
       const a = document.createElement("a");
@@ -1474,13 +1722,14 @@
       const payload = {
         exportedAt: new Date().toISOString(),
         state,
-        last: LAST ? { plan: LAST.plan, outs: LAST.outs } : null
+        activeTab: ACTIVE_TAB,
+        last: LAST
       };
       const txt = JSON.stringify(payload, null, 2);
       const blob = new Blob([txt], {type:"application/json"});
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `backup_v43_${nowISO()}.json`;
+      a.download = `backup_v43_v7_${nowISO()}.json`;
       a.click();
       URL.revokeObjectURL(a.href);
     }
@@ -1496,10 +1745,14 @@
         try{
           const payload = JSON.parse(txt);
           applyState(payload.state || {});
-          LAST = payload.last || null;
-          if(LAST?.outs) renderOutput(LAST.outs);
+          LAST = payload.last || {A:null,B:null,C:null};
+          ACTIVE_TAB = payload.activeTab || "A";
+
           ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
           refreshPills();
+          if(!LAST[ACTIVE_TAB]) ACTIVE_TAB = "A";
+          setActiveTab(ACTIVE_TAB);
+
           saveState();
           toast("복구 완료!");
         }catch(e){
@@ -1518,17 +1771,19 @@
       $("reality").value = "REAL_WORLD";
       $("bg").value = "저녁 늦은 밤";
       $("protagonist").value = "person";
-      $("autoCharacter").value = "off";
       $("autoImprov").value = "off";
       $("presetId").value = "custom";
       $("charLock").value = "off";
       $("kinderMode").value = "on";
+      $("abcMode").value = "on";
       ENABLE_KINDER_MODE = true;
 
       $("out").textContent = "";
-      LAST = null;
+      LAST = {A:null,B:null,C:null};
+      ACTIVE_TAB = "A";
 
       try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+      try{ localStorage.removeItem(TAB_KEY); }catch(e){}
 
       refreshPills();
       saveState();
@@ -1536,7 +1791,7 @@
     }
 
     function bindAutoSave(){
-      const ids = ["line","genre","len","tone","reality","bg","protagonist","autoCharacter","autoImprov","presetId","charLock","kinderMode"];
+      const ids = ["line","genre","len","tone","reality","bg","protagonist","autoImprov","presetId","charLock","kinderMode","abcMode"];
       ids.forEach(id=>{
         const el = $(id);
         if(!el) return;
@@ -1547,6 +1802,7 @@
             refreshPills();
           }
           saveState();
+          refreshQuickStyle();
         });
       });
     }
@@ -1558,7 +1814,7 @@
         z.textContent = "📦 ZIP(오프라인 불가)";
         z.disabled = true;
       }else{
-        z.textContent = "📦 ZIP(필수파일)";
+        z.textContent = "📦 ZIP(A/B/C 폴더)";
         z.disabled = false;
       }
     }
@@ -1622,17 +1878,70 @@
         }
       });
 
-      closeBtn.addEventListener("click", ()=>{
-        ov.style.display = "none";
-      });
+      closeBtn.addEventListener("click", ()=>{ ov.style.display = "none"; });
 
-      ov.addEventListener("click", (e)=>{
-        if(e.target === ov) ov.style.display = "none";
-      });
+      ov.addEventListener("click", (e)=>{ if(e.target === ov) ov.style.display = "none"; });
 
       document.addEventListener("keydown", (e)=>{
         if(e.key === "Escape" && ov.style.display === "flex") ov.style.display = "none";
       });
+
+      const dump = $("devDumpBtn");
+      if(dump){
+        dump.addEventListener("click", ()=>{
+          const payload = {
+            state: collectUI(),
+            activeTab: ACTIVE_TAB,
+            hasA: !!LAST.A, hasB: !!LAST.B, hasC: !!LAST.C
+          };
+          alert(JSON.stringify(payload, null, 2));
+        });
+      }
+    }
+
+    // ===== v7-lite: Tabs =====
+    function initTabs(){
+      ["A","B","C"].forEach(k=>{
+        const el = $("tab"+k);
+        if(!el) return;
+        el.addEventListener("click", ()=>{
+          if(!LAST[k]){
+            toast("이 탭은 아직 생성된 출력이 없어. (ABC가 OFF면 A만 생성됨)");
+            return;
+          }
+          setActiveTab(k);
+        });
+      });
+      // restore active tab from storage
+      try{
+        const t = localStorage.getItem(TAB_KEY);
+        if(t && ["A","B","C"].includes(t)) ACTIVE_TAB = t;
+      }catch(e){}
+      setActiveTab(ACTIVE_TAB);
+    }
+
+    // ===== v7-lite: Validator / Auto-fix 버튼 =====
+    function runValidator(){
+      const txt = $("out").textContent || "";
+      const hits = validateText(txt);
+      if(!hits.length){
+        toast("Validator: 문제 없음 ✅");
+        return;
+      }
+      toast("Validator: 금지어 감지 ⚠️\n\n" + hits.slice(0,12).join(", ") + (hits.length>12 ? " ..." : ""));
+    }
+
+    function runAutofix(){
+      const pack = LAST[ACTIVE_TAB];
+      if(!pack){
+        toast("Auto-fix: 먼저 생성하기를 눌러줘.");
+        return;
+      }
+      pack.outs = autoFixOutputs(pack.outs);
+      LAST[ACTIVE_TAB] = pack;
+      renderActiveTab();
+      toast("Auto-fix 적용 완료 ✅");
+      saveState();
     }
 
     // ====== Init ======
@@ -1641,6 +1950,7 @@
       bindHints();
       bindAutoSave();
       updateZipButtonState();
+      initTemplates();
 
       const st = loadState();
       if(st) applyState(st);
@@ -1649,13 +1959,20 @@
       refreshPills();
 
       bindQuickStart();
+      initHelpModal();
+      initDevMode();
+      initTabs();
 
       $("genBtn").addEventListener("click", generate);
-      $("copyBtn").addEventListener("click", copyAll);
+      $("copyBtn").addEventListener("click", copyCurrent);
+      $("copyAllBtn").addEventListener("click", copyAllABC);
       $("zipBtn").addEventListener("click", makeZip);
       $("backupBtn").addEventListener("click", backup);
       $("restoreBtn").addEventListener("click", restore);
       $("resetBtn").addEventListener("click", resetAll);
+
+      $("validateBtn").addEventListener("click", runValidator);
+      $("autofixBtn").addEventListener("click", runAutofix);
 
       $("line").addEventListener("keydown", (e)=>{
         if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
@@ -1664,10 +1981,7 @@
       });
 
       showFirstOverlayOnce();
-
-      // ✅ 추가된 기능들
-      initHelpModal();
-      initDevMode();
+      refreshQuickStyle();
     });
   </script>
 </body>
