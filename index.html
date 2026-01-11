@@ -536,6 +536,9 @@
       border-color:rgba(255,209,102,.35);
       color:#1a1202;
     }
+
+    /* ✅ 개발자 슬롯 텍스트영역 높이 안정(추가) */
+    #devSlotA, #devSlotB { min-height: 160px; }
   </style>
 </head>
 
@@ -881,6 +884,48 @@
           </p>
           <div class="divider"></div>
           <button class="miniBtn" id="devDumpBtn">📦 현재 상태 덤프(alert)</button>
+
+          <!-- ✅ A/B 슬롯 UI (추가됨) -->
+          <div class="divider"></div>
+
+          <div class="devSection">
+            <div class="devH">🧷 A/B 저장 슬롯 (오프라인 localStorage)</div>
+
+            <p style="color:var(--muted);line-height:1.6;margin:8px 0;">
+              A = <b>복구용(완성본 코드/스냅샷)</b><br/>
+              B = <b>작업중(어디까지 했는지/끊긴 지점 메모)</b>
+            </p>
+
+            <div class="row">
+              <div>
+                <div class="small" style="margin:6px 0 6px;">A 슬롯(복구용)</div>
+                <textarea id="devSlotA" placeholder="여기에 완성본 코드/복구 스냅샷을 붙여넣기"></textarea>
+                <div class="btnRow" style="margin-top:8px;">
+                  <button class="miniBtn secondary" id="saveSlotA">💾 A 저장</button>
+                  <button class="miniBtn" id="copySlotA">📋 A 복사</button>
+                  <button class="miniBtn warn" id="clearSlotA">🧹 A 비우기</button>
+                </div>
+              </div>
+
+              <div>
+                <div class="small" style="margin:6px 0 6px;">B 슬롯(작업중 메모)</div>
+                <textarea id="devSlotB" placeholder="여기에 작업중 끊긴 지점/설계 메모를 붙여넣기"></textarea>
+                <div class="btnRow" style="margin-top:8px;">
+                  <button class="miniBtn secondary" id="saveSlotB">💾 B 저장</button>
+                  <button class="miniBtn" id="copySlotB">📋 B 복사</button>
+                  <button class="miniBtn warn" id="clearSlotB">🧹 B 비우기</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="btnRow">
+              <button class="miniBtn secondary" id="exportSlots">📤 A/B 내보내기(JSON)</button>
+              <button class="miniBtn" id="importSlots">📥 A/B 가져오기(JSON)</button>
+            </div>
+          </div>
+          <!-- ✅ A/B 슬롯 UI 끝 -->
         </div>
       </div>
     </div>
@@ -1895,6 +1940,107 @@
             hasA: !!LAST.A, hasB: !!LAST.B, hasC: !!LAST.C
           };
           alert(JSON.stringify(payload, null, 2));
+        });
+      }
+
+      // ===== A/B 슬롯 로직 (오프라인 localStorage) =====
+      const SLOT_A_KEY = "V43_DEV_SLOT_A";
+      const SLOT_B_KEY = "V43_DEV_SLOT_B";
+
+      const slotA = $("devSlotA");
+      const slotB = $("devSlotB");
+
+      // 로드
+      try{
+        if(slotA) slotA.value = localStorage.getItem(SLOT_A_KEY) || "";
+        if(slotB) slotB.value = localStorage.getItem(SLOT_B_KEY) || "";
+      }catch(e){}
+
+      const saveToLS = (k, v)=>{
+        try{ localStorage.setItem(k, v || ""); }catch(e){}
+      };
+
+      const copyText = (txt)=>{
+        if(!txt || !txt.trim()) return toast("복사할 내용이 없어.");
+        navigator.clipboard.writeText(txt).then(()=>toast("복사 완료!")).catch(()=>{
+          const ta = document.createElement("textarea");
+          ta.value = txt;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          toast("복사 완료(대체 방식)!");
+        });
+      };
+
+      // A
+      const saveA = $("saveSlotA");
+      const copyA = $("copySlotA");
+      const clearA = $("clearSlotA");
+
+      if(saveA && slotA) saveA.addEventListener("click", ()=>{ saveToLS(SLOT_A_KEY, slotA.value); toast("A 저장 완료!"); });
+      if(copyA && slotA) copyA.addEventListener("click", ()=> copyText(slotA.value));
+      if(clearA && slotA) clearA.addEventListener("click", ()=>{
+        slotA.value = "";
+        saveToLS(SLOT_A_KEY, "");
+        toast("A 비움 완료!");
+      });
+
+      // B
+      const saveB = $("saveSlotB");
+      const copyB = $("copySlotB");
+      const clearB = $("clearSlotB");
+
+      if(saveB && slotB) saveB.addEventListener("click", ()=>{ saveToLS(SLOT_B_KEY, slotB.value); toast("B 저장 완료!"); });
+      if(copyB && slotB) copyB.addEventListener("click", ()=> copyText(slotB.value));
+      if(clearB && slotB) clearB.addEventListener("click", ()=>{
+        slotB.value = "";
+        saveToLS(SLOT_B_KEY, "");
+        toast("B 비움 완료!");
+      });
+
+      // 내보내기/가져오기
+      const exportBtn = $("exportSlots");
+      const importBtn = $("importSlots");
+
+      if(exportBtn){
+        exportBtn.addEventListener("click", ()=>{
+          const payload = {
+            exportedAt: new Date().toISOString(),
+            slotA: slotA ? slotA.value : "",
+            slotB: slotB ? slotB.value : ""
+          };
+          const txt = JSON.stringify(payload, null, 2);
+          const blob = new Blob([txt], {type:"application/json"});
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = `dev_slots_${nowISO()}.json`;
+          a.click();
+          URL.revokeObjectURL(a.href);
+        });
+      }
+
+      if(importBtn){
+        importBtn.addEventListener("click", ()=>{
+          const inp = document.createElement("input");
+          inp.type = "file";
+          inp.accept = "application/json";
+          inp.onchange = async ()=>{
+            const f = inp.files && inp.files[0];
+            if(!f) return;
+            const txt = await f.text();
+            try{
+              const payload = JSON.parse(txt);
+              if(slotA) slotA.value = payload.slotA || "";
+              if(slotB) slotB.value = payload.slotB || "";
+              saveToLS(SLOT_A_KEY, slotA ? slotA.value : "");
+              saveToLS(SLOT_B_KEY, slotB ? slotB.value : "");
+              toast("A/B 가져오기 완료!");
+            }catch(e){
+              toast("가져오기 실패: JSON 형식이 아님");
+            }
+          };
+          inp.click();
         });
       }
     }
