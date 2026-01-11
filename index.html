@@ -132,30 +132,6 @@
     /* devOnly: 기본 숨김 / 로고 7탭으로 노출 */
     .devOnly{display:none;}
     .devOnly.on{display:flex;}
-
-    /* details UI */
-    details{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
-      border-radius:12px;
-      padding:10px;
-    }
-    summary{
-      cursor:pointer;
-      font-weight:900;
-      color:#e5e7eb;
-      outline:none;
-    }
-    summary::-webkit-details-marker{display:none;}
-    .kv{
-      display:grid;
-      grid-template-columns:110px 1fr;
-      gap:6px 10px;
-      margin-top:10px;
-      font-size:13px;
-      color:var(--text);
-    }
-    .kv .kk{color:var(--muted);font-size:12px}
   </style>
 </head>
 
@@ -178,7 +154,7 @@
         <div class="pill" id="serverPill">🛰 서버: 오프라인(고정)</div>
         <div class="pill" id="autosavePill">💾 자동저장: ON</div>
         <div class="pill" id="healthPill">🛡 안전모드: ON</div>
-        <div class="pill" id="buildPill">🏷 버전: eja-director-v1+specLock</div>
+        <div class="pill" id="buildPill">🏷 버전: eja-director-v1</div>
       </div>
     </div>
 
@@ -209,8 +185,7 @@
             <div class="control" style="flex:1 1 320px;min-width:240px">
               <button class="primary" id="make" style="width:100%">⚡ 생성하기(Director)</button>
               <div class="hint" style="margin-top:8px">
-                ✅ 의도 우선: 입력에 없는 캐릭터/소품/판타지 효과를 멋대로 추가하지 않습니다.<br/>
-                ✅ Spec Lock: 입력에서 추출한 (주체/행동/장소/색/의상)을 HARD LOCK 규칙으로 모든 씬에 강제 삽입합니다.
+                ✅ 의도 우선: 입력에 없는 캐릭터/소품/판타지 효과를 멋대로 추가하지 않습니다.
               </div>
             </div>
           </div>
@@ -258,19 +233,17 @@
 <script>
 /* =========================================================
  * One-Line Dog Movie (Eunbi·Jerry·Arang) — Director Mode (single file)
- * + Spec Lock + HardLock
+ * - 텍스트 한 줄 → 씬 분해 → 이미지/영상 프롬프트 생성
+ * - 의도 우선(자동 상상/멋대로 추가 금지)
+ * - devOnly: 로고 7탭으로 ZIP/다운로드/백업 노출
  * ========================================================= */
 
-const BUILD = "eja-director-v1+specLock";
+const BUILD = "eja-director-v1";
 
 // =========================
 // DIRECTOR MODE (현실화/의도 우선)
 // =========================
 const DIRECTOR_MODE = true;
-
-// ✅ Spec Lock switches
-const SPEC_LOCK_ON = true;      // ✅ 의도 잠금(권장: ON)
-const SPEC_LOCK_STRICT = true;  // ✅ 보수적으로 추출(오탐 최소)
 
 const $ = (id) => document.getElementById(id);
 const safeTrim = (v) => (v || "").toString().trim();
@@ -325,71 +298,6 @@ function applySafety(line){
     }
   }
   return { ok:true, line: raw };
-}
-
-/* =========================
- * Spec Extract + HardLock (ChatGPT-like)
- * - Very conservative extraction (min hallucination)
- * ========================= */
-function extractSpecStrict(line){
-  const raw = (line || "").trim();
-  const L = raw.toLowerCase();
-
-  // (A) Subject: 대표 키워드만 (오탐 방지)
-  let subject = "unknown";
-  if(/은비|eunbi|제리|jerry|아랑|arang|세\s*아이|삼남매|trio/.test(L)) subject = "eja_trio";
-  else if(/강아지|dog|puppy/.test(L)) subject = "dog";
-  else if(/고양이|cat|kitten|냥/.test(L)) subject = "cat";
-  else if(/사람|human|man|woman|남자|여자/.test(L)) subject = "human";
-  else if(/로봇|robot|android/.test(L)) subject = "robot";
-  else if(/차|자동차|car|truck|vehicle/.test(L)) subject = "vehicle";
-
-  // (B) Action: 딱 1개만 (대표 동사)
-  const actionMatch =
-    raw.match(/(뛰|달리|걷|앉|서|울|웃|도망|추격|싸우|구하|구조|요리|먹|마시|열|닫|숨|찾|추적|기다리|살피|지킨다|막는다|도와)/);
-  const action = actionMatch ? actionMatch[0] : "";
-
-  // (C) Setting: 딱 1개만
-  const settingMatch =
-    raw.match(/(지하철|골목|거리|집|주방|거실|학교|병원|바다|산|도시|한옥|방|카페|공원|현장|차도|보도|횡단보도|대피소)/);
-  const setting = settingMatch ? settingMatch[0] : "";
-
-  // (D) Color / Outfit: 있으면 잠금
-  const colorMatch =
-    raw.match(/(검은|하얀|흰|빨간|파란|노란|초록|보라|핑크|베이지|갈색|하늘색)/);
-  const color = colorMatch ? colorMatch[0] : "";
-
-  const outfitMatch =
-    raw.match(/(코트|자켓|점퍼|후드|드레스|정장|패딩|니트|한복|교복|셔츠|바지|장갑|목도리)/);
-  const outfit = outfitMatch ? outfitMatch[0] : "";
-
-  return { raw, subject, action, setting, color, outfit };
-}
-
-function buildHardLockRules(spec){
-  const rules = [];
-
-  // ✅ 주체/종/팀 고정
-  if(spec.subject === "eja_trio"){
-    rules.push("MAIN CAST MUST BE: Eunbi, Jerry, Arang (the same three realistic small dogs). DO NOT replace or add protagonists.");
-  } else if(spec.subject !== "unknown"){
-    rules.push(`PROTAGONIST MUST BE ${spec.subject.toUpperCase()}. NEVER CHANGE SPECIES/TYPE.`);
-  } else {
-    rules.push("DO NOT replace the protagonist with a different species/type.");
-  }
-
-  // ✅ 사용자가 말한 속성 고정
-  if(spec.color)  rules.push(`MAIN COLOR MUST INCLUDE "${spec.color}". DO NOT change it.`);
-  if(spec.outfit) rules.push(`OUTFIT MUST INCLUDE "${spec.outfit}". DO NOT change style/color.`);
-  if(spec.action) rules.push(`ACTION MUST INCLUDE "${spec.action}". DO NOT replace it.`);
-  if(spec.setting)rules.push(`SETTING MUST INCLUDE "${spec.setting}". DO NOT relocate it.`);
-
-  // ✅ 멋대로 추가 금지(핵심)
-  rules.push("DO NOT add extra characters not explicitly mentioned by the user.");
-  rules.push("DO NOT introduce fantasy/magic/sci-fi elements unless explicitly asked.");
-  rules.push("DO NOT add any on-screen text/captions/subtitles/watermark/logo/typography.");
-
-  return "HARD LOCK RULES: " + rules.join(" ");
 }
 
 /* =========================================================
@@ -626,7 +534,6 @@ function findFirstTwistIndex(times){
  * Translator (Director Mode)
  * - 자막/텍스트/로고 금지
  * - 실사/현실 물리
- * - Spec Lock: HARD LOCK RULES 끝에 강제 삽입
  * ========================================================= */
 const TRANSLATE = {
   cameraLine(brain, idx){
@@ -644,8 +551,7 @@ const TRANSLATE = {
     return "…";
   },
 
-  // ✅ hardLock 파라미터 추가
-  toImage({ brain, line, hardLock, beat, idx, seconds, flags }){
+  toImage({ brain, line, beat, idx, seconds, flags }){
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
     const noText = "no subtitles, no captions, no text, no watermark, no logo, no letters, no typography";
 
@@ -670,12 +576,10 @@ Style: ${styleLine}, ultra realistic, sharp focus, detailed, high quality,
 RULES: do not invent extra characters/props not implied by the user input. realistic physics. grounded scene.
 ${look}
 ${add ? "Extra: " + add + "," : ""}
-${noText}
-${hardLock ? ("\n" + hardLock) : ""}`.trim();
+${noText}`.trim();
   },
 
-  // ✅ hardLock 파라미터 추가
-  toVideo({ brain, line, hardLock, beat, idx, seconds, flags }){
+  toVideo({ brain, line, beat, idx, seconds, flags }){
     const timeHint = seconds <= 30 ? "short-form 30s" : (seconds <= 60 ? "short-form 60s" : "short-form 3min");
     const noText = "no subtitles, no captions, no text, no watermark, no logo, no letters, no typography";
 
@@ -699,8 +603,7 @@ ${this.cameraLine(brain, idx)}
 Lighting/Mood: ${toneLabel()}. Sound: ${sfx}
 Continuity: keep Eunbi, Jerry, Arang identical across scenes (face/fur/outfit/proportions).
 ${look}
-${styleLine} ${noText}
-${hardLock ? ("\n" + hardLock) : ""}`.trim();
+${styleLine} ${noText}`.trim();
   }
 };
 
@@ -822,19 +725,8 @@ function buildPlan(payload){
     };
 
     const subtitle = TRANSLATE.subtitle(brain, i, line, flags);
-
-    // ✅ hardLock 전달
-    const imagePrompt = TRANSLATE.toImage({
-      brain, line,
-      hardLock: payload.hardLock,
-      beat, idx:i, seconds: total, flags
-    });
-
-    const videoPrompt = TRANSLATE.toVideo({
-      brain, line,
-      hardLock: payload.hardLock,
-      beat, idx:i, seconds: total, flags
-    });
+    const imagePrompt = TRANSLATE.toImage({ brain, line, beat, idx:i, seconds: total, flags });
+    const videoPrompt = TRANSLATE.toVideo({ brain, line, beat, idx:i, seconds: total, flags });
 
     scenes.push({
       index: i+1,
@@ -865,8 +757,7 @@ function buildPlan(payload){
       preset: brain.presetLabel,
       look_lock: ENABLE_LOOK_LOCK ? "ON" : "OFF",
       retention_force: ENABLE_RETENTION ? "ON" : "OFF",
-      first_twist_at: ENABLE_RETENTION ? "12s" : null,
-      spec_lock: SPEC_LOCK_ON ? "ON" : "OFF"
+      first_twist_at: ENABLE_RETENTION ? "12s" : null
     },
     brain: {
       presetId: brain.presetId,
@@ -876,7 +767,7 @@ function buildPlan(payload){
       dialogue_policy: brain.preset?.rules?.dialogue || "NO_SPEECH",
       look_lock_token: brain.look_lock
     },
-    payload: { ...payload }, // ✅ payload.spec / payload.hardLock 포함
+    payload: { ...payload },
     scenes
   };
 
@@ -900,11 +791,7 @@ function planToText(plan){
   let txt = `🐾🎬 원라인(Director): ${plan.title}\n`;
   txt += `${plan.meta.genre} · ${plan.meta.tone} · ${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · cast:${plan.meta.hero}\n`;
   txt += `VARIANT:${plan?.v7?.variant || "-"} · TEMPLATE:${plan?.v7?.template ? (plan.v7.template.id+":"+plan.v7.template.name) : "-"}\n`;
-  txt += `룩고정:${plan.meta.look_lock} · 리텐션강제:${plan.meta.retention_force} · 첫반전:${plan.meta.first_twist_at || "-"} · SpecLock:${plan.meta.spec_lock}\n`;
-  if(plan?.payload?.spec){
-    const sp = plan.payload.spec;
-    txt += `SPEC: subject=${sp.subject} action=${sp.action||"-"} setting=${sp.setting||"-"} color=${sp.color||"-"} outfit=${sp.outfit||"-"}\n`;
-  }
+  txt += `룩고정:${plan.meta.look_lock} · 리텐션강제:${plan.meta.retention_force} · 첫반전:${plan.meta.first_twist_at || "-"}\n`;
   txt += `버전: ${plan.version} · 생성: ${plan.created_at}\n\n`;
 
   plan.scenes.forEach(s=>{
@@ -988,7 +875,7 @@ async function downloadZipPlan(plan){
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "one-line-dog-movie_EJA_director_specLock.zip";
+  a.download = "one-line-dog-movie_EJA_director.zip";
   a.click();
   URL.revokeObjectURL(url);
   setStatus("ZIP 생성 완료", "good");
@@ -1090,7 +977,7 @@ function renderPlan(plan, serverResult){
 
   const tpl = plan?.v7?.template ? `${plan.v7.template.id}:${plan.v7.template.name}` : "-";
   $("outMeta").textContent =
-    `${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · cast:${plan.meta.hero} · TEMPLATE:${tpl} · 룩락:${plan.meta.look_lock} · SpecLock:${plan.meta.spec_lock}`;
+    `${plan.meta.length_seconds}s · ${plan.meta.scene_count} scenes · cast:${plan.meta.hero} · TEMPLATE:${tpl} · 룩락:${plan.meta.look_lock}`;
 
   const out = $("out");
   out.innerHTML = "";
@@ -1105,32 +992,6 @@ function renderPlan(plan, serverResult){
     <div class="box">${escapeHtml(serverResult?.text || "오프라인 모드: 서버 없이도 설계는 정상 동작합니다.")}</div>
   `;
   out.appendChild(srv);
-
-  // Spec Lock 카드
-  const spec = plan?.payload?.spec || null;
-  const hardLock = plan?.payload?.hardLock || "";
-  const specCard = document.createElement("div");
-  specCard.className = "serverCard";
-
-  const specSummary = spec
-    ? `subject=${spec.subject} / action=${spec.action||"-"} / setting=${spec.setting||"-"} / color=${spec.color||"-"} / outfit=${spec.outfit||"-"}`
-    : "(Spec Lock OFF 또는 추출 실패)";
-
-  specCard.innerHTML = `
-    <div class="serverHead">
-      <b>🔒 Spec Lock</b>
-      <span>${escapeHtml(plan?.meta?.spec_lock || "OFF")}</span>
-    </div>
-
-    <details>
-      <summary>추출된 Spec + HARD LOCK 규칙 보기</summary>
-      <div class="kv">
-        <div class="kk">Spec</div><div>${escapeHtml(specSummary)}</div>
-        <div class="kk">HARD LOCK</div><div class="box" style="margin:0">${escapeHtml(hardLock || "(none)")}</div>
-      </div>
-    </details>
-  `;
-  out.appendChild(specCard);
 
   // 의도/검증 카드
   const issues = plan?.validator?.issues || [];
@@ -1150,7 +1011,6 @@ function renderPlan(plan, serverResult){
 - 실사/현실 물리 기반 (과장/판타지/만화 금지)
 - 입력에 없는 캐릭터/소품/텍스트를 멋대로 추가하지 않음
 - 프롬프트에는 항상: no subtitles / no text / no watermark
-- Spec Lock ON이면: 각 씬 프롬프트 끝에 HARD LOCK RULES 강제 삽입
 VALIDATOR: ${escapeHtml(issueSummary)}
     </div>
   `;
@@ -1209,14 +1069,6 @@ async function run(){
   const payload = getPayloadFromInputs();
   payload.line = finalLine;
 
-  // ✅ DIRECTOR MODE: Spec Lock (ChatGPT-like)
-  if (SPEC_LOCK_ON) {
-    const spec = extractSpecStrict(finalLine);
-    const hardLock = buildHardLockRules(spec);
-    payload.spec = spec;
-    payload.hardLock = hardLock;
-  }
-
   latestPlan = buildPlan(payload);
 
   let serverResult = { ok:false, text:"오프라인: 설계는 정상 생성됨" };
@@ -1244,23 +1096,23 @@ $("copyAll")?.addEventListener("click", () => {
 });
 $("downloadJson")?.addEventListener("click", () => {
   if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download(`one-line-dog-movie_director_specLock.json`, JSON.stringify(latestPlan, null, 2), "application/json;charset=utf-8");
+  download(`one-line-dog-movie_director.json`, JSON.stringify(latestPlan, null, 2), "application/json;charset=utf-8");
 });
 $("downloadSrt")?.addEventListener("click", () => {
   if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download(`one-line-dog-movie_director_specLock.srt`, planToSrt(latestPlan), "text/plain;charset=utf-8");
+  download(`one-line-dog-movie_director.srt`, planToSrt(latestPlan), "text/plain;charset=utf-8");
 });
 $("downloadTxt")?.addEventListener("click", () => {
   if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download(`one-line-dog-movie_director_specLock.txt`, planToText(latestPlan), "text/plain;charset=utf-8");
+  download(`one-line-dog-movie_director.txt`, planToText(latestPlan), "text/plain;charset=utf-8");
 });
 $("downloadImagePrompts")?.addEventListener("click", () => {
   if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download(`prompts_image_director_specLock.txt`, planToImagePromptsTxt(latestPlan), "text/plain;charset=utf-8");
+  download(`prompts_image_director.txt`, planToImagePromptsTxt(latestPlan), "text/plain;charset=utf-8");
 });
 $("downloadVideoPrompts")?.addEventListener("click", () => {
   if(!latestPlan){ alert("먼저 생성하기를 눌러줘!"); return; }
-  download(`prompts_video_director_specLock.txt`, planToVideoPromptsTxt(latestPlan), "text/plain;charset=utf-8");
+  download(`prompts_video_director.txt`, planToVideoPromptsTxt(latestPlan), "text/plain;charset=utf-8");
 });
 $("downloadZip")?.addEventListener("click", () => downloadZipPlan(latestPlan));
 $("backupBtn")?.addEventListener("click", exportBackup);
