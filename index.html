@@ -308,7 +308,7 @@
       font-weight:800;
     }
 
-    /* ===== 사용 방법(설명서) 모달 ===== */
+    /* ====== 사용 방법(설명서) 모달 ===== */
     .helpBtn{
       padding:12px 14px;
       border-radius:14px;
@@ -330,7 +330,6 @@
       padding:18px;
       z-index:9998;
     }
-
     .helpModal{
       width:min(820px, 100%);
       max-height:85vh;
@@ -340,7 +339,6 @@
       background:linear-gradient(180deg, rgba(15,22,32,.96), rgba(10,16,24,.92));
       box-shadow:0 18px 55px rgba(0,0,0,.55);
     }
-
     .helpHead{
       position:sticky; top:0;
       background:rgba(10,16,24,.92);
@@ -351,13 +349,11 @@
       justify-content:space-between;
       gap:10px;
     }
-
     .helpTitle{
       font-weight:1000;
       letter-spacing:-.2px;
       display:flex; align-items:center; gap:8px;
     }
-
     .helpClose{
       padding:10px 12px;
       border-radius:12px;
@@ -365,17 +361,13 @@
       background:rgba(255,255,255,.06);
       cursor:pointer;
       font-weight:900;
-      color:var(--text);
     }
-
     .helpBody{
       padding:14px;
       color:var(--text);
     }
-
     .helpBody p{ margin:10px 0; line-height:1.7; color:var(--muted); }
     .helpBody b{ color:#ffe7a3; font-weight:900; }
-
     .helpSection{
       border:1px solid rgba(255,255,255,.08);
       background:rgba(255,255,255,.03);
@@ -383,13 +375,11 @@
       padding:12px 12px;
       margin:10px 0;
     }
-
     .helpH{
       font-weight:1000;
       margin:0 0 8px;
       letter-spacing:-.2px;
     }
-
     .helpList{
       margin:0;
       padding-left:18px;
@@ -397,7 +387,6 @@
       line-height:1.75;
       font-size:13.5px;
     }
-
     .helpCode{
       border:1px solid rgba(255,255,255,.10);
       background:rgba(0,0,0,.22);
@@ -410,12 +399,58 @@
       white-space:pre-wrap;
       word-break:break-word;
     }
-
     .helpMini{
       font-size:12.5px;
       color:rgba(170,182,197,.92);
       line-height:1.6;
     }
+
+    /* ===== 개발자 모드(숨김) ===== */
+    .devOverlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.70);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:10000;
+    }
+    .devModal{
+      width:min(820px, 100%);
+      max-height:85vh;
+      overflow:auto;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(15,22,32,.96), rgba(10,16,24,.92));
+      box-shadow:0 18px 55px rgba(0,0,0,.55);
+    }
+    .devHead{
+      position:sticky; top:0;
+      background:rgba(10,16,24,.92);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .devTitle{ font-weight:1000; }
+    .devClose{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      font-weight:900;
+    }
+    .devBody{ padding:14px; color:var(--text); }
+    .devSection{
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      margin:10px 0;
+    }
+    .devH{ font-weight:1000; margin-bottom:6px; }
   </style>
 </head>
 
@@ -440,7 +475,7 @@
 
   <div class="wrap">
     <div class="hero">
-      <h1>한 줄을 쓰면, 그 순간 “영화 설계”가 된다.</h1>
+      <h1 id="appTitle">한 줄을 쓰면, 그 순간 “영화 설계”가 된다.</h1>
       <p>V4.3 Omni · 단일 파일 · 오프라인 기본 · 의도 우선(추천은 제안만) · 기본값: 🧸 유치원 모드</p>
     </div>
 
@@ -479,25 +514,13 @@
 
             <div class="qsMiniRow">
               <div class="qsPill" id="qsNowStyle">🎬 현재 설정: (옵션을 고르면 자동 표시)</div>
-              <button class="qsToggle" id="qsToggle">사용 방법 보기</button>
+              <button class="qsToggle" id="qsToggle">초보 설명(작게) 보기</button>
             </div>
 
             <div class="qsBox" id="qsBox">
-              <b>🧸 유치원 모드</b>: 시체/피/상처/트렁크 같은 표현은 <b>절대 화면에 안 나오고</b>, 경찰차·구급차 불빛·CCTV·타이어 자국 같은 <b>단서 장면</b>으로 바뀝니다.<br/>
-              <b>🐾 캐릭터 자동 등장</b>: ON이면 앱이 “추천”을 제안할 수 있어요. OFF면 내가 쓴 것만 나옵니다.<br/>
-              <b>🎨 자동 상상(연출 추가)</b>: ON이면 카메라/조명/분위기를 더 풍부하게 붙입니다.<br/>
-              <div class="divider"></div>
-              <b>📦 ZIP 다운로드 위치</b><br/>
-              - 안드로이드: <b>내 파일 → 다운로드</b><br/>
-              - 아이폰: <b>파일 앱 → 다운로드</b><br/>
-              - PC: <b>다운로드(Downloads)</b> 폴더<br/>
-              <div class="divider"></div>
-              <b>🎨 이미지 생성 방법</b><br/>
-              1) 출력창에서 <b>--- prompts_image.txt ---</b> 아래를 복사<br/>
-              2) 이미지 생성 툴에 <b>SCENE 1부터</b> 순서대로 붙여넣고 생성<br/>
-              3) 영상은 <b>prompts_video.txt</b>, 자막은 <b>srt.txt</b>를 사용<br/>
-              <div class="divider"></div>
-              <b>TIP</b>: 더 쉬운 전체 설명서는 아래 <b>📘 사용 방법</b> 버튼을 눌러요.
+              <b>🧸 유치원 모드</b>: 무서운 장면 대신 <b>경찰차·CCTV·단서</b>로만 보여줘요.<br/>
+              <b>📦 ZIP 위치</b>: 안드로이드=내 파일→다운로드 / 아이폰=파일앱→다운로드 / PC=Downloads<br/>
+              <b>사용 방법 전체</b>는 아래 버튼 <b>📘 사용 방법</b>을 눌러주세요.
             </div>
           </div>
 
@@ -551,12 +574,11 @@
             <div class="optRow">
               <div>
                 <div class="optLabel">🧸 유치원 모드 <span class="hint" data-hint="kinder">ⓘ</span></div>
-                <div class="small">고어/피/시신/상처/트렁크 장면을 단서 연출로 자동 치환</div>
+                <div class="small">무서운 장면(피/상처/트렁크 등)을 안전한 단서로 바꿈</div>
                 <div class="hintBox" id="hint-kinder" style="display:none;">
                   <b style="color:#ffe7a3">유치원 모드(기본 ON)</b><br/>
-                  “피/시신/상처/트렁크” 같은 장면은 절대 보여주지 않고,<br/>
-                  <b>경찰차·경광등·CCTV·타이어 자국·떨어진 물건</b> 같은 <b>안전 단서</b>로만 사건을 보여줍니다.<br/>
-                  예시) “사망/시신” 입력 → “구급차 불빛 원경 + 경찰차 + 떨어진 휴대폰”
+                  무서운 장면 대신<br/>
+                  <b>경찰차·경광등·CCTV·떨어진 물건</b> 같은 <b>안전 단서</b>로만 보여줍니다.
                 </div>
               </div>
               <select id="kinderMode">
@@ -570,10 +592,8 @@
                 <div class="optLabel">🐾 캐릭터 자동 등장 <span class="hint" data-hint="autoChar">ⓘ</span></div>
                 <div class="small">ON이면 앱이 “추천 캐릭터”를 제안(자동 확정 X)</div>
                 <div class="hintBox" id="hint-autoChar" style="display:none;">
-                  <b style="color:#cfe8ff">자동 등장</b><br/>
-                  OFF: 입력에 없으면 등장시키지 않습니다.<br/>
-                  ON: 입력 내용을 보고 “추천”을 제안할 수 있습니다(의도 우선).<br/>
-                  예시) “탐정” 언급 → “고양이 탐정” 프리셋 추천
+                  OFF: 내가 쓴 것만.<br/>
+                  ON: 앱이 추천을 “제안”할 수 있어요.
                 </div>
               </div>
               <select id="autoCharacter">
@@ -585,12 +605,10 @@
             <div class="optRow">
               <div>
                 <div class="optLabel">🧠 자동 상상(연출 추가) <span class="hint" data-hint="autoImprov">ⓘ</span></div>
-                <div class="small">ON이면 카메라/조명/분위기를 자동으로 풍부하게</div>
+                <div class="small">ON이면 카메라/조명/분위기를 더 풍부하게</div>
                 <div class="hintBox" id="hint-autoImprov" style="display:none;">
-                  <b style="color:#cfe8ff">자동 상상</b><br/>
-                  OFF: 입력한 내용만 충실히 반영합니다.<br/>
-                  ON: 비/가로등/렌즈/무드 같은 연출을 추가합니다.<br/>
-                  예시) “골목” → OFF: 골목 / ON: 비 오는 골목 + 가로등 + 긴장 무드
+                  OFF: 딱 내가 쓴 그대로.<br/>
+                  ON: 더 멋있게 연출을 붙여줘요.
                 </div>
               </div>
               <select id="autoImprov">
@@ -602,11 +620,9 @@
             <div class="optRow">
               <div>
                 <div class="optLabel">🎭 캐릭터 프리셋(선택) <span class="hint" data-hint="preset">ⓘ</span></div>
-                <div class="small">autoCharacter OFF여도 “내가 고른 프리셋”은 항상 적용</div>
+                <div class="small">내가 고르면 무조건 적용(의도)</div>
                 <div class="hintBox" id="hint-preset" style="display:none;">
-                  <b style="color:#ffe7a3">중요 규칙</b><br/>
-                  자동등장 OFF = “앱이 멋대로 추가하지 마” 입니다.<br/>
-                  하지만 사용자가 프리셋을 직접 고르면(나비/코코/타이거) <b>그건 수동 의도</b>라서 무조건 적용됩니다.
+                  자동등장 OFF여도, 내가 프리셋을 고르면 그건 “내 의도”라서 적용됩니다.
                 </div>
               </div>
               <select id="presetId">
@@ -621,11 +637,10 @@
             <div class="optRow">
               <div>
                 <div class="optLabel">🔒 캐릭터 고정(록락) <span class="hint" data-hint="lock">ⓘ</span></div>
-                <div class="small">시리즈용(주인공 얼굴/옷/톤을 최대한 고정)</div>
+                <div class="small">시리즈용(주인공 얼굴/옷/톤 고정)</div>
                 <div class="hintBox" id="hint-lock" style="display:none;">
-                  <b style="color:#cfe8ff">캐릭터 고정</b><br/>
-                  ON: “같은 배우” 느낌으로 일관성 강화<br/>
-                  OFF: 장면마다 조금씩 달라질 수 있음
+                  ON: 같은 배우처럼 유지<br/>
+                  OFF: 장면마다 조금 달라질 수 있음
                 </div>
               </div>
               <select id="charLock">
@@ -667,8 +682,8 @@
           </div>
 
           <div class="small" style="margin-top:10px;">
-            ✅ 철학: “의도 우선” · 추천은 제안만 · 자동등장 OFF면 앱이 멋대로 추가하지 않음<br/>
-            ⚠️ 유치원 모드 ON이면 “고어/피/시신/상처/트렁크”는 입력해도 단서 연출로 치환됩니다.
+            ✅ 순서: <b>한 줄 쓰기 → ⚡ 생성하기 → Copy 또는 ZIP → 이미지 만들기 → 영상 만들기 → 자막 넣기</b><br/>
+            ⚠️ 유치원 모드 ON이면 무서운 표현은 자동으로 안전 단서로 바뀝니다.
           </div>
 
         </div>
@@ -741,7 +756,7 @@
           <div class="helpH">3️⃣ 이걸 파일로 어떻게 저장해?</div>
           <ul class="helpList">
             <li><b>📋 Copy All</b> → 모든 설계도를 글로 복사 → 다른 앱에 붙여넣기 가능</li>
-            <li><b>📦 ZIP</b> → 영화 만들기용 파일 묶음 다운로드 (이미지/영상/자막 다 포함)</li>
+            <li><b>📦 ZIP</b> → 영화 만들기용 파일 묶음 다운로드</li>
           </ul>
         </div>
 
@@ -752,64 +767,88 @@
             <li>🍎 <b>아이폰</b>: <b>파일 앱</b> → <b>다운로드</b></li>
             <li>💻 <b>PC</b>: <b>Downloads(다운로드)</b></li>
           </ul>
-          <p class="helpMini">ZIP이 안 열리면 “압축 풀기” 하면 돼.</p>
+          <p class="helpMini">ZIP이 안 열리면 “압축 풀기”를 하면 돼.</p>
         </div>
 
         <div class="helpSection">
           <div class="helpH">5️⃣ ZIP 안에는 뭐가 들어있어?</div>
           <ul class="helpList">
-            <li><b>prompts_image.txt</b> : 사진(이미지) 만드는 글</li>
+            <li><b>prompts_image.txt</b> : 사진 만드는 글</li>
             <li><b>prompts_video.txt</b> : 영상 만드는 글</li>
             <li><b>srt.txt</b> : 자막 파일</li>
-            <li><b>plan.json</b> : 영화 시간표(설계 정보)</li>
+            <li><b>plan.json</b> : 영화 시간표</li>
           </ul>
         </div>
 
         <div class="helpSection">
           <div class="helpH">6️⃣ 진짜 이미지 만드는 법</div>
           <ol class="helpList">
-            <li>ZIP에서 <b>prompts_image.txt</b> 열기</li>
-            <li><b>SCENE 1</b> 글 복사</li>
-            <li><b>나노바나나 / 미드저니 / 이미지 AI</b>에 붙여넣기</li>
-            <li>SCENE 2, 3… 반복</li>
+            <li>ZIP 안에서 <b>prompts_image.txt</b>를 연다</li>
+            <li><b>SCENE 1</b> 글을 복사한다</li>
+            <li><b>나노바나나 / 미드저니 / 이미지 AI</b>에 붙여넣고 만든다</li>
+            <li><b>SCENE 2, 3…</b>도 반복한다</li>
           </ol>
         </div>
 
         <div class="helpSection">
           <div class="helpH">7️⃣ 진짜 영상 만드는 법</div>
           <ol class="helpList">
-            <li>ZIP에서 <b>prompts_video.txt</b> 열기</li>
-            <li><b>SCENE 1</b> 복사</li>
-            <li><b>VEO / Runway / Sora</b> 같은 영상 AI에 붙여넣기</li>
-            <li>SCENE 2, 3… 반복</li>
+            <li>ZIP 안에서 <b>prompts_video.txt</b>를 연다</li>
+            <li><b>SCENE 1</b>을 복사한다</li>
+            <li><b>VEO / Runway / Sora</b> 같은 영상 AI에 붙여넣고 만든다</li>
+            <li><b>SCENE 2, 3…</b>도 이어서 만든다</li>
           </ol>
         </div>
 
         <div class="helpSection">
           <div class="helpH">8️⃣ 자막 넣기</div>
           <p>
-            ZIP 안의 <b>srt.txt</b>를 캡컷/프리미어에 넣으면<br/>
-            <b>자막이 자동으로</b> 들어간다.
+            ZIP 안에 있는 <b>srt.txt</b>를<br/>
+            영상 편집 앱(캡컷/프리미어 등)에 넣으면<br/>
+            <b>자동으로 자막</b>이 들어간다.
           </p>
         </div>
 
         <div class="helpSection">
           <div class="helpH">🧸 유치원 모드란?</div>
           <p>
-            켜져 있으면 <b>피/시체/상처/트렁크</b> 같은 무서운 건 안 나오고<br/>
-            대신 <b>경찰차 / CCTV / 떨어진 휴대폰</b> 같은 안전한 단서로 바뀐다.
+            유치원 모드가 켜져 있으면<br/>
+            <b>피 / 시체 / 상처 / 트렁크</b> 같은 건 나오지 않고<br/>
+            대신 <b>경찰차 / CCTV / 떨어진 휴대폰</b> 같은<br/>
+            <b>안전한 단서</b>로 바꿔서 보여줘.
           </p>
         </div>
 
         <div class="helpSection">
           <div class="helpH">✅ 한 줄 결론</div>
           <p>
-            <b>한 줄 쓰기 → ⚡ 생성하기 → Copy 또는 ZIP → 이미지 만들기 → 영상 만들기 → 자막 넣기</b><br/>
-            이 순서대로만 하면 영화가 완성돼.
+            <b>한 줄 쓰기 → ⚡ 생성하기 → Copy 또는 ZIP → 이미지 만들기 → 영상 만들기 → 자막 넣기</b>
           </p>
         </div>
 
-        <p class="helpMini">TIP: 모르는 게 생기면 “📘 사용 방법”만 누르면 돼.</p>
+        <p class="helpMini">TIP: 모르면 “📘 사용 방법”을 다시 누르면 돼.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 개발자 모드(숨김) 모달 ===== -->
+  <div class="devOverlay" id="devOverlay">
+    <div class="devModal">
+      <div class="devHead">
+        <div class="devTitle">🛠 개발자 모드</div>
+        <button class="devClose" id="devClose">닫기</button>
+      </div>
+      <div class="devBody">
+        <div class="devSection">
+          <div class="devH">이 화면은 너만 보는 비밀 메뉴야</div>
+          <p style="color:var(--muted);line-height:1.6;margin:8px 0;">
+            여기는 일반 사용자에게 보이면 안 되는 공간이야.<br/>
+            (열리는 방법: <b>제목 7번 터치</b> + <b>비밀번호 7878</b>)
+          </p>
+          <p style="color:var(--muted);line-height:1.6;margin:8px 0;">
+            나중에 여기 안에 개발자용 설정/로그/테스트 버튼 넣을 수 있어.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -835,45 +874,6 @@
     function toast(msg){
       try{ navigator.vibrate && navigator.vibrate(10); }catch(e){}
       alert(msg);
-    }
-
-    // ===== 사용 방법(설명서) 모달 =====
-    function initHelpModal(){
-      const btn = $("helpBtn");
-      const ov  = $("helpOverlay");
-      const closeBtn = $("helpClose");
-
-      if(!btn || !ov || !closeBtn) return;
-
-      const open = ()=>{
-        ov.style.display = "flex";
-        ov.setAttribute("aria-hidden","false");
-      };
-
-      const close = ()=>{
-        ov.style.display = "none";
-        ov.setAttribute("aria-hidden","true");
-      };
-
-      btn.addEventListener("click", open);
-      closeBtn.addEventListener("click", close);
-
-      // 바깥 클릭하면 닫기
-      ov.addEventListener("click", (e)=>{
-        if(e.target === ov) close();
-      });
-
-      // ESC로 닫기(PC)
-      document.addEventListener("keydown", (e)=>{
-        if(e.key === "Escape" && ov.style.display === "flex") close();
-      });
-
-      // QuickStart의 "사용 방법 보기"는 원래 박스 토글이니까,
-      // ✅ 더블클릭이면 설명서 모달로 열리게(충돌 방지)
-      const qsToggle = $("qsToggle");
-      if(qsToggle){
-        qsToggle.addEventListener("dblclick", open);
-      }
     }
 
     // ====== Server policy ======
@@ -916,7 +916,7 @@
       "피","고어","시체","시신","사체","토막","장기","절단","훼손","피웅덩이","트렁크","상처","절개","목이 잘린"
     ];
 
-    // ✅ 경찰선(폴리스테이프) 제거 → 경찰차/경찰서 중심
+    // ✅ 경찰선 제거 → 경찰차/경찰서 중심
     const SAFE_EVIDENCE_VISUALS = [
       "police car with flashing lights in the distance",
       "police station exterior at night, calm documentary mood",
@@ -944,7 +944,6 @@
       return beats;
     }
 
-    // ✅ 씬마다 길어지지 않게 짧게만
     function joinHardRules(intent){
       const rules = (intent?.hardRules || []).map(safeText);
       let out = rules.length ? ("HARD RULES: " + rules.join(" ")) : "";
@@ -1052,7 +1051,6 @@
       const preset = PRESETS[pid] || PRESETS.custom;
 
       let beats = beatsForGenre(genre, n);
-
       if(ENABLE_KINDER_MODE && reality === "REAL_WORLD"){
         beats = safeBeatsForRealIncident(n);
       }
@@ -1266,7 +1264,6 @@
       const meta = LAST?.plan?.meta || {};
       const modeText = (meta.kinderMode === true) ? "KINDER" : "NORMAL";
 
-      // ✅ FORBID는 "출력 상단"에 1번만
       const globalSafety =
         (ENABLE_KINDER_MODE && (meta.reality === "REAL_WORLD"))
           ? `GLOBAL SAFETY (KINDER): FORBID: ${FORBID_GORE_TOKENS.join(", ")}`
@@ -1309,7 +1306,7 @@
       });
     }
 
-    // ====== Quick Start (원클릭 예시 + 사용방법) ======
+    // ====== Quick Start ======
     function getSelectedText(selectId){
       const el = $(selectId);
       if(!el || el.tagName !== "SELECT") return "";
@@ -1343,15 +1340,12 @@
           const ex = btn.getAttribute("data-example") || "";
           $("line").value = safeText(ex);
 
-          // 초보 데모는 안정적으로: 현실 + 유치원 ON 유지
           $("reality").value = "REAL_WORLD";
           $("kinderMode").value = "on";
           ENABLE_KINDER_MODE = true;
 
-          // 첫 데모는 보기 쉬운 60초로
           $("len").value = "60";
 
-          // 미리보기 느낌 강화
           const text = safeText(ex);
           if(text.includes("CCTV") || text.includes("현장") || text.includes("기록")){
             $("genre").value = "documentary";
@@ -1367,8 +1361,6 @@
           refreshPills();
           refreshQuickStyle();
           saveState();
-
-          // ✅ 원클릭: 생성까지 자동 실행
           generate();
 
           try{ $("out").scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){}
@@ -1390,7 +1382,7 @@
       refreshQuickStyle();
     }
 
-    // ====== First-run overlay (3초, 1회) ======
+    // ====== First-run overlay ======
     function showFirstOverlayOnce(){
       let seen = false;
       try{ seen = (localStorage.getItem(FIRST_OVERLAY_KEY) === "1"); }catch(e){}
@@ -1571,6 +1563,78 @@
       }
     }
 
+    // ===== 사용 방법(설명서) 모달 =====
+    function initHelpModal(){
+      const btn = $("helpBtn");
+      const ov  = $("helpOverlay");
+      const closeBtn = $("helpClose");
+
+      if(!btn || !ov || !closeBtn) return;
+
+      const open = ()=>{
+        ov.style.display = "flex";
+        ov.setAttribute("aria-hidden","false");
+      };
+
+      const close = ()=>{
+        ov.style.display = "none";
+        ov.setAttribute("aria-hidden","true");
+      };
+
+      btn.addEventListener("click", open);
+      closeBtn.addEventListener("click", close);
+
+      ov.addEventListener("click", (e)=>{
+        if(e.target === ov) close();
+      });
+
+      document.addEventListener("keydown", (e)=>{
+        if(e.key === "Escape" && ov.style.display === "flex") close();
+      });
+    }
+
+    // ===== 개발자 모드(숨김): 제목 7번 + 7878 =====
+    function initDevMode(){
+      const DEV_PASS = "7878";
+
+      const title = $("appTitle");
+      const ov = $("devOverlay");
+      const closeBtn = $("devClose");
+
+      if(!title || !ov || !closeBtn) return;
+
+      let taps = 0;
+      let timer = null;
+
+      title.addEventListener("click", ()=>{
+        taps++;
+        clearTimeout(timer);
+        timer = setTimeout(()=>{ taps = 0; }, 2000);
+
+        if(taps >= 7){
+          taps = 0;
+          const pw = prompt("개발자 비밀번호 4자리");
+          if(pw === DEV_PASS){
+            ov.style.display = "flex";
+          } else {
+            alert("비밀번호 틀림");
+          }
+        }
+      });
+
+      closeBtn.addEventListener("click", ()=>{
+        ov.style.display = "none";
+      });
+
+      ov.addEventListener("click", (e)=>{
+        if(e.target === ov) ov.style.display = "none";
+      });
+
+      document.addEventListener("keydown", (e)=>{
+        if(e.key === "Escape" && ov.style.display === "flex") ov.style.display = "none";
+      });
+    }
+
     // ====== Init ======
     document.addEventListener("DOMContentLoaded", ()=>{
       applyServerPolicy();
@@ -1600,9 +1664,11 @@
       });
 
       showFirstOverlayOnce();
+
+      // ✅ 추가된 기능들
       initHelpModal();
+      initDevMode();
     });
   </script>
 </body>
 </html>
-```0
