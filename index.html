@@ -562,10 +562,10 @@
 
           <!-- Quick Start -->
           <div class="qsCard" id="quickStart">
-            <div class="qsTitle">✍️ 초보용: 예시 한 번만 눌러보세요 (원클릭 실행)</div>
+            <div class="qsTitle">✍️ 초보용: 예시 한 번만 눌러보세요 (원클릭 완성)</div>
             <div class="qsDesc">
-              예시 버튼을 누르면 입력이 자동으로 들어가고 <b>⚡ 생성하기</b>까지 바로 실행됩니다.<br/>
-              저장은 <b>📋 복사</b> 또는 <b>📦 압축 저장(ZIP)</b>을 누르면 됩니다.
+              예시 버튼을 누르면 <b>자동 생성 + A탭 이동 + 자동 복사</b>까지 끝나요.<br/>
+              이제 <b>나노바나나에 붙여넣기만</b> 하면 됩니다. (주소가 없으면 🔗 공장 주소 설정 먼저)
             </div>
             <div class="qsGrid">
               <button class="qsBtn" data-example="비 오는 밤, 골목에서 누군가가 사라졌다. 단서는 떨어진 휴대폰뿐이다.">
@@ -611,7 +611,6 @@
           <div class="row">
             <div>
               <div class="small" style="margin:6px 0 6px;">장르</div>
-              <!-- ✅ 장르 추가 + value/키 연결 완료 -->
               <select id="genre">
                 <option value="daily">일상</option>
                 <option value="healing">힐링</option>
@@ -761,7 +760,6 @@
 
           <div class="btnRow">
             <button class="primary" id="genBtn">⚡ 생성하기</button>
-            <!-- ✅ 버튼 한글화 -->
             <button class="secondary" id="copyBtn">📋 복사(현재 탭)</button>
             <button class="secondary" id="copyAllBtn">📋 전체 복사(A+B+C)</button>
             <button id="zipBtn">📦 압축 저장(ZIP)</button>
@@ -794,10 +792,10 @@
               <button class="tabBtn" data-tab="C" id="tabC">C</button>
             </div>
 
-            <!-- ✅ 출력 버튼 한글화 + 공장 버튼 3개 추가 -->
             <div class="miniBtns">
               <button class="miniBtn warn" id="validateBtn">🛠 검사(금지어)</button>
               <button class="miniBtn secondary" id="autofixBtn">✨ 자동 수정</button>
+              <button class="miniBtn" id="toolSettingBtn">🔗 공장 주소 설정</button>
               <button class="miniBtn" id="openNanoBtn">🖼 나노바나나 열기</button>
               <button class="miniBtn" id="openVeoBtn">🎬 VEO3 열기</button>
               <button class="miniBtn" id="copySceneBtn">📋 현재 씬 프롬프트 복사</button>
@@ -850,7 +848,6 @@
           </p>
         </div>
 
-        <!-- ✅ 휴대폰 새로고침/초기화 문구 추가 -->
         <div class="helpSection">
           <div class="helpH">📱 휴대폰에서 꼭 지켜야 하는 규칙</div>
           <p>
@@ -916,18 +913,37 @@
       alert(msg);
     }
 
-    // ====== External Tools (사용자 설정 URL) ======
+    // ====== External Tools (사용자 설정 URL: 로컬 저장) ======
     const TOOL_URLS = {
-      NANO: "", // 여기에 나노바나나 주소 붙여넣기
-      VEO:  ""  // 여기에 VEO3 주소 붙여넣기
+      NANO: localStorage.getItem("TOOL_URL_NANO") || "",
+      VEO:  localStorage.getItem("TOOL_URL_VEO")  || ""
     };
+
+    function setToolUrls(nano, veo){
+      TOOL_URLS.NANO = (nano || "").trim();
+      TOOL_URLS.VEO  = (veo  || "").trim();
+      try{
+        localStorage.setItem("TOOL_URL_NANO", TOOL_URLS.NANO);
+        localStorage.setItem("TOOL_URL_VEO",  TOOL_URLS.VEO);
+      }catch(e){}
+    }
 
     function openTool(url, name){
       if(!url || !String(url).trim()){
-        toast(name + " 주소가 아직 비어있어.\n\nindex.html 안의 TOOL_URLS에서 URL을 넣어줘.");
+        toast(name + " 주소가 아직 없어.\n\n🔗 '공장 주소 설정'에서 주소를 먼저 넣어줘.");
         return;
       }
       window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function openToolSetting(){
+      const nano = prompt("나노바나나 주소(URL)를 붙여넣어줘", TOOL_URLS.NANO || "");
+      if(nano === null) return;
+      const veo  = prompt("VEO3 주소(URL)를 붙여넣어줘", TOOL_URLS.VEO || "");
+      if(veo === null) return;
+
+      setToolUrls(nano, veo);
+      toast("저장 완료! 이제 '나노바나나 열기 / VEO3 열기'가 작동해 ✅");
     }
 
     // ====== Prompt Extractor (출력 텍스트에서 prompts 섹션 파싱) ======
@@ -937,7 +953,6 @@
       if(start < 0) return "";
       const afterStart = t.slice(start + headerLine.length);
 
-      // 다음 섹션 시작점 찾기
       const markers = [
         "\n--- prompts_video.txt ---",
         "\n--- srt.txt ---",
@@ -961,7 +976,6 @@
       const startIdx = (m.index || 0) + (m[1] ? m[1].length : 0);
       const rest = t.slice(startIdx);
 
-      // 다음 SCENE 시작 전까지
       const nextIdx = rest.slice(1).search(/\nSCENE\s+\d+\s*\([^)]+\)\n/i);
       if(nextIdx < 0) return rest.trim();
       return rest.slice(0, nextIdx + 1).trim();
@@ -994,14 +1008,12 @@
         return;
       }
 
-      // 1) 이미지/영상 선택 (확인=이미지, 취소=영상)
       const isImage = confirm("현재 씬 프롬프트 복사\n\n[확인]=이미지 프롬프트\n[취소]=영상 프롬프트");
 
       const section = isImage
         ? extractSection(full, "--- 이미지 프롬프트(prompts_image.txt) ---")
         : extractSection(full, "--- 영상 프롬프트(prompts_video.txt) ---");
 
-      // (한글 헤더가 없으면 기존 헤더로 재시도)
       const sectionFallback = isImage
         ? extractSection(full, "--- prompts_image.txt ---")
         : extractSection(full, "--- prompts_video.txt ---");
@@ -1012,7 +1024,6 @@
         return;
       }
 
-      // 2) 씬 번호 입력
       const n = (LAST && LAST[ACTIVE_TAB] && LAST[ACTIVE_TAB].plan && LAST[ACTIVE_TAB].plan.meta && LAST[ACTIVE_TAB].plan.meta.n)
         ? Number(LAST[ACTIVE_TAB].plan.meta.n)
         : 0;
@@ -1147,7 +1158,6 @@
     // ====== Engine ======
     function beatsForGenre(genre, n){
       const base = ({
-        // ✅ 추가 장르 3개
         daily:   ["훅", "일상 시작", "작은 사건", "귀여운 반응", "소소한 변화", "따뜻한 순간", "미소", "정리", "여운"],
         healing: ["훅", "조용한 시작", "따뜻한 배경", "힐링 포인트", "공감", "포근한 행동", "미소", "안정", "여운"],
         family:  ["훅", "가족 등장", "작은 갈등", "오해", "다시 이해", "화해", "웃음", "포옹", "훈훈 엔딩"],
@@ -1485,7 +1495,6 @@
     let LAST = { A:null, B:null, C:null };
     let ACTIVE_TAB = "A";
 
-    // ✅ 출력 헤더 100% 한글화(통째 교체 버전 적용)
     function headerFor(tabKey, pack){
       const meta = pack?.plan?.meta || {};
       const modeText = (meta.kinderMode === true) ? "유치원(안전) 모드" : "일반 모드";
@@ -1613,7 +1622,9 @@
           refreshPills();
           refreshQuickStyle();
           saveState();
-          generate();
+
+          // ✅ 초보 원클릭: 생성 + A 이동 + 자동복사 + 안내
+          oneClickFinish();
 
           try{ $("out").scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){}
         });
@@ -1670,7 +1681,10 @@
           refreshPills();
           refreshQuickStyle();
           saveState();
-          generate();
+
+          // ✅ 초보 원클릭: 생성 + A 이동 + 자동복사 + 안내
+          oneClickFinish();
+
           try{ $("out").scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){}
         });
         grid.appendChild(b);
@@ -1752,6 +1766,44 @@
 
       refreshPills();
       saveState();
+    }
+
+    // ✅ 초보 원클릭: 생성 + A탭 이동 + 자동복사 + 다음 단계 안내
+    async function oneClickFinish(){
+      generate();
+      setActiveTab("A");
+
+      const txt = $("out").textContent || "";
+      if(!txt.trim()){
+        toast("생성 결과가 비어있어. 입력/설정을 확인해줘.");
+        return;
+      }
+
+      try{
+        await navigator.clipboard.writeText(txt);
+      }catch(e){
+        const tmp = document.createElement("textarea");
+        tmp.value = txt;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand("copy");
+        document.body.removeChild(tmp);
+      }
+
+      const hasNano = !!(TOOL_URLS.NANO && TOOL_URLS.NANO.trim());
+      const hasVeo  = !!(TOOL_URLS.VEO && TOOL_URLS.VEO.trim());
+
+      if(!hasNano || !hasVeo){
+        toast(
+          "✅ 원클릭 완료! (A 탭 결과 자동 복사됨)\n\n" +
+          "다음: 🔗 공장 주소 설정 → 🖼 나노바나나 열기 → 🎬 VEO3 열기"
+        );
+      }else{
+        toast(
+          "✅ 원클릭 완료! (A 탭 결과 자동 복사됨)\n\n" +
+          "다음: 🖼 나노바나나 열기 → 이미지 만들기 → 🎬 VEO3 열기 → 영상 만들기 → 자막(srt) 넣기"
+        );
+      }
     }
 
     function copyCurrent(){
@@ -2085,7 +2137,10 @@
       $("validateBtn").addEventListener("click", runValidator);
       $("autofixBtn").addEventListener("click", runAutofix);
 
-      // ✅ 공장 버튼 3개 이벤트 연결
+      // ✅ 공장 버튼 이벤트 연결
+      $("toolSettingBtn").addEventListener("click", openToolSetting);
+
+      // ✅ 공장 열기 버튼 이벤트 연결
       $("openNanoBtn").addEventListener("click", ()=> openTool(TOOL_URLS.NANO, "나노바나나"));
       $("openVeoBtn").addEventListener("click", ()=> openTool(TOOL_URLS.VEO, "VEO3"));
       $("copySceneBtn").addEventListener("click", copyCurrentScenePrompt);
@@ -2102,4 +2157,3 @@
   </script>
 </body>
 </html>
-```0
