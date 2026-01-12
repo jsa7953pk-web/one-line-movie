@@ -878,11 +878,32 @@
           <div class="devH">이 화면은 너만 보는 비밀 메뉴야</div>
           <p style="color:var(--muted);line-height:1.6;margin:8px 0;">
             여기는 일반 사용자에게 보이면 안 되는 공간이야.<br/>
-            (열리는 방법: <b>제목 7번 터치</b> + <b>비밀번호 7878</b>)
+            (열리는 방법: <b>제목 7번 터치</b> + <b>비밀번호(저장된 3개 중 1개)</b>)
           </p>
           <p style="color:var(--muted);line-height:1.6;margin:8px 0;">
             v7-lite 테스트/로그/실험 버튼을 나중에 여기 넣으면 돼.
           </p>
+
+          <div class="divider"></div>
+
+          <div class="devH">🔒 개발자 코드(최대 3개)</div>
+          <p style="color:var(--muted);line-height:1.6;margin:8px 0;">
+            아래 3개 중 하나라도 맞으면 개발자 모드 인증이 됩니다. (기본값: 7878)
+          </p>
+
+          <div class="row">
+            <input id="devCode1" type="text" inputmode="numeric" maxlength="4" placeholder="코드1 (4자리)" />
+            <input id="devCode2" type="text" inputmode="numeric" maxlength="4" placeholder="코드2 (4자리)" />
+          </div>
+          <div class="row">
+            <input id="devCode3" type="text" inputmode="numeric" maxlength="4" placeholder="코드3 (4자리)" />
+            <button class="miniBtn secondary" id="devSaveCodes">💾 코드 저장</button>
+          </div>
+
+          <p class="small" style="margin-top:8px;">
+            ⚠️ 비워두면 해당 코드는 비활성. (코드는 4자리 숫자만)
+          </p>
+
           <div class="divider"></div>
           <button class="miniBtn" id="devDumpBtn">📦 현재 상태 덤프(alert)</button>
         </div>
@@ -919,6 +940,30 @@
       VEO:  localStorage.getItem("TOOL_URL_VEO")  || ""
     };
 
+    // ✅ 기본 주소(처음 실행에서만 자동 저장 — 이미 저장돼 있으면 유지)
+    const DEFAULT_TOOL_URLS = {
+      // 나노바나나(=Gemini로 연결)
+      NANO: "https://gemini.google.com",
+      // VEO3 (트래킹 파라미터 제거한 안정 주소)
+      VEO:  "https://deevid.ai/ko/model/veo-ai"
+    };
+
+    // localStorage가 비어있을 때만 기본값 자동 주입 + 메모리 동기화
+    function ensureToolUrls(){
+      const nano = (localStorage.getItem("TOOL_URL_NANO") || "").trim();
+      const veo  = (localStorage.getItem("TOOL_URL_VEO")  || "").trim();
+
+      if(!nano && DEFAULT_TOOL_URLS.NANO){
+        localStorage.setItem("TOOL_URL_NANO", DEFAULT_TOOL_URLS.NANO.trim());
+      }
+      if(!veo && DEFAULT_TOOL_URLS.VEO){
+        localStorage.setItem("TOOL_URL_VEO", DEFAULT_TOOL_URLS.VEO.trim());
+      }
+
+      TOOL_URLS.NANO = (localStorage.getItem("TOOL_URL_NANO") || "").trim();
+      TOOL_URLS.VEO  = (localStorage.getItem("TOOL_URL_VEO")  || "").trim();
+    }
+
     function setToolUrls(nano, veo){
       TOOL_URLS.NANO = (nano || "").trim();
       TOOL_URLS.VEO  = (veo  || "").trim();
@@ -928,12 +973,20 @@
       }catch(e){}
     }
 
+    // ✅ 팝업 차단 대비: 새 탭 실패하면 같은 탭 이동
     function openTool(url, name){
-      if(!url || !String(url).trim()){
+      url = (url || "").trim();
+      if(!url){
         toast(name + " 주소가 아직 없어.\n\n🔗 '공장 주소 설정'에서 주소를 먼저 넣어줘.");
         return;
       }
-      window.open(url, "_blank", "noopener,noreferrer");
+      let w = null;
+      try{
+        w = window.open(url, "_blank", "noopener,noreferrer");
+      }catch(e){}
+      if(!w){
+        location.assign(url);
+      }
     }
 
     function openToolSetting(){
@@ -943,6 +996,7 @@
       if(veo === null) return;
 
       setToolUrls(nano, veo);
+      saveState(); // ✅ 주소도 상태 저장에 포함
       toast("저장 완료! 이제 '나노바나나 열기 / VEO3 열기'가 작동해 ✅");
     }
 
@@ -1424,9 +1478,23 @@
     const FIRST_OVERLAY_KEY = "V43_FIRST_OVERLAY_SEEN";
     const TAB_KEY = "V43_ACTIVE_TAB";
 
+    // ====== Output rendering (ABC tabs) ======
+    let LAST = { A:null, B:null, C:null };
+    let ACTIVE_TAB = "A";
+
+    // ✅ A/B/C + 주소 + 설정까지 저장
     function saveState(){
-      const state = collectUI();
-      try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+      const ui = collectUI();
+      const payload = {
+        ui,
+        activeTab: ACTIVE_TAB,
+        last: LAST,
+        toolUrls: {
+          NANO: TOOL_URLS.NANO || "",
+          VEO:  TOOL_URLS.VEO  || ""
+        }
+      };
+      try{ localStorage.setItem(STORE_KEY, JSON.stringify(payload)); }catch(e){}
       try{ localStorage.setItem(TAB_KEY, ACTIVE_TAB); }catch(e){}
     }
 
@@ -1440,25 +1508,40 @@
 
     function applyState(st){
       if(!st) return;
-      if(st.line != null) $("line").value = st.line;
-      if(st.genre) $("genre").value = st.genre;
-      if(st.len) $("len").value = st.len;
-      if(st.tone) $("tone").value = st.tone;
-      if(st.reality) $("reality").value = st.reality;
-      if(st.bg != null) $("bg").value = st.bg;
-      if(st.protagonist) $("protagonist").value = st.protagonist;
 
-      if(st.autoImprov) $("autoImprov").value = st.autoImprov;
-      if(st.presetId) $("presetId").value = st.presetId;
-      if(st.charLock) $("charLock").value = st.charLock;
+      const ui = st.ui || st.state || st;
+      if(ui){
+        if(ui.line != null) $("line").value = ui.line;
+        if(ui.genre) $("genre").value = ui.genre;
+        if(ui.len) $("len").value = ui.len;
+        if(ui.tone) $("tone").value = ui.tone;
+        if(ui.reality) $("reality").value = ui.reality;
+        if(ui.bg != null) $("bg").value = ui.bg;
+        if(ui.protagonist) $("protagonist").value = ui.protagonist;
 
-      if(st.kinderMode){
-        $("kinderMode").value = st.kinderMode;
-        ENABLE_KINDER_MODE = (st.kinderMode === "on");
+        if(ui.autoImprov) $("autoImprov").value = ui.autoImprov;
+        if(ui.presetId) $("presetId").value = ui.presetId;
+        if(ui.charLock) $("charLock").value = ui.charLock;
+
+        if(ui.kinderMode){
+          $("kinderMode").value = ui.kinderMode;
+          ENABLE_KINDER_MODE = (ui.kinderMode === "on");
+        }
+        if(ui.abcMode){
+          $("abcMode").value = ui.abcMode;
+        }
       }
 
-      if(st.abcMode){
-        $("abcMode").value = st.abcMode;
+      if(st.toolUrls){
+        setToolUrls(st.toolUrls.NANO || "", st.toolUrls.VEO || "");
+      }
+
+      if(st.last){
+        LAST = st.last;
+      }
+
+      if(st.activeTab && ["A","B","C"].includes(st.activeTab)){
+        ACTIVE_TAB = st.activeTab;
       }
     }
 
@@ -1490,10 +1573,6 @@
         safeP.innerHTML = `<span class="dot"></span><strong>🛡 안전:</strong> ${on ? "유치원 모드 ON" : "유치원 모드 OFF"}`;
       }
     }
-
-    // ====== Output rendering (ABC tabs) ======
-    let LAST = { A:null, B:null, C:null };
-    let ACTIVE_TAB = "A";
 
     function headerFor(tabKey, pack){
       const meta = pack?.plan?.meta || {};
@@ -1623,9 +1702,7 @@
           refreshQuickStyle();
           saveState();
 
-          // ✅ 초보 원클릭: 생성 + A 이동 + 자동복사 + 안내
           oneClickFinish();
-
           try{ $("out").scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){}
         });
       });
@@ -1682,9 +1759,7 @@
           refreshQuickStyle();
           saveState();
 
-          // ✅ 초보 원클릭: 생성 + A 이동 + 자동복사 + 안내
           oneClickFinish();
-
           try{ $("out").scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){}
         });
         grid.appendChild(b);
@@ -1768,7 +1843,6 @@
       saveState();
     }
 
-    // ✅ 초보 원클릭: 생성 + A탭 이동 + 자동복사 + 다음 단계 안내
     async function oneClickFinish(){
       generate();
       setActiveTab("A");
@@ -1883,12 +1957,13 @@
     }
 
     function backup(){
-      const state = collectUI();
+      const ui = collectUI();
       const payload = {
         exportedAt: new Date().toISOString(),
-        state,
+        ui,
         activeTab: ACTIVE_TAB,
-        last: LAST
+        last: LAST,
+        toolUrls: { NANO: TOOL_URLS.NANO, VEO: TOOL_URLS.VEO }
       };
       const txt = JSON.stringify(payload, null, 2);
       const blob = new Blob([txt], {type:"application/json"});
@@ -1909,12 +1984,11 @@
         const txt = await f.text();
         try{
           const payload = JSON.parse(txt);
-          applyState(payload.state || {});
-          LAST = payload.last || {A:null,B:null,C:null};
-          ACTIVE_TAB = payload.activeTab || "A";
+          applyState(payload);
 
           ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
           refreshPills();
+
           if(!LAST[ACTIVE_TAB]) ACTIVE_TAB = "A";
           setActiveTab(ACTIVE_TAB);
 
@@ -2014,15 +2088,38 @@
       });
     }
 
-    // ===== 개발자 모드(숨김): 제목 7번 + 7878 =====
+    // ===== 개발자 모드(숨김): 제목 7번 + (저장된 코드 3개 중 1개) =====
     function initDevMode(){
-      const DEV_PASS = "7878";
-
       const title = $("appTitle");
       const ov = $("devOverlay");
       const closeBtn = $("devClose");
-
       if(!title || !ov || !closeBtn) return;
+
+      const DEV_KEYS = ["DEV_PASS_1","DEV_PASS_2","DEV_PASS_3"];
+
+      function ensureDevCodes(){
+        const p1 = (localStorage.getItem(DEV_KEYS[0]) || "").trim();
+        const p2 = (localStorage.getItem(DEV_KEYS[1]) || "").trim();
+        const p3 = (localStorage.getItem(DEV_KEYS[2]) || "").trim();
+        if(!p1 && !p2 && !p3){
+          localStorage.setItem(DEV_KEYS[0], "7878");
+        }
+      }
+
+      function getDevCodes(){
+        return DEV_KEYS
+          .map(k => (localStorage.getItem(k) || "").trim())
+          .filter(Boolean);
+      }
+
+      function fillDevInputs(){
+        const c1 = $("devCode1"), c2 = $("devCode2"), c3 = $("devCode3");
+        if(c1) c1.value = (localStorage.getItem(DEV_KEYS[0]) || "").trim();
+        if(c2) c2.value = (localStorage.getItem(DEV_KEYS[1]) || "").trim();
+        if(c3) c3.value = (localStorage.getItem(DEV_KEYS[2]) || "").trim();
+      }
+
+      ensureDevCodes();
 
       let taps = 0;
       let timer = null;
@@ -2035,8 +2132,12 @@
         if(taps >= 7){
           taps = 0;
           const pw = prompt("개발자 비밀번호 4자리");
-          if(pw === DEV_PASS){
+          if(pw === null) return;
+
+          const ok = getDevCodes().includes(String(pw).trim());
+          if(ok){
             ov.style.display = "flex";
+            fillDevInputs();
           } else {
             alert("비밀번호 틀림");
           }
@@ -2050,13 +2151,36 @@
         if(e.key === "Escape" && ov.style.display === "flex") ov.style.display = "none";
       });
 
+      const saveBtn = $("devSaveCodes");
+      if(saveBtn){
+        saveBtn.addEventListener("click", ()=>{
+          const c1 = ($("devCode1")?.value || "").trim();
+          const c2 = ($("devCode2")?.value || "").trim();
+          const c3 = ($("devCode3")?.value || "").trim();
+
+          const ok4 = (s)=> !s || /^[0-9]{4}$/.test(s);
+          if(!ok4(c1) || !ok4(c2) || !ok4(c3)){
+            alert("코드는 4자리 숫자만 가능해요. (예: 7878)");
+            return;
+          }
+
+          localStorage.setItem(DEV_KEYS[0], c1);
+          localStorage.setItem(DEV_KEYS[1], c2);
+          localStorage.setItem(DEV_KEYS[2], c3);
+
+          alert("개발자 코드 저장 완료 ✅");
+        });
+      }
+
       const dump = $("devDumpBtn");
       if(dump){
         dump.addEventListener("click", ()=>{
           const payload = {
             state: collectUI(),
             activeTab: ACTIVE_TAB,
-            hasA: !!LAST.A, hasB: !!LAST.B, hasC: !!LAST.C
+            hasA: !!LAST.A, hasB: !!LAST.B, hasC: !!LAST.C,
+            toolUrls: { NANO: TOOL_URLS.NANO, VEO: TOOL_URLS.VEO },
+            devCodesCount: getDevCodes().length
           };
           alert(JSON.stringify(payload, null, 2));
         });
@@ -2076,10 +2200,12 @@
           setActiveTab(k);
         });
       });
+
       try{
         const t = localStorage.getItem(TAB_KEY);
         if(t && ["A","B","C"].includes(t)) ACTIVE_TAB = t;
       }catch(e){}
+
       setActiveTab(ACTIVE_TAB);
     }
 
@@ -2109,7 +2235,9 @@
 
     // ====== Init ======
     document.addEventListener("DOMContentLoaded", ()=>{
+      ensureToolUrls();   // ✅ 앱 시작 즉시: 주소 자동 주입/동기화
       applyServerPolicy();
+
       bindHints();
       bindAutoSave();
       updateZipButtonState();
@@ -2126,6 +2254,8 @@
       initDevMode();
       initTabs();
 
+      renderActiveTab(); // ✅ 저장된 LAST가 있으면 즉시 출력 복구
+
       $("genBtn").addEventListener("click", generate);
       $("copyBtn").addEventListener("click", copyCurrent);
       $("copyAllBtn").addEventListener("click", copyAllABC);
@@ -2137,10 +2267,8 @@
       $("validateBtn").addEventListener("click", runValidator);
       $("autofixBtn").addEventListener("click", runAutofix);
 
-      // ✅ 공장 버튼 이벤트 연결
       $("toolSettingBtn").addEventListener("click", openToolSetting);
 
-      // ✅ 공장 열기 버튼 이벤트 연결
       $("openNanoBtn").addEventListener("click", ()=> openTool(TOOL_URLS.NANO, "나노바나나"));
       $("openVeoBtn").addEventListener("click", ()=> openTool(TOOL_URLS.VEO, "VEO3"));
       $("copySceneBtn").addEventListener("click", copyCurrentScenePrompt);
@@ -2157,3 +2285,4 @@
   </script>
 </body>
 </html>
+```0
