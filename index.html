@@ -567,14 +567,24 @@
               예시 버튼을 누르면 <b>자동 생성 + A탭 이동 + 자동 복사</b>까지 끝나요.<br/>
               이제 <b>나노바나나에 붙여넣기만</b> 하면 됩니다. (주소가 없으면 🔗 공장 주소 설정 먼저)
             </div>
+
+            <!-- ✅ 패치: data-reality 추가 + 그대로 반영 -->
             <div class="qsGrid">
-              <button class="qsBtn" data-example="비 오는 밤, 골목에서 누군가가 사라졌다. 단서는 떨어진 휴대폰뿐이다.">
+              <button class="qsBtn"
+                      data-example="비 오는 밤, 골목에서 누군가가 사라졌다. 단서는 떨어진 휴대폰뿐이다."
+                      data-reality="REAL_WORLD">
                 예시 1) 비 오는 밤 실종… 단서는 휴대폰 (미스터리)
               </button>
-              <button class="qsBtn" data-example="편의점 앞에서 의문의 사고가 발생했다. 현장에는 경찰차와 CCTV 화면만 남아 있다.">
+
+              <button class="qsBtn"
+                      data-example="편의점 앞에서 의문의 사고가 발생했다. 현장에는 경찰차와 CCTV 화면만 남아 있다."
+                      data-reality="REAL_WORLD">
                 예시 2) 편의점 앞 사고… 경찰차와 CCTV (다큐 느낌)
               </button>
-              <button class="qsBtn" data-example="세 마리 강아지가 도시를 구하는 60초 짧은 이야기. 위험은 단서로만 암시한다.">
+
+              <button class="qsBtn"
+                      data-example="세 마리 강아지가 도시를 구하는 60초 짧은 이야기. 위험은 단서로만 암시한다."
+                      data-reality="FICTION">
                 예시 3) 강아지 3마리 60초 히어로 (유튜브용)
               </button>
             </div>
@@ -942,13 +952,10 @@
 
     // ✅ 기본 주소(처음 실행에서만 자동 저장 — 이미 저장돼 있으면 유지)
     const DEFAULT_TOOL_URLS = {
-      // 나노바나나(=Gemini로 연결)
       NANO: "https://gemini.google.com",
-      // VEO3 (트래킹 파라미터 제거한 안정 주소)
       VEO:  "https://deevid.ai/ko/model/veo-ai"
     };
 
-    // localStorage가 비어있을 때만 기본값 자동 주입 + 메모리 동기화
     function ensureToolUrls(){
       const nano = (localStorage.getItem("TOOL_URL_NANO") || "").trim();
       const veo  = (localStorage.getItem("TOOL_URL_VEO")  || "").trim();
@@ -973,7 +980,6 @@
       }catch(e){}
     }
 
-    // ✅ 팝업 차단 대비: 새 탭 실패하면 같은 탭 이동
     function openTool(url, name){
       url = (url || "").trim();
       if(!url){
@@ -996,7 +1002,7 @@
       if(veo === null) return;
 
       setToolUrls(nano, veo);
-      saveState(); // ✅ 주소도 상태 저장에 포함
+      saveState();
       toast("저장 완료! 이제 '나노바나나 열기 / VEO3 열기'가 작동해 ✅");
     }
 
@@ -1482,7 +1488,6 @@
     let LAST = { A:null, B:null, C:null };
     let ACTIVE_TAB = "A";
 
-    // ✅ A/B/C + 주소 + 설정까지 저장
     function saveState(){
       const ui = collectUI();
       const payload = {
@@ -1671,6 +1676,7 @@
       pill.textContent = "🎬 현재 설정: " + parts.filter(Boolean).join(" · ");
     }
 
+    // ✅✅✅ 패치 완료: data-reality를 그대로 반영
     function bindQuickStart(){
       const root = $("quickStart");
       if(!root) return;
@@ -1680,13 +1686,20 @@
           const ex = btn.getAttribute("data-example") || "";
           $("line").value = safeText(ex);
 
-          $("reality").value = "REAL_WORLD";
+          // ✅ 핵심: 버튼이 가진 REAL/FICTION 그대로 적용
+          const r = (btn.getAttribute("data-reality") || "REAL_WORLD").trim();
+          $("reality").value = (r === "FICTION") ? "FICTION" : "REAL_WORLD";
+
+          // ✅ 유치원 모드는 기본 ON 유지
           $("kinderMode").value = "on";
           ENABLE_KINDER_MODE = true;
 
+          // ✅ 예시는 60초 고정
           $("len").value = "60";
 
           const text = safeText(ex);
+
+          // ✅ 장르/톤 자동 추천
           if(text.includes("CCTV") || text.includes("현장") || text.includes("기록")){
             $("genre").value = "documentary";
             $("tone").value = "dry_serious";
@@ -1752,9 +1765,11 @@
           $("reality").value = t.reality;
           $("bg").value = t.bg;
           $("protagonist").value = t.pro;
+
           $("kinderMode").value = "on";
           ENABLE_KINDER_MODE = true;
           $("abcMode").value = "on";
+
           refreshPills();
           refreshQuickStyle();
           saveState();
@@ -2235,7 +2250,7 @@
 
     // ====== Init ======
     document.addEventListener("DOMContentLoaded", ()=>{
-      ensureToolUrls();   // ✅ 앱 시작 즉시: 주소 자동 주입/동기화
+      ensureToolUrls();
       applyServerPolicy();
 
       bindHints();
@@ -2254,7 +2269,7 @@
       initDevMode();
       initTabs();
 
-      renderActiveTab(); // ✅ 저장된 LAST가 있으면 즉시 출력 복구
+      renderActiveTab();
 
       $("genBtn").addEventListener("click", generate);
       $("copyBtn").addEventListener("click", copyCurrent);
@@ -2285,4 +2300,3 @@
   </script>
 </body>
 </html>
-```0
