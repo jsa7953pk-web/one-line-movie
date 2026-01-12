@@ -1,93 +1,715 @@
-너는 100만 조회수 이상을 목표로 하는 
-동물 유튜브 쇼츠 전용 자동 영화감독이다.
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>One-line Movie V4.4 (Dog Director) · 60초/9씬 감독설계도</title>
+  <style>
+    :root{
+      --bg:#0b0f14; --card:#0f1620; --text:#e8eef7; --muted:#aab6c5; --line:#1b2635;
+      --green:#2ecc71; --blue:#4aa3ff; --yellow:#ffd166; --red:#ff5c77; --shadow:0 12px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Noto Sans KR,sans-serif;
+      background: radial-gradient(1200px 600px at 30% 10%, rgba(74,163,255,.10), transparent 50%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(46,204,113,.08), transparent 50%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:980px; margin:0 auto; padding:22px 16px 60px;}
+    .hero{ text-align:center; margin:18px 0 14px; }
+    .hero h1{margin:0; font-size:28px; letter-spacing:-.5px; line-height:1.2}
+    .hero p{margin:10px 0 0; color:var(--muted); line-height:1.55}
+    .grid{display:grid; grid-template-columns: 1.1fr .9fr; gap:14px;}
+    @media (max-width: 920px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hd{padding:14px 14px 10px; border-bottom:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.01);}
+    .title{font-weight:900; letter-spacing:-.3px}
+    .bd{padding:14px}
+    textarea, select, input[type="text"]{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(10,16,24,.75);
+      color:var(--text);
+      outline:none;
+      line-height:1.55;
+      font-size:14px;
+    }
+    textarea{min-height:120px; resize:vertical}
+    textarea:focus, select:focus, input[type="text"]:focus{border-color:rgba(74,163,255,.45); box-shadow:0 0 0 3px rgba(74,163,255,.12)}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+    @media (max-width: 520px){ .row{grid-template-columns:1fr} }
+    .small{color:var(--muted); font-size:12.8px; line-height:1.5}
+    .btnRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    button{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(10,16,24,.75);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:-.2px;
+    }
+    button.primary{background:linear-gradient(180deg, rgba(46,204,113,.95), rgba(46,204,113,.70)); border-color:rgba(46,204,113,.35); color:#07110b;}
+    button.secondary{background:linear-gradient(180deg, rgba(74,163,255,.95), rgba(74,163,255,.70)); border-color:rgba(74,163,255,.35); color:#06101a;}
+    button.warn{background:linear-gradient(180deg, rgba(255,209,102,.95), rgba(255,209,102,.70)); border-color:rgba(255,209,102,.35); color:#1a1202;}
+    button.danger{background:linear-gradient(180deg, rgba(255,92,119,.95), rgba(255,92,119,.70)); border-color:rgba(255,92,119,.35); color:#1b0509;}
+    .out{
+      width:100%;
+      min-height:340px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(10,16,24,.75);
+      color:var(--text);
+      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      font-size:12.8px;
+      line-height:1.55;
+      white-space:pre-wrap;
+      word-break:break-word;
+      outline:none;
+    }
+    .tabsRow{display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:10px}
+    .tabs{display:flex; gap:8px; flex-wrap:wrap}
+    .tabBtn{
+      padding:8px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      cursor:pointer; font-weight:900; font-size:12.5px; color:var(--muted);
+    }
+    .tabBtn.active{background:linear-gradient(180deg, rgba(74,163,255,.95), rgba(74,163,255,.70)); border-color:rgba(74,163,255,.35); color:#06101a;}
+    .footer{margin-top:10px; color:var(--muted); font-size:12px; text-align:center; opacity:.85}
+    .pillRow{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .pill{padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); color:var(--muted); font-size:12.5px;}
+  </style>
+</head>
 
-이 엔진의 목적은
-“시청자가 강아지가 화면에 있는 동안 절대 스크롤하지 않게 만드는 것”이다.
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>🐶 은비·제리·아랑 “감독 설계도 엔진” (오프라인)</h1>
+      <p>한 줄 상황 → 60초/9씬 감독 설계도(카메라/표정/입모양/소품/나노/VE0) + A/B/C 3안</p>
+    </div>
 
-웃김, 감동, 교훈은 중요하지 않다.
-리텐션과 몰입이 최우선이다.
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <div class="hd">
+          <div class="title">입력</div>
+          <div class="small">※ 이 파일은 “HTML에 엔진 글 붙이기”가 아니라, JS가 규칙을 실행해서 감독 설계도를 출력합니다.</div>
+        </div>
+        <div class="bd">
+          <textarea id="line" placeholder="한 줄 상황(예: 새벽 골목에서 세 강아지가 동시에 멈춰 섰다. 떨어진 건 리본 하나뿐.)"></textarea>
 
----
+          <div class="row">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">장르</div>
+              <select id="genre">
+                <option value="documentary">다큐(리얼)</option>
+                <option value="mystery">미스터리</option>
+                <option value="drama">드라마</option>
+                <option value="healing">힐링</option>
+                <option value="fantasy">판타지</option>
+                <option value="comedy">코미디</option>
+              </select>
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">길이</div>
+              <select id="len">
+                <option value="60">60초 (감독룰: 9씬)</option>
+                <option value="30">30초</option>
+                <option value="20">20초</option>
+                <option value="180">180초(3분)</option>
+              </select>
+            </div>
+          </div>
 
-[입력]
-- 캐릭터: 은비, 제리, 아랑 (사람처럼 옷 입고 행동하는 강아지)
-- 참고 이미지: 사용자가 업로드한 캐릭터 이미지
-- 한 줄 상황: 사용자가 입력한 상황
+          <div class="row">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">톤</div>
+              <select id="tone">
+                <option value="dry_serious">건조·진지</option>
+                <option value="tense">긴장</option>
+                <option value="calm">차분</option>
+                <option value="warm">따뜻</option>
+              </select>
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">현실/허구</div>
+              <select id="reality">
+                <option value="FICTION">허구(추천)</option>
+                <option value="REAL_WORLD">현실 사건(안전 단서)</option>
+              </select>
+            </div>
+          </div>
 
----
+          <div class="row">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">배경</div>
+              <input id="bg" type="text" value="새벽의 조용한 동네 골목" />
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">유치원 모드(안전)</div>
+              <select id="kinderMode">
+                <option value="on">ON (기본)</option>
+                <option value="off">OFF</option>
+              </select>
+            </div>
+          </div>
 
-[고정 연출 규칙 — 절대 변경 금지]
+          <div class="row">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">A/B/C 3안</div>
+              <select id="abcMode">
+                <option value="on">ON (추천)</option>
+                <option value="off">OFF</option>
+              </select>
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">자동 연출(조명/카메라 강화)</div>
+              <select id="autoImprov">
+                <option value="on">ON (추천)</option>
+                <option value="off">OFF</option>
+              </select>
+            </div>
+          </div>
 
-1. 훅 규칙
-- 첫 1초는 반드시 “이상한 장면” 또는 “멈춰 있는 긴장”
-- 카메라는 이미 사건 한가운데 있음
-- 설명 없이 시작
+          <div style="margin-top:10px;">
+            <div class="small" style="margin:6px 0 6px;">🐶 캐릭터 고정 설명(중요)</div>
+            <textarea id="charSpec" placeholder="여기에 ‘은비/제리/아랑’ 고정 스펙을 적어야 장면마다 얼굴/옷이 덜 흔들립니다.
+예)
+은비: 작은 시츄, 하늘색 롱패딩+하늘색 벙어리장갑+하늘색 패딩바지, 하늘색 하트핀(좌/우), 둥근 얼굴, 사람처럼 서거나 앉음
+제리: 작은 말티즈, 노란 패딩+노란 리본, 목도리 노랑 두 번 감기, 사람처럼 행동
+아랑: (너의 고정 의상/악세서리/체형/얼굴 특징)
+공통: 실제 사진 같은 시네마틱, 만화 금지, 과장된 감정 금지, 9:16, 같은 옷/색/악세서리 전 씬 동일"></textarea>
+          </div>
 
-2. 침묵 규칙
-- 강아지는 말하지 않는다
-- 정보는 표정, 행동, 카메라 거리로만 전달
+          <div class="pillRow">
+            <div class="pill" id="pillSafety">🛡 안전: 유치원 모드 ON</div>
+            <div class="pill" id="pillRule">🎬 룰: 60초=9씬, 씬2/5/7 소품 클로즈업</div>
+          </div>
 
-3. 반복 규칙
-- 매 씬마다 같은 구도 요소 1개 유지
-  (예: 마이크가 항상 프레임 오른쪽 15%, 또는 CCTV 시점)
+          <div class="btnRow">
+            <button class="primary" id="genBtn">⚡ 생성하기</button>
+            <button class="secondary" id="copyBtn">📋 복사(현재 탭)</button>
+            <button class="warn" id="copyAllBtn">📋 전체 복사(A+B+C)</button>
+            <button class="danger" id="resetBtn">🧹 초기화</button>
+          </div>
 
-4. 캐릭터 고정
-- 은비, 제리, 아랑의 옷, 색, 악세서리는 전 씬 동일
-- 얼굴과 비율은 절대 변형 금지
+          <div class="small" style="margin-top:10px;">
+            ✅ 사용: <b>한 줄 입력 → ⚡ 생성하기 → (A/B/C 탭) → 📋 복사 → 나노바나나/VE0에 붙여넣기</b><br/>
+            ⚠️ “강아지 말 금지”는 <b>입모양</b>으로만 기록되고, 대사는 출력하지 않습니다.
+          </div>
+        </div>
+      </div>
 
-5. 소품 3개 자동 배치
-- 씬2 = 소품1 클로즈업
-- 씬5 = 소품2 클로즈업
-- 씬7 = 소품3 클로즈업
+      <!-- RIGHT -->
+      <div class="card">
+        <div class="hd">
+          <div class="title">출력</div>
+          <div class="small">감독 설계도(복붙용) + prompts_image / prompts_video / srt / json</div>
+        </div>
+        <div class="bd">
+          <div class="tabsRow">
+            <div class="tabs">
+              <button class="tabBtn active" data-tab="A" id="tabA">A</button>
+              <button class="tabBtn" data-tab="B" id="tabB">B</button>
+              <button class="tabBtn" data-tab="C" id="tabC" >C</button>
+            </div>
+            <div class="small">A=다큐 / B=시네마 / C=긴장</div>
+          </div>
 
-6. 카메라 흐름
-- 씬1: 롱 또는 CCTV (상황 훅)
-- 씬2: 소품 ECU
-- 씬3: 인물 클로즈업
-- 씬4: 미디엄
-- 씬5: 소품 클로즈업
-- 씬6: 압박 샷
-- 씬7: 소품 ECU
-- 씬8: 여운
-- 씬9: 엔딩 고정
+          <div class="out" id="out" contenteditable="true" spellcheck="false"></div>
+          <div class="footer">© One-Line Movie V4.4 Dog Director · Single-file</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-7. 엔딩 규칙
-- 마지막 컷은 항상 정면 아이컨택
-- 감정이 닫히지 않고 여운으로 멈춤
+  <script>
+    // ===== Utilities =====
+    const $ = (id)=>document.getElementById(id);
+    const safeText = (s)=> (s==null ? "" : String(s).replace(/\uFFFD/g,"").normalize("NFC"));
+    function secondsToSrtTime(sec){
+      sec = Math.max(0, Math.floor(sec));
+      const h = Math.floor(sec/3600);
+      const m = Math.floor((sec%3600)/60);
+      const s = sec%60;
+      const pad = (n)=>String(n).padStart(2,"0");
+      return `${pad(h)}:${pad(m)}:${pad(s)},000`;
+    }
+    async function copyToClipboard(txt){
+      const t = String(txt||"");
+      if(!t.trim()){ alert("복사할 내용이 없습니다. 먼저 생성하세요."); return; }
+      try{ await navigator.clipboard.writeText(t); alert("복사 완료!"); }
+      catch(e){
+        const ta = document.createElement("textarea");
+        ta.value = t; document.body.appendChild(ta); ta.select();
+        document.execCommand("copy"); document.body.removeChild(ta);
+        alert("복사 완료(대체 방식)!");
+      }
+    }
 
----
+    // ===== Safety (Kinder) =====
+    let ENABLE_KINDER_MODE = true;
+    const FORBID = ["피","고어","시체","시신","사체","토막","장기","절단","훼손","트렁크","상처","절개","목이 잘린","blood","gore","corpse","dismemberment","decapitation","open trunk","dead body"];
+    function autoFixText(txt){
+      let out = String(txt||"");
+      // 아주 강한 키워드만 안전 치환
+      out = out.replace(/(피|고어|시체|시신|사체|토막|장기|절단|훼손)/g, "비그래픽 단서");
+      out = out.replace(/(트렁크)/g, "차량 후미등(원경)");
+      out = out.replace(/(상처|절개|목이 잘린)/g, "부상 묘사 금지(단서로 대체)");
+      out = out.replace(/\b(blood|gore|corpse|dead body|dismemberment|decapitation|open trunk)\b/gi, "non-graphic clue");
+      return out;
+    }
 
-[출력 형식 — 반드시 지켜라]
+    function refreshPills(){
+      const on = ENABLE_KINDER_MODE;
+      $("pillSafety").textContent = "🛡 안전: 유치원 모드 " + (on ? "ON" : "OFF");
+    }
 
-총 60초 / 9씬
+    // ===== Beats =====
+    function getSceneCount(len){
+      len = Number(len);
+      if(len <= 20) return 5;
+      if(len <= 30) return 6;
+      if(len <= 60) return 9;
+      return 12;
+    }
 
-각 씬마다 아래를 반드시 출력:
+    function beatsFor(genre, n){
+      const base = ({
+        documentary:["오프닝","현장","단서","기록","관찰","증언","정리","추정","여운"],
+        mystery:["훅","사건 암시","단서","목격","추적","막다른 길","새 단서","반전","여운"],
+        drama:["훅","상황","감정","갈등","선택","후회","결심","변화","여운"],
+        healing:["훅","조용한 시작","따뜻한 배경","힐링 포인트","공감","포근한 행동","미소","안정","여운"],
+        fantasy:["훅","룰 공개","도전","장치","위기","각성","클라이맥스","대가","엔딩"],
+        comedy:["훅","오해","더 큰 오해","리액션","폭주","수습","반전","침묵","엔딩"]
+      })[genre] || ["훅","상황","전개","단서","전환","추적","긴장","클라이맥스","엔딩"];
+      const beats = base.slice();
+      while(beats.length < n) beats.push("추가 비트");
+      return beats.slice(0,n);
+    }
 
-SCENE 번호
-⏱ 시간(초)
-🎥 카메라
-🙂 표정 & 동작
-🗣 입모양(말 안 해도 적어라)
-🎬 상황 설명
-🧩 소품(있으면)
+    function safeBeatsReal(n){
+      // 현실 사건일 때: 비그래픽 단서 중심
+      const beats = [
+        "밤길 원경(사건 암시만, 인물 멀리)",
+        "놀란 얼굴 클로즈업(피/상처 없음)",
+        "떨어진 물건(리본/휴대폰) 클로즈업",
+        "경찰차·경광등 원경",
+        "증거 마킹(숫자/기호만)",
+        "젖은 도로 반사/타이어 자국",
+        "CCTV/블랙박스 화면(픽셀, 비그래픽)",
+        "멀어지는 후미등(번호판 식별 금지)",
+        "텅 빈 도로 + 여운"
+      ];
+      while(beats.length < n) beats.splice(beats.length-1,0,"추가 단서(비그래픽)");
+      return beats.slice(0,n);
+    }
+
+    // ===== Variant Flavor =====
+    const VAR = {
+      A:{label:"A(다큐/현장감)", lens:"documentary realism, natural lighting, handheld authenticity", cam:"관찰형 핸드헬드, 미세 줌", mood:"documentary, restrained"},
+      B:{label:"B(시네마/감정선)", lens:"cinematic lighting, soft bokeh, emotional framing", cam:"슬로우 푸시인/돌리인", mood:"cinematic, gentle tension"},
+      C:{label:"C(긴장/스릴)", lens:"high contrast cinematic, suspense framing", cam:"타이트 프레이밍, 느린 핸드헬드", mood:"suspense, tense"}
+    };
+
+    // ===== Director Output Builder (핵심) =====
+    function buildDirector(plan){
+      const m = plan.meta;
+
+      // 감독 룰: 60초면 9씬 고정
+      const n = (Number(m.len) === 60) ? 9 : m.n;
+      const total = Number(m.len);
+      const per = total / n;
+
+      const props = [
+        "떨어진 물건(리본/휴대폰/키 중 1개)",
+        "CCTV 화면(모니터)",
+        "봉투/쪽지/스티커(의문의 단서)"
+      ];
+      const propAt = { 2: props[0], 5: props[1], 7: props[2] };
+
+      const repeatElement = "프레임 오른쪽 15%에 항상 마이크 또는 CCTV 타임스탬프 요소 유지";
+      const charSpec = safeText(m.charSpec||"").trim();
+
+      const scenes = [];
+      for(let i=0;i<n;i++){
+        const start = Math.floor(i*per);
+        const end = Math.floor((i+1)*per);
+        const dur = Math.max(1, end-start);
+        scenes.push({idx:i+1,start,end,dur,beat:plan.beats[i]||"단서가 늘어난다",prop:propAt[i+1]||""});
+      }
+
+      function camFlow(idx){
+        return ({
+          1:"롱샷 또는 CCTV 원경(사건 한가운데에서 시작)",
+          2:"소품 ECU(초근접)",
+          3:"인물 클로즈업(눈/입 주변)",
+          4:"미디엄샷(세 캐릭터 관계)",
+          5:"소품 클로즈업",
+          6:"압박 샷(카메라가 가까워짐, 숨막힘)",
+          7:"소품 ECU",
+          8:"여운 샷(정적 유지)",
+          9:"엔딩 고정 정면 아이컨택"
+        })[idx] || "미디엄샷";
+      }
+
+      function actFlow(idx){
+        return ({
+          1:"멈춰 있는 긴장. 세 마리 모두 정지. 눈만 움직임",
+          2:"소품을 바라보는 시선. 앞발이 아주 살짝 떨림",
+          3:"은비가 천천히 고개를 듦(말 없이)",
+          4:"제리가 다른 둘을 번갈아 봄(눈으로만 질문)",
+          5:"아랑이 CCTV/단서를 가리키듯 앞발을 살짝 듦",
+          6:"세 마리 중 한 마리가 한 발 앞으로. 숨 멎는 정적",
+          7:"단서를 ‘가볍게’ 밀어놓음(의도적으로)",
+          8:"세 마리 모두 멈춤. 상황이 풀리지 않은 채 유지",
+          9:"정면 아이컨택. 감정이 닫히지 않고 멈춤"
+        })[idx] || "미세한 반응";
+      }
+
+      const mouth = "입은 닫혀 있음(발화 없음), 숨만 보일 정도";
+      const blocks = [];
+      const imgBlocks = [];
+      const vidBlocks = [];
+      const srtLines = [];
+
+      for(const sc of scenes){
+        const cam = camFlow(sc.idx);
+        const act = actFlow(sc.idx);
+
+        const nano = [
+          "세로 9:16, 실제 사진 같은 시네마틱, 만화 스타일 금지, 과장된 감정 금지.",
+          charSpec ? ("[캐릭터 고정]\n" + charSpec) : "[캐릭터 고정] 은비/제리/아랑: 사람처럼 옷 입고 행동하는 강아지 3마리(옷/색/악세서리 전 씬 동일).",
+          `[반복 구도] ${repeatElement}.`,
+          `배경: ${m.bg}.`,
+          `스타일: ${m.variantLabel}. ${m.lens}. ${m.mood}.`,
+          `SCENE ${sc.idx} (${sc.start}-${sc.end}초): ${sc.beat}.`,
+          `카메라: ${cam}.`,
+          `표정/동작: ${act}.`,
+          sc.prop ? `소품: ${sc.prop} (클로즈업 강조).` : "",
+          "조명: 다큐/뉴스 현장 같은 자연스러운 조명, 리얼한 털 질감.",
+          "금지: 피/상처/고어/시체/트렁크/폭력/혐오/선정적."
+        ].filter(Boolean).join("\n");
+
+        const veo = [
+          "세로 9:16, 실제 촬영 같은 시네마틱 영상.",
+          `길이 ${sc.dur}초.`,
+          `스타일: ${m.variantLabel}.`,
+          `카메라 무브: ${m.cam}.`,
+          `사운드: 말 없음. 주변 환경음/아주 작은 효과음만.`,
+          `연기: ${act}.`,
+          `입모양: ${mouth}.`,
+          sc.prop ? `소품 연출: ${sc.prop}를 화면 중심으로 잠깐 강조.` : "",
+          `[반복 구도] ${repeatElement}.`,
+          "금지: 폭력/피/상처/고어/시체/선정/혐오 연출."
+        ].filter(Boolean).join("\n");
+
+        blocks.push(
+`SCENE ${sc.idx}
+⏱ ${sc.start}–${sc.end}초 (${sc.dur}초)
+🎥 카메라: ${cam}
+🙂 표정 & 동작: ${act}
+🗣 입모양: ${mouth}
+🎬 상황 설명: ${sc.beat}
+🧩 소품: ${sc.prop || "없음"}
 🖼 나노바나나 이미지 프롬프트 (한국어)
+${nano}
 🎥 VEO3 영상 프롬프트 (한국어)
+${veo}
+`
+        );
 
----
+        imgBlocks.push(`SCENE ${sc.idx} (${sc.start}-${sc.end}s)\n${nano}\n`);
+        vidBlocks.push(`SCENE ${sc.idx} (${sc.start}-${sc.end}s)\n${veo}\n`);
+        srtLines.push(`${sc.idx}\n${secondsToSrtTime(sc.start)} --> ${secondsToSrtTime(sc.end)}\n${safeText(sc.beat).slice(0,42)}\n`);
+      }
 
-[스타일]
+      const json = {
+        createdAt: new Date().toISOString(),
+        meta: {...m, n},
+        beats: plan.beats,
+        scenes
+      };
 
-- 실제 사진 같은 시네마틱
-- 만화 스타일 금지
-- 과장된 감정 금지
-- 진짜 다큐나 뉴스 현장처럼
+      return {
+        scenes,
+        director_txt: blocks.join("\n").trim() + "\n",
+        prompts_image_txt: imgBlocks.join("\n").trim() + "\n",
+        prompts_video_txt: vidBlocks.join("\n").trim() + "\n",
+        srt_txt: srtLines.join("\n").trim() + "\n",
+        json_txt: JSON.stringify(json, null, 2)
+      };
+    }
 
----
+    function headerFor(tabKey, pack){
+      const m = pack.plan.meta;
+      const safety = (ENABLE_KINDER_MODE && m.reality === "REAL_WORLD")
+        ? `전체 안전(유치원): 금지어 예시 = ${FORBID.join(", ")}`
+        : `안전: 기본(폭력/고어 금지 유지)`;
 
-이제 사용자가 준 “한 줄 상황”을 바탕으로  
-은비 · 제리 · 아랑이 등장하는  
-3분짜리 쇼츠 시퀀스를 생성하라.
+      return [
+        `# 은비·제리·아랑 감독 설계도 출력 (${tabKey})`,
+        `- 생성 시각: ${new Date().toLocaleString()}`,
+        `- 버전: ${m.variantLabel}`,
+        `- 길이: ${m.len}초`,
+        `- 장르: ${m.genre}`,
+        `- 톤: ${m.tone}`,
+        `- 현실/허구: ${m.reality}`,
+        `- 유치원 모드: ${m.kinderMode ? "ON" : "OFF"}`,
+        safety,
+        ``,
+        `--- 감독 설계도(복붙용) ---`,
+        pack.outs.director_txt || "",
+        `--- 이미지 프롬프트(prompts_image.txt) ---`,
+        pack.outs.prompts_image_txt || "",
+        `--- 영상 프롬프트(prompts_video.txt) ---`,
+        pack.outs.prompts_video_txt || "",
+        `--- 자막(srt.txt) ---`,
+        pack.outs.srt_txt || "",
+        `--- 계획(JSON) ---`,
+        pack.outs.json_txt || ""
+      ].join("\n");
+    }
 
-시청자는
-“왜 이 장면이 계속되지?”
-라는 이유로 끝까지 보게 되어야 한다.
+    // ===== State =====
+    const STORE_KEY = "V44_DOG_DIRECTOR_STATE";
+    const TAB_KEY = "V44_DOG_DIRECTOR_TAB";
+    let LAST = {A:null,B:null,C:null};
+    let ACTIVE_TAB = "A";
+
+    function collectUI(){
+      return {
+        line: safeText($("line").value),
+        genre: $("genre").value,
+        len: $("len").value,
+        tone: $("tone").value,
+        reality: $("reality").value,
+        bg: safeText($("bg").value),
+        kinderMode: $("kinderMode").value,
+        abcMode: $("abcMode").value,
+        autoImprov: $("autoImprov").value,
+        charSpec: safeText($("charSpec").value)
+      };
+    }
+
+    function saveState(){
+      try{
+        const payload = { ui: collectUI(), last: LAST, activeTab: ACTIVE_TAB };
+        localStorage.setItem(STORE_KEY, JSON.stringify(payload));
+        localStorage.setItem(TAB_KEY, ACTIVE_TAB);
+      }catch(e){}
+    }
+
+    function applyState(st){
+      if(!st || !st.ui) return;
+      const ui = st.ui;
+      if(ui.line!=null) $("line").value = ui.line;
+      if(ui.genre) $("genre").value = ui.genre;
+      if(ui.len) $("len").value = ui.len;
+      if(ui.tone) $("tone").value = ui.tone;
+      if(ui.reality) $("reality").value = ui.reality;
+      if(ui.bg!=null) $("bg").value = ui.bg;
+      if(ui.kinderMode) $("kinderMode").value = ui.kinderMode;
+      if(ui.abcMode) $("abcMode").value = ui.abcMode;
+      if(ui.autoImprov) $("autoImprov").value = ui.autoImprov;
+      if(ui.charSpec!=null) $("charSpec").value = ui.charSpec;
+
+      ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
+      if(st.last) LAST = st.last;
+      if(st.activeTab) ACTIVE_TAB = st.activeTab;
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      }catch(e){ return null; }
+    }
+
+    function setActiveTab(tabKey){
+      ACTIVE_TAB = tabKey;
+      ["A","B","C"].forEach(k=>{
+        const el = $("tab"+k);
+        if(el) el.classList.toggle("active", k===tabKey);
+      });
+      renderActiveTab();
+      saveState();
+    }
+
+    function renderActiveTab(){
+      const pack = LAST[ACTIVE_TAB];
+      $("out").textContent = pack ? headerFor(ACTIVE_TAB, pack) : "";
+    }
+
+    function renderAllCombined(){
+      const blocks = [];
+      for(const k of ["A","B","C"]){
+        if(LAST[k]) blocks.push(headerFor(k, LAST[k]));
+      }
+      return blocks.join("\n\n\n====================\n\n\n").trim() + "\n";
+    }
+
+    // ===== Generate =====
+    function generate(){
+      const ui = collectUI();
+      ENABLE_KINDER_MODE = (ui.kinderMode === "on");
+
+      if(!ui.line.trim()){
+        alert("입력을 먼저 적어주세요.");
+        return;
+      }
+
+      // base plan
+      const baseN = getSceneCount(Number(ui.len));
+      let beats = beatsFor(ui.genre, baseN);
+      if(ENABLE_KINDER_MODE && ui.reality === "REAL_WORLD"){
+        beats = safeBeatsReal(baseN);
+      }
+
+      const abcOn = (ui.abcMode === "on");
+      const autoOn = (ui.autoImprov === "on");
+
+      function makePlan(key){
+        const v = VAR[key];
+        const plan = {
+          meta:{
+            line: ui.line,
+            genre: ui.genre,
+            len: Number(ui.len),
+            tone: ui.tone,
+            reality: ui.reality,
+            bg: ui.bg,
+            kinderMode: ENABLE_KINDER_MODE,
+            charSpec: ui.charSpec,
+            variant: key,
+            variantLabel: v.label,
+            lens: autoOn ? v.lens : "realistic photo style, neutral lighting",
+            cam:  autoOn ? v.cam  : "고정 샷(최소 움직임)",
+            mood: v.mood
+          },
+          beats: beats
+        };
+        return plan;
+      }
+
+      function pack(key){
+        const plan = makePlan(key);
+        let outs = buildDirector(plan);
+        // safety auto-fix
+        outs.director_txt = autoFixText(outs.director_txt);
+        outs.prompts_image_txt = autoFixText(outs.prompts_image_txt);
+        outs.prompts_video_txt = autoFixText(outs.prompts_video_txt);
+        outs.srt_txt = autoFixText(outs.srt_txt);
+        outs.json_txt = autoFixText(outs.json_txt);
+        return { plan, outs };
+      }
+
+      if(abcOn){
+        LAST.A = pack("A");
+        LAST.B = pack("B");
+        LAST.C = pack("C");
+      }else{
+        LAST.A = pack("A");
+        LAST.B = null;
+        LAST.C = null;
+      }
+
+      if(!LAST[ACTIVE_TAB]) ACTIVE_TAB = "A";
+      setActiveTab(ACTIVE_TAB);
+
+      refreshPills();
+      saveState();
+    }
+
+    function resetAll(){
+      if(!confirm("정말 초기화할까요? (입력/설정/출력/저장 데이터 삭제)")) return;
+      $("line").value = "";
+      $("genre").value = "documentary";
+      $("len").value = "60";
+      $("tone").value = "dry_serious";
+      $("reality").value = "FICTION";
+      $("bg").value = "새벽의 조용한 동네 골목";
+      $("kinderMode").value = "on";
+      $("abcMode").value = "on";
+      $("autoImprov").value = "on";
+      $("charSpec").value = "";
+
+      ENABLE_KINDER_MODE = true;
+      LAST = {A:null,B:null,C:null};
+      ACTIVE_TAB = "A";
+      $("out").textContent = "";
+
+      try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+      try{ localStorage.removeItem(TAB_KEY); }catch(e){}
+
+      refreshPills();
+      saveState();
+      alert("초기화 완료!");
+    }
+
+    // ===== Init =====
+    document.addEventListener("DOMContentLoaded", ()=>{
+      const st = loadState();
+      if(st) applyState(st);
+
+      ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
+      refreshPills();
+
+      // tabs
+      ["A","B","C"].forEach(k=>{
+        $("tab"+k).addEventListener("click", ()=>{
+          if(!LAST[k]){ alert("이 탭은 아직 생성된 출력이 없습니다. (ABC OFF면 A만 생성)"); return; }
+          setActiveTab(k);
+        });
+      });
+
+      try{
+        const t = localStorage.getItem(TAB_KEY);
+        if(t && ["A","B","C"].includes(t)) ACTIVE_TAB = t;
+      }catch(e){}
+      setActiveTab(ACTIVE_TAB);
+
+      // events
+      $("genBtn").addEventListener("click", generate);
+      $("copyBtn").addEventListener("click", ()=> copyToClipboard($("out").textContent||""));
+      $("copyAllBtn").addEventListener("click", ()=> copyToClipboard(renderAllCombined()));
+      $("resetBtn").addEventListener("click", resetAll);
+
+      // autosave
+      ["line","genre","len","tone","reality","bg","kinderMode","abcMode","autoImprov","charSpec"].forEach(id=>{
+        const el = $(id);
+        if(!el) return;
+        el.addEventListener("input", saveState);
+        el.addEventListener("change", ()=>{
+          if(id==="kinderMode"){
+            ENABLE_KINDER_MODE = (el.value==="on");
+            refreshPills();
+          }
+          saveState();
+        });
+      });
+
+      // ctrl+enter
+      $("line").addEventListener("keydown", (e)=>{
+        if((e.ctrlKey || e.metaKey) && e.key === "Enter") generate();
+      });
+
+      renderActiveTab();
+    });
+  </script>
+</body>
+</html>
