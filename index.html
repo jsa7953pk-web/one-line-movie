@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>One-line Movie V4.5 (Dog Director) · 60초/9씬 감독설계도</title>
+  <title>One-line Movie V4.4 (Dog Director) · 60초/9씬 감독설계도</title>
   <style>
     :root{
       --bg:#0b0f14; --card:#0f1620; --text:#e8eef7; --muted:#aab6c5; --line:#1b2635;
@@ -98,7 +98,7 @@
 <body>
   <div class="wrap">
     <div class="hero">
-      <h1>🐶 은비·제리·아랑 “감독 설계도 엔진” (오프라인) · V4.5</h1>
+      <h1>🐶 은비·제리·아랑 “감독 설계도 엔진” (오프라인)</h1>
       <p>한 줄 상황 → 60초/9씬 감독 설계도(카메라/표정/입모양/소품/나노/VE0) + A/B/C 3안</p>
     </div>
 
@@ -195,23 +195,6 @@
 공통: 실제 사진 같은 시네마틱, 만화 금지, 과장된 감정 금지, 9:16, 같은 옷/색/악세서리 전 씬 동일"></textarea>
           </div>
 
-          <!-- V4.5 UI PATCH (A) -->
-          <div style="margin-top:10px;">
-            <div class="small" style="margin:6px 0 6px;">🎭 CAST(자동/수동)</div>
-            <textarea id="castSpec" placeholder="예) 30대 여성(엄마), 30대 남성(아빠), 5살 아이. 함께 걷는 장면."></textarea>
-          </div>
-
-          <div class="row" style="margin-top:10px;">
-            <div>
-              <div class="small" style="margin:6px 0 6px;">🌍 WORLD MUST(필수 앵커)</div>
-              <textarea id="worldMust" placeholder="ancient stone castle gate, colossal gatekeeper taller than the wall, medieval fantasy, runes, torchlight"></textarea>
-            </div>
-            <div>
-              <div class="small" style="margin:6px 0 6px;">🚫 WORLD MUST_NOT(금지 앵커)</div>
-              <textarea id="worldMustNot" placeholder="apartment, elevator door, modern corridor, keypad, intercom, fluorescent light"></textarea>
-            </div>
-          </div>
-
           <div class="pillRow">
             <div class="pill" id="pillSafety">🛡 안전: 유치원 모드 ON</div>
             <div class="pill" id="pillRule">🎬 룰: 60초=9씬, 씬2/5/7 소품 클로즈업</div>
@@ -242,13 +225,13 @@
             <div class="tabs">
               <button class="tabBtn active" data-tab="A" id="tabA">A</button>
               <button class="tabBtn" data-tab="B" id="tabB">B</button>
-              <button class="tabBtn" data-tab="C" id="tabC">C</button>
+              <button class="tabBtn" data-tab="C" id="tabC" >C</button>
             </div>
             <div class="small">A=다큐 / B=시네마 / C=긴장</div>
           </div>
 
           <div class="out" id="out" contenteditable="true" spellcheck="false"></div>
-          <div class="footer">© One-Line Movie V4.5 Dog Director · Single-file</div>
+          <div class="footer">© One-Line Movie V4.4 Dog Director · Single-file</div>
         </div>
       </div>
     </div>
@@ -278,98 +261,16 @@
       }
     }
 
-    // ===== NLU: Slot Extractor (V4.5) =====
-    const LEX = {
-      world: {
-        fantasy: ["성문","성벽","문지기","수호신","룬","중세","마법","검","방패","왕국","성채","탑","던전"],
-        daily:   ["일상","아침","출근","학교","도서관","카페","공원","엘리베이터","아파트","횡단보도"],
-        scifi:   ["우주","행성","로봇","AI","우주선","기지","레이저","사이버"]
-      },
-      place: [
-        {k:["성문","성벽","성채","요새"], v:"castle_gate"},
-        {k:["도서관"], v:"library"},
-        {k:["골목"], v:"alley"},
-        {k:["학교"], v:"school"},
-        {k:["숲"], v:"forest"},
-        {k:["아파트","엘리베이터"], v:"apartment"}
-      ],
-      action: [
-        {k:["지나","통과","들어가"], v:"pass"},
-        {k:["추적","쫓","뒤따"], v:"chase"},
-        {k:["싸","전투","결투","검","칼"], v:"fight"},
-        {k:["발견","줍","단서"], v:"discover"},
-        {k:["도망"], v:"escape"},
-        {k:["증명","시험","퀴즈"], v:"prove"}
-      ],
-      entity: [
-        {k:["30대 여성","여자","여성","엄마"], v:"adult_female_30s"},
-        {k:["30대 남성","남자","남성","아빠"], v:"adult_male_30s"},
-        {k:["아이","5살","유치원","아기"], v:"child"},
-        {k:["여학생"], v:"schoolgirl"},
-        {k:["여우"], v:"fox"},
-        {k:["강아지","개","시츄","말티즈"], v:"dogs"}
-      ]
-    };
-
-    function pickFirst(list, text){
-      for(const item of list){
-        if(item.k.some(w => text.includes(w))) return item.v;
-      }
-      return "";
-    }
-
-    function extractSlots(line, bg, genre){
-      const t = (line||"") + " " + (bg||"");
-      const place = pickFirst(LEX.place, t);
-      const action = pickFirst(LEX.action, t);
-
-      let world = "";
-      const hasFantasy = LEX.world.fantasy.some(w=>t.includes(w));
-      const hasScifi = LEX.world.scifi.some(w=>t.includes(w));
-      if(hasFantasy || genre==="fantasy") world = "fantasy";
-      else if(hasScifi) world = "scifi";
-      else world = "daily";
-
-      const entities = [];
-      for(const e of LEX.entity){
-        if(e.k.some(w=>t.includes(w))) entities.push(e.v);
-      }
-
-      const anchors = [];
-      if(world==="fantasy"){
-        if(t.includes("성문") || t.includes("성벽")) anchors.push("ancient stone castle gate, massive stone walls");
-        if(t.includes("문지기") || t.includes("수호신")) anchors.push("colossal gatekeeper taller than the wall, intimidating presence");
-        if(t.includes("룬")) anchors.push("glowing runes carved into stone");
-        if(t.includes("검") || t.includes("칼")) anchors.push("two-handed sword, medieval armor details");
-      }
-      if(place==="library") anchors.push("quiet library exterior, tall bookshelves glimpsed through windows");
-      if(entities.includes("schoolgirl")) anchors.push("schoolgirl riding a bicycle, backpack, casual campus street");
-
-      return { world, place, action, entities, anchors };
-    }
-
     // ===== Safety (Kinder) =====
     let ENABLE_KINDER_MODE = true;
     const FORBID = ["피","고어","시체","시신","사체","토막","장기","절단","훼손","트렁크","상처","절개","목이 잘린","blood","gore","corpse","dismemberment","decapitation","open trunk","dead body"];
     function autoFixText(txt){
       let out = String(txt||"");
+      // 아주 강한 키워드만 안전 치환
       out = out.replace(/(피|고어|시체|시신|사체|토막|장기|절단|훼손)/g, "비그래픽 단서");
       out = out.replace(/(트렁크)/g, "차량 후미등(원경)");
       out = out.replace(/(상처|절개|목이 잘린)/g, "부상 묘사 금지(단서로 대체)");
       out = out.replace(/\b(blood|gore|corpse|dead body|dismemberment|decapitation|open trunk)\b/gi, "non-graphic clue");
-      return out;
-    }
-
-    // ===== World Guard (V4.5) =====
-    function worldGuard(txt, meta){
-      const m = meta || {};
-      const slots = (m.slots||{});
-      let out = String(txt||"");
-
-      if(slots.world==="fantasy"){
-        out = out.replace(/(아파트|엘리베이터|현대식|인터폰|비밀번호 키패드|복도 형광등)/g, "중세 판타지 요소로 대체");
-        out = out.replace(/\b(apartment|elevator|keypad|intercom|fluorescent corridor|modern door|modern)\b/gi, "medieval fantasy element");
-      }
       return out;
     }
 
@@ -402,6 +303,7 @@
     }
 
     function safeBeatsReal(n){
+      // 현실 사건일 때: 비그래픽 단서 중심
       const beats = [
         "밤길 원경(사건 암시만, 인물 멀리)",
         "놀란 얼굴 클로즈업(피/상처 없음)",
@@ -417,43 +319,6 @@
       return beats.slice(0,n);
     }
 
-    // ===== Planner: Scenario Arcs (V4.5) =====
-    function arcBeats(slots, n){
-      if(slots.world==="fantasy" && (slots.place==="castle_gate" || (slots.anchors||[]).join(" ").includes("gatekeeper"))){
-        const beats = [
-          "성문 원경: 성벽보다 큰 문지기 실루엣만 보인다",
-          "문지기 클로즈업: 지나가려면 ‘증명’하라는 무언의 압박",
-          "도전자 등장: 30대 남성이 양손검을 쥐고 자세를 낮춘다",
-          "거리 좁히기: 바람, 횃불, 룬이 반짝이며 긴장이 올라간다",
-          "단서 클로즈업: 룬 문양/봉인 장치가 ‘열쇠’임을 암시한다",
-          "선택의 순간: 싸움이 아니라 ‘증명 방식’을 찾아야 한다",
-          "증명 시도: 아이/가족/동료가 힌트를 던지는 제스처",
-          "문지기 반응: 문지기가 미세하게 비켜서거나 더 막아선다",
-          "엔딩 아이컨택: 통과는 확정되지 않은 채, 멈춘 긴장으로 끝"
-        ];
-        while(beats.length < n) beats.splice(beats.length-1,0,"추가 단서(룬/봉인/열쇠)");
-        return beats.slice(0,n);
-      }
-
-      if(slots.place==="library" && (slots.entities||[]).includes("fox")){
-        const beats = [
-          "도서관 앞을 자전거로 지나가는 여학생, 이상한 정적",
-          "그림자: 책 더미 사이로 여우의 실루엣이 스친다",
-          "시선 교차: 여학생이 멈추고 뒤를 돌아본다",
-          "단서: 바닥에 떨어진 ‘책갈피/쪽지’ 클로즈업",
-          "여우 등장: 도서관 입구에서 조용히 바라본다",
-          "추적: 여학생이 천천히 따라가며 거리 유지",
-          "숨은 공간: 서가 사이, 빛이 갈라지는 틈",
-          "반전: 여우가 ‘안내’하듯 길을 연다",
-          "엔딩: 책갈피의 문구로 여운(설명 없이)"
-        ];
-        while(beats.length < n) beats.splice(beats.length-1,0,"추가 단서(비그래픽)");
-        return beats.slice(0,n);
-      }
-
-      return [];
-    }
-
     // ===== Variant Flavor =====
     const VAR = {
       A:{label:"A(다큐/현장감)", lens:"documentary realism, natural lighting, handheld authenticity", cam:"관찰형 핸드헬드, 미세 줌", mood:"documentary, restrained"},
@@ -464,15 +329,6 @@
     // ===== Director Output Builder (핵심) =====
     function buildDirector(plan){
       const m = plan.meta;
-
-      // V4.5 MUST/MUST_NOT/CAST inject (D-1)
-      const slots = m.slots || {};
-      const castSpec = safeText(m.castSpec||"").trim();
-      const worldMust = safeText(m.worldMust||"").trim();
-      const worldMustNot = safeText(m.worldMustNot||"").trim();
-      const autoAnchors = (slots.anchors && slots.anchors.length) ? slots.anchors.join(", ") : "";
-      const MUST = [autoAnchors, worldMust].filter(Boolean).join(", ");
-      const MUST_NOT = [worldMustNot].filter(Boolean).join(", ");
 
       // 감독 룰: 60초면 9씬 고정
       const n = (Number(m.len) === 60) ? 9 : m.n;
@@ -538,9 +394,6 @@
         const nano = [
           "세로 9:16, 실제 사진 같은 시네마틱, 만화 스타일 금지, 과장된 감정 금지.",
           charSpec ? ("[캐릭터 고정]\n" + charSpec) : "[캐릭터 고정] 은비/제리/아랑: 사람처럼 옷 입고 행동하는 강아지 3마리(옷/색/악세서리 전 씬 동일).",
-          castSpec ? (`[CAST]\n${castSpec}`) : "",
-          MUST ? (`[WORLD MUST]\n${MUST}`) : "",
-          MUST_NOT ? (`[WORLD MUST_NOT]\n${MUST_NOT}`) : "",
           `[반복 구도] ${repeatElement}.`,
           `배경: ${m.bg}.`,
           `스타일: ${m.variantLabel}. ${m.lens}. ${m.mood}.`,
@@ -556,9 +409,6 @@
           "세로 9:16, 실제 촬영 같은 시네마틱 영상.",
           `길이 ${sc.dur}초.`,
           `스타일: ${m.variantLabel}.`,
-          castSpec ? (`[CAST]\n${castSpec}`) : "",
-          MUST ? (`[WORLD MUST]\n${MUST}`) : "",
-          MUST_NOT ? (`[WORLD MUST_NOT]\n${MUST_NOT}`) : "",
           `카메라 무브: ${m.cam}.`,
           `사운드: 말 없음. 주변 환경음/아주 작은 효과음만.`,
           `연기: ${act}.`,
@@ -611,8 +461,6 @@ ${veo}
         ? `전체 안전(유치원): 금지어 예시 = ${FORBID.join(", ")}`
         : `안전: 기본(폭력/고어 금지 유지)`;
 
-      const slotLine = m.slots ? `- slots: ${JSON.stringify(m.slots)}` : "";
-
       return [
         `# 은비·제리·아랑 감독 설계도 출력 (${tabKey})`,
         `- 생성 시각: ${new Date().toLocaleString()}`,
@@ -622,7 +470,6 @@ ${veo}
         `- 톤: ${m.tone}`,
         `- 현실/허구: ${m.reality}`,
         `- 유치원 모드: ${m.kinderMode ? "ON" : "OFF"}`,
-        slotLine,
         safety,
         ``,
         `--- 감독 설계도(복붙용) ---`,
@@ -635,12 +482,12 @@ ${veo}
         pack.outs.srt_txt || "",
         `--- 계획(JSON) ---`,
         pack.outs.json_txt || ""
-      ].filter(Boolean).join("\n");
+      ].join("\n");
     }
 
     // ===== State =====
-    const STORE_KEY = "V45_DOG_DIRECTOR_STATE";
-    const TAB_KEY = "V45_DOG_DIRECTOR_TAB";
+    const STORE_KEY = "V44_DOG_DIRECTOR_STATE";
+    const TAB_KEY = "V44_DOG_DIRECTOR_TAB";
     let LAST = {A:null,B:null,C:null};
     let ACTIVE_TAB = "A";
 
@@ -655,11 +502,7 @@ ${veo}
         kinderMode: $("kinderMode").value,
         abcMode: $("abcMode").value,
         autoImprov: $("autoImprov").value,
-        charSpec: safeText($("charSpec").value),
-
-        castSpec: safeText($("castSpec").value),
-        worldMust: safeText($("worldMust").value),
-        worldMustNot: safeText($("worldMustNot").value),
+        charSpec: safeText($("charSpec").value)
       };
     }
 
@@ -684,10 +527,6 @@ ${veo}
       if(ui.abcMode) $("abcMode").value = ui.abcMode;
       if(ui.autoImprov) $("autoImprov").value = ui.autoImprov;
       if(ui.charSpec!=null) $("charSpec").value = ui.charSpec;
-
-      if(ui.castSpec!=null) $("castSpec").value = ui.castSpec;
-      if(ui.worldMust!=null) $("worldMust").value = ui.worldMust;
-      if(ui.worldMustNot!=null) $("worldMustNot").value = ui.worldMustNot;
 
       ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
       if(st.last) LAST = st.last;
@@ -734,13 +573,9 @@ ${veo}
         return;
       }
 
+      // base plan
       const baseN = getSceneCount(Number(ui.len));
-      const slots = extractSlots(ui.line, ui.bg, ui.genre);
-
-      let beats = arcBeats(slots, baseN);
-      if(!beats.length){
-        beats = beatsFor(ui.genre, baseN);
-      }
+      let beats = beatsFor(ui.genre, baseN);
       if(ENABLE_KINDER_MODE && ui.reality === "REAL_WORLD"){
         beats = safeBeatsReal(baseN);
       }
@@ -760,12 +595,6 @@ ${veo}
             bg: ui.bg,
             kinderMode: ENABLE_KINDER_MODE,
             charSpec: ui.charSpec,
-
-            slots,
-            castSpec: ui.castSpec,
-            worldMust: ui.worldMust,
-            worldMustNot: ui.worldMustNot,
-
             variant: key,
             variantLabel: v.label,
             lens: autoOn ? v.lens : "realistic photo style, neutral lighting",
@@ -780,21 +609,12 @@ ${veo}
       function pack(key){
         const plan = makePlan(key);
         let outs = buildDirector(plan);
-
         // safety auto-fix
         outs.director_txt = autoFixText(outs.director_txt);
         outs.prompts_image_txt = autoFixText(outs.prompts_image_txt);
         outs.prompts_video_txt = autoFixText(outs.prompts_video_txt);
         outs.srt_txt = autoFixText(outs.srt_txt);
         outs.json_txt = autoFixText(outs.json_txt);
-
-        // world guard (D-2)
-        outs.director_txt = worldGuard(outs.director_txt, plan.meta);
-        outs.prompts_image_txt = worldGuard(outs.prompts_image_txt, plan.meta);
-        outs.prompts_video_txt = worldGuard(outs.prompts_video_txt, plan.meta);
-        outs.srt_txt = worldGuard(outs.srt_txt, plan.meta);
-        outs.json_txt = worldGuard(outs.json_txt, plan.meta);
-
         return { plan, outs };
       }
 
@@ -827,10 +647,6 @@ ${veo}
       $("abcMode").value = "on";
       $("autoImprov").value = "on";
       $("charSpec").value = "";
-
-      $("castSpec").value = "";
-      $("worldMust").value = "";
-      $("worldMustNot").value = "";
 
       ENABLE_KINDER_MODE = true;
       LAST = {A:null,B:null,C:null};
@@ -874,7 +690,7 @@ ${veo}
       $("resetBtn").addEventListener("click", resetAll);
 
       // autosave
-      ["line","genre","len","tone","reality","bg","kinderMode","abcMode","autoImprov","charSpec","castSpec","worldMust","worldMustNot"].forEach(id=>{
+      ["line","genre","len","tone","reality","bg","kinderMode","abcMode","autoImprov","charSpec"].forEach(id=>{
         const el = $(id);
         if(!el) return;
         el.addEventListener("input", saveState);
@@ -897,4 +713,3 @@ ${veo}
   </script>
 </body>
 </html>
-```0
