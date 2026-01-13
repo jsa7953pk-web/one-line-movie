@@ -3,1178 +3,898 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>One-line Movie Engine V4.4 (Single File)</title>
+  <title>One-line Movie V4.5 (Dog Director) · 60초/9씬 감독설계도</title>
   <style>
-    :root{--bg:#0b0e14;--panel:#121827;--panel2:#0f1422;--text:#e7ecff;--muted:#a8b0d6;--line:#253055;--accent:#8fd3ff;--good:#7CFFB2;--warn:#FFDC7C;--bad:#FF7C9B;}
-    *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#070a10, #0b0e14 40%, #070a10);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Pretendard,Apple SD Gothic Neo,Noto Sans KR,sans-serif}
-    header{position:sticky;top:0;z-index:5;background:rgba(10,12,18,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-    .wrap{max-width:1200px;margin:0 auto;padding:14px 14px}
-    h1{margin:0;font-size:16px;letter-spacing:.2px}
-    .sub{color:var(--muted);font-size:12px;margin-top:2px}
-    .grid{display:grid;grid-template-columns:420px 1fr;gap:12px;max-width:1200px;margin:12px auto;padding:0 14px 18px}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}}
-    .card{background:linear-gradient(180deg,rgba(18,24,39,.95),rgba(12,16,28,.95));border:1px solid var(--line);border-radius:14px;overflow:hidden}
-    .card .hd{display:flex;align-items:center;justify-content:space-between;padding:12px 12px;border-bottom:1px solid var(--line);gap:10px}
-    .card .hd b{font-size:13px}
-    .card .bd{padding:12px}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .row > *{flex:1}
-    label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
-    input[type="text"], input[type="number"], textarea, select{
-      width:100%;padding:10px 10px;border-radius:12px;border:1px solid var(--line);
-      background:rgba(10,12,18,.65);color:var(--text);outline:none
+    :root{
+      --bg:#0b0f14; --card:#0f1620; --text:#e8eef7; --muted:#aab6c5; --line:#1b2635;
+      --green:#2ecc71; --blue:#4aa3ff; --yellow:#ffd166; --red:#ff5c77; --shadow:0 12px 30px rgba(0,0,0,.35);
+      --radius:16px;
     }
-    textarea{min-height:92px;resize:vertical}
-    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(10,12,18,.55);
-      color:var(--text);padding:9px 11px;border-radius:12px;cursor:pointer;user-select:none}
-    .btn:hover{border-color:#3750a8}
-    .btn.primary{background:linear-gradient(180deg,rgba(60,130,255,.25),rgba(20,28,55,.25));border-color:#3b63ff}
-    .btn.good{border-color:#2d7a56}
-    .btn.warn{border-color:#7a6a2d}
-    .btn.bad{border-color:#7a2d42}
-    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;background:rgba(10,12,18,.45)}
-    .hr{height:1px;background:var(--line);margin:12px 0}
-    .tabs{display:flex;gap:6px;flex-wrap:wrap}
-    .tab{padding:7px 10px;border-radius:999px;border:1px solid var(--line);cursor:pointer;color:var(--muted)}
-    .tab.on{border-color:#3b63ff;color:var(--text);background:rgba(59,99,255,.18)}
-    .mini{font-size:12px;color:var(--muted)}
-    .list{display:flex;flex-direction:column;gap:8px}
-    .item{border:1px solid var(--line);border-radius:12px;padding:10px;background:rgba(10,12,18,.45)}
-    .item .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .item .meta{color:var(--muted);font-size:12px}
-    .item .acts{display:flex;gap:6px;flex-wrap:wrap}
-    .k{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;white-space:pre-wrap}
-    .out{min-height:360px}
-    .badge{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--muted)}
-    .badge.good{border-color:#2d7a56;color:var(--good)}
-    .badge.warn{border-color:#7a6a2d;color:var(--warn)}
-    .badge.bad{border-color:#7a2d42;color:var(--bad)}
-    .hint{color:var(--muted);font-size:12px}
-    .checkrow{display:flex;gap:10px;flex-wrap:wrap}
-    .check{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:rgba(10,12,18,.45)}
-    .check input{transform:scale(1.05)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Noto Sans KR,sans-serif;
+      background: radial-gradient(1200px 600px at 30% 10%, rgba(74,163,255,.10), transparent 50%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(46,204,113,.08), transparent 50%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:980px; margin:0 auto; padding:22px 16px 60px;}
+    .hero{ text-align:center; margin:18px 0 14px; }
+    .hero h1{margin:0; font-size:28px; letter-spacing:-.5px; line-height:1.2}
+    .hero p{margin:10px 0 0; color:var(--muted); line-height:1.55}
+    .grid{display:grid; grid-template-columns: 1.1fr .9fr; gap:14px;}
+    @media (max-width: 920px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hd{padding:14px 14px 10px; border-bottom:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.01);}
+    .title{font-weight:900; letter-spacing:-.3px}
+    .bd{padding:14px}
+    textarea, select, input[type="text"]{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(10,16,24,.75);
+      color:var(--text);
+      outline:none;
+      line-height:1.55;
+      font-size:14px;
+    }
+    textarea{min-height:120px; resize:vertical}
+    textarea:focus, select:focus, input[type="text"]:focus{border-color:rgba(74,163,255,.45); box-shadow:0 0 0 3px rgba(74,163,255,.12)}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+    @media (max-width: 520px){ .row{grid-template-columns:1fr} }
+    .small{color:var(--muted); font-size:12.8px; line-height:1.5}
+    .btnRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    button{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(10,16,24,.75);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:-.2px;
+    }
+    button.primary{background:linear-gradient(180deg, rgba(46,204,113,.95), rgba(46,204,113,.70)); border-color:rgba(46,204,113,.35); color:#07110b;}
+    button.secondary{background:linear-gradient(180deg, rgba(74,163,255,.95), rgba(74,163,255,.70)); border-color:rgba(74,163,255,.35); color:#06101a;}
+    button.warn{background:linear-gradient(180deg, rgba(255,209,102,.95), rgba(255,209,102,.70)); border-color:rgba(255,209,102,.35); color:#1a1202;}
+    button.danger{background:linear-gradient(180deg, rgba(255,92,119,.95), rgba(255,92,119,.70)); border-color:rgba(255,92,119,.35); color:#1b0509;}
+    .out{
+      width:100%;
+      min-height:340px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(10,16,24,.75);
+      color:var(--text);
+      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      font-size:12.8px;
+      line-height:1.55;
+      white-space:pre-wrap;
+      word-break:break-word;
+      outline:none;
+    }
+    .tabsRow{display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:10px}
+    .tabs{display:flex; gap:8px; flex-wrap:wrap}
+    .tabBtn{
+      padding:8px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      cursor:pointer; font-weight:900; font-size:12.5px; color:var(--muted);
+    }
+    .tabBtn.active{background:linear-gradient(180deg, rgba(74,163,255,.95), rgba(74,163,255,.70)); border-color:rgba(74,163,255,.35); color:#06101a;}
+    .footer{margin-top:10px; color:var(--muted); font-size:12px; text-align:center; opacity:.85}
+    .pillRow{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .pill{padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); color:var(--muted); font-size:12.5px;}
   </style>
 </head>
+
 <body>
-<header>
   <div class="wrap">
-    <h1>One-line Movie Engine V4.4 (Single File)</h1>
-    <div class="sub">목표: 강아지가 화면에 있는 동안 절대 스크롤 못 하게 만드는 쇼츠용 “자동 영화감독”. ✅일상 포함 / ✅사람+동물+공룡+상상생물 무제한 캐스팅</div>
+    <div class="hero">
+      <h1>🐶 은비·제리·아랑 “감독 설계도 엔진” (오프라인) · V4.5</h1>
+      <p>한 줄 상황 → 60초/9씬 감독 설계도(카메라/표정/입모양/소품/나노/VE0) + A/B/C 3안</p>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <div class="hd">
+          <div class="title">입력</div>
+          <div class="small">※ 이 파일은 “HTML에 엔진 글 붙이기”가 아니라, JS가 규칙을 실행해서 감독 설계도를 출력합니다.</div>
+        </div>
+        <div class="bd">
+          <textarea id="line" placeholder="한 줄 상황(예: 새벽 골목에서 세 강아지가 동시에 멈춰 섰다. 떨어진 건 리본 하나뿐.)"></textarea>
+
+          <div class="row">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">장르</div>
+              <select id="genre">
+                <option value="documentary">다큐(리얼)</option>
+                <option value="mystery">미스터리</option>
+                <option value="drama">드라마</option>
+                <option value="healing">힐링</option>
+                <option value="fantasy">판타지</option>
+                <option value="comedy">코미디</option>
+              </select>
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">길이</div>
+              <select id="len">
+                <option value="60">60초 (감독룰: 9씬)</option>
+                <option value="30">30초</option>
+                <option value="20">20초</option>
+                <option value="180">180초(3분)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">톤</div>
+              <select id="tone">
+                <option value="dry_serious">건조·진지</option>
+                <option value="tense">긴장</option>
+                <option value="calm">차분</option>
+                <option value="warm">따뜻</option>
+              </select>
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">현실/허구</div>
+              <select id="reality">
+                <option value="FICTION">허구(추천)</option>
+                <option value="REAL_WORLD">현실 사건(안전 단서)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">배경</div>
+              <input id="bg" type="text" value="새벽의 조용한 동네 골목" />
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">유치원 모드(안전)</div>
+              <select id="kinderMode">
+                <option value="on">ON (기본)</option>
+                <option value="off">OFF</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">A/B/C 3안</div>
+              <select id="abcMode">
+                <option value="on">ON (추천)</option>
+                <option value="off">OFF</option>
+              </select>
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">자동 연출(조명/카메라 강화)</div>
+              <select id="autoImprov">
+                <option value="on">ON (추천)</option>
+                <option value="off">OFF</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <div class="small" style="margin:6px 0 6px;">🐶 캐릭터 고정 설명(중요)</div>
+            <textarea id="charSpec" placeholder="여기에 ‘은비/제리/아랑’ 고정 스펙을 적어야 장면마다 얼굴/옷이 덜 흔들립니다.
+예)
+은비: 작은 시츄, 하늘색 롱패딩+하늘색 벙어리장갑+하늘색 패딩바지, 하늘색 하트핀(좌/우), 둥근 얼굴, 사람처럼 서거나 앉음
+제리: 작은 말티즈, 노란 패딩+노란 리본, 목도리 노랑 두 번 감기, 사람처럼 행동
+아랑: (너의 고정 의상/악세서리/체형/얼굴 특징)
+공통: 실제 사진 같은 시네마틱, 만화 금지, 과장된 감정 금지, 9:16, 같은 옷/색/악세서리 전 씬 동일"></textarea>
+          </div>
+
+          <!-- V4.5 UI PATCH (A) -->
+          <div style="margin-top:10px;">
+            <div class="small" style="margin:6px 0 6px;">🎭 CAST(자동/수동)</div>
+            <textarea id="castSpec" placeholder="예) 30대 여성(엄마), 30대 남성(아빠), 5살 아이. 함께 걷는 장면."></textarea>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div>
+              <div class="small" style="margin:6px 0 6px;">🌍 WORLD MUST(필수 앵커)</div>
+              <textarea id="worldMust" placeholder="ancient stone castle gate, colossal gatekeeper taller than the wall, medieval fantasy, runes, torchlight"></textarea>
+            </div>
+            <div>
+              <div class="small" style="margin:6px 0 6px;">🚫 WORLD MUST_NOT(금지 앵커)</div>
+              <textarea id="worldMustNot" placeholder="apartment, elevator door, modern corridor, keypad, intercom, fluorescent light"></textarea>
+            </div>
+          </div>
+
+          <div class="pillRow">
+            <div class="pill" id="pillSafety">🛡 안전: 유치원 모드 ON</div>
+            <div class="pill" id="pillRule">🎬 룰: 60초=9씬, 씬2/5/7 소품 클로즈업</div>
+          </div>
+
+          <div class="btnRow">
+            <button class="primary" id="genBtn">⚡ 생성하기</button>
+            <button class="secondary" id="copyBtn">📋 복사(현재 탭)</button>
+            <button class="warn" id="copyAllBtn">📋 전체 복사(A+B+C)</button>
+            <button class="danger" id="resetBtn">🧹 초기화</button>
+          </div>
+
+          <div class="small" style="margin-top:10px;">
+            ✅ 사용: <b>한 줄 입력 → ⚡ 생성하기 → (A/B/C 탭) → 📋 복사 → 나노바나나/VE0에 붙여넣기</b><br/>
+            ⚠️ “강아지 말 금지”는 <b>입모양</b>으로만 기록되고, 대사는 출력하지 않습니다.
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card">
+        <div class="hd">
+          <div class="title">출력</div>
+          <div class="small">감독 설계도(복붙용) + prompts_image / prompts_video / srt / json</div>
+        </div>
+        <div class="bd">
+          <div class="tabsRow">
+            <div class="tabs">
+              <button class="tabBtn active" data-tab="A" id="tabA">A</button>
+              <button class="tabBtn" data-tab="B" id="tabB">B</button>
+              <button class="tabBtn" data-tab="C" id="tabC">C</button>
+            </div>
+            <div class="small">A=다큐 / B=시네마 / C=긴장</div>
+          </div>
+
+          <div class="out" id="out" contenteditable="true" spellcheck="false"></div>
+          <div class="footer">© One-Line Movie V4.5 Dog Director · Single-file</div>
+        </div>
+      </div>
+    </div>
   </div>
-</header>
 
-<div class="grid">
-  <!-- LEFT: SETTINGS -->
-  <section class="card">
-    <div class="hd">
-      <b>설정</b>
-      <span class="pill" id="saveStatePill">자동 저장: ON</span>
-    </div>
-    <div class="bd">
-      <div class="row">
-        <div>
-          <label>장르 프리셋</label>
-          <select id="genre">
-            <option value="daily">일상(일상극)</option>
-            <option value="daily_twist">일상 + 이상한 반전</option>
-            <option value="fantasy">판타지</option>
-            <option value="sf">SF</option>
-            <option value="mystery">미스터리</option>
-            <option value="horror">공포(과하지 않게)</option>
-            <option value="comedy_dry">건조 코미디</option>
-          </select>
-          <div class="hint">⚠️ “강아지 사람처럼 행동”은 연출 스타일일 뿐, 등장 제한이 아닙니다.</div>
-        </div>
-        <div>
-          <label>길이 템플릿</label>
-          <select id="lenTpl">
-            <option value="20">20초 (초단편)</option>
-            <option value="60" selected>60초 (쇼츠 강추)</option>
-            <option value="180">180초 (3분)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <div>
-          <label>한 줄 설정(시작 아이디어)</label>
-          <input id="oneLine" type="text" placeholder="예: 자전거 타고 가는 여학생이 도서관을 지나는데, 갑자기 여우가 나타난다." />
-          <div class="mini">※ 여기에 한 줄만 적어도 엔진이 씬으로 확장합니다.</div>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <div>
-          <label>글쓴이(텍스트 화자/작가) 설정</label>
-          <select id="writerPersona">
-            <option value="f30">30대 여성</option>
-            <option value="m30">30대 남성</option>
-            <option value="mom5">5아이 엄마</option>
-            <option value="dad5">5아이 아빠</option>
-            <option value="neutral">중립(제3자)</option>
-          </select>
-          <div class="mini">이 값은 톤(대사/묘사)과 시점에 반영됩니다.</div>
-        </div>
-        <div>
-          <label>톤</label>
-          <select id="tone">
-            <option value="dry_serious" selected>건조·진지(리텐션형)</option>
-            <option value="docu">다큐(잔잔)</option>
-            <option value="cinematic">시네마틱(강조)</option>
-            <option value="cute_deadpan">귀여움 + 무표정</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="checkrow">
-        <label style="width:100%;margin:0 0 6px;">연출 규칙(기능 제한 ❌ / 스타일만 ✅)</label>
-        <div class="check"><input id="anthroDogs" type="checkbox" checked /> <span>강아지 사람처럼 행동/옷</span></div>
-        <div class="check"><input id="allowHumans" type="checkbox" checked /> <span>사람 등장 허용</span></div>
-        <div class="check"><input id="allowAnimals" type="checkbox" checked /> <span>동물(여우/소/돼지/닭 등) 허용</span></div>
-        <div class="check"><input id="allowCreatures" type="checkbox" checked /> <span>공룡/드래곤/상상생물 허용</span></div>
-        <div class="check"><input id="noTextInImage" type="checkbox" checked /> <span>이미지에 자막/문자 금지</span></div>
-        <div class="check"><input id="vertical916" type="checkbox" checked /> <span>세로 9:16 강제</span></div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <div>
-          <label>캐스팅(등장인물) — 무제한 추가 가능</label>
-          <div class="tabs" id="castTabs"></div>
-          <div class="mini">A/B/C 각각 다른 캐스팅·연출을 만들 수 있어요.</div>
-        </div>
-      </div>
-
-      <div class="row" style="align-items:flex-end">
-        <div>
-          <label>프리셋 추가</label>
-          <select id="castPreset">
-            <option value="human_f30">사람(30대 여성)</option>
-            <option value="human_m30">사람(30대 남성)</option>
-            <option value="family_mom_dad_kids">가족(엄마/아빠/아이 3~5)</option>
-            <option value="dog_shih">강아지(시츄)</option>
-            <option value="dog_maltese">강아지(말티즈)</option>
-            <option value="fox">여우</option>
-            <option value="cow">소</option>
-            <option value="pig">돼지</option>
-            <option value="chicken">닭</option>
-            <option value="dino">공룡(티라노/랩터 계열)</option>
-            <option value="dragon">드래곤(상상생물)</option>
-            <option value="custom">직접 입력(자유)</option>
-          </select>
-        </div>
-        <div>
-          <label>직접 입력(프리셋=직접 입력일 때)</label>
-          <input id="castCustom" type="text" placeholder="예: 자전거 타는 여학생(고등학생), 도서관 사서(40대 남성), 길고양이, 작은 로봇..." />
-        </div>
-        <div style="flex:0 0 auto">
-          <button class="btn good" id="addCast">+ 캐스트 추가</button>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="list" id="castList"></div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <button class="btn primary" id="generate">🎬 생성(A/B/C)</button>
-        <button class="btn warn" id="validate">🧪 Validator</button>
-        <button class="btn good" id="autofix">🛠 Auto-fix</button>
-        <button class="btn" id="copyAll">📋 전체 복사</button>
-        <button class="btn" id="downloadZip">🗜 ZIP(A/B/C)</button>
-        <span class="mini" id="zipHint">ZIP은 JSZip(인터넷 필요). 오프라인이면 나머지 기능만 사용.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- RIGHT: OUTPUT -->
-  <section class="card">
-    <div class="hd">
-      <b>결과</b>
-      <div class="row" style="justify-content:flex-end">
-        <span class="badge" id="statusBadge">대기</span>
-        <span class="pill mono" id="seedPill">seed: -</span>
-      </div>
-    </div>
-    <div class="bd">
-      <div class="tabs" id="outTabs"></div>
-      <textarea id="output" class="out k" placeholder="여기에 A/B/C 결과가 표시됩니다."></textarea>
-      <div class="hint">팁: 나노바나나 프롬프트는 각 씬에 (한국어/영어) 2줄로 들어갑니다. “이미지에 글자 금지”가 기본으로 자동 포함됩니다.</div>
-    </div>
-  </section>
-</div>
-
-<script>
-/* =========================
-   V4.4 Single-file Engine
-   - Daily genre restored
-   - Casting is unlimited, not restricted to dog+human
-   - A/B/C variants
-   - 60s templates
-   - Validator + Auto-fix
-   - ZIP export with JSZip (online)
-========================= */
-
-const $ = (id)=>document.getElementById(id);
-
-const STATE_KEY = "oneLineMovieV44_state";
-const DEFAULTS = {
-  genre:"daily",
-  lenTpl:"60",
-  oneLine:"자전거를 타고 가는 여학생이 도서관을 지나고 있다. 그런데 갑자기 여우가 나타난다.",
-  writerPersona:"f30",
-  tone:"dry_serious",
-  anthroDogs:true,
-  allowHumans:true,
-  allowAnimals:true,
-  allowCreatures:true,
-  noTextInImage:true,
-  vertical916:true,
-  activeVariant:"A",
-  seed: Math.floor(Math.random()*999999),
-  casts: {
-    A: [],
-    B: [],
-    C: []
-  },
-  outputs: {A:"",B:"",C:""}
-};
-
-let state = loadState();
-
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STATE_KEY);
-    if(!raw) return structuredClone(DEFAULTS);
-    const s = JSON.parse(raw);
-    // merge
-    return {
-      ...structuredClone(DEFAULTS),
-      ...s,
-      casts:{...structuredClone(DEFAULTS.casts), ...(s.casts||{})},
-      outputs:{...structuredClone(DEFAULTS.outputs), ...(s.outputs||{})}
-    };
-  }catch(e){
-    return structuredClone(DEFAULTS);
-  }
-}
-
-function saveState(){
-  localStorage.setItem(STATE_KEY, JSON.stringify(state));
-  $("saveStatePill").textContent = "자동 저장: ON";
-}
-
-function setBadge(type, text){
-  const b = $("statusBadge");
-  b.textContent = text;
-  b.className = "badge " + (type||"");
-}
-
-function rng(seed){
-  // mulberry32
-  let t = seed >>> 0;
-  return function(){
-    t += 0x6D2B79F5;
-    let r = Math.imul(t ^ (t >>> 15), 1 | t);
-    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
-    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
-  }
-}
-
-function pick(r, arr){ return arr[Math.floor(r()*arr.length)] }
-
-function clamp(n,a,b){ return Math.max(a, Math.min(b,n)) }
-
-function nowSeed(){
-  // stable-ish seed but changes when user clicks generate
-  state.seed = Math.floor(Math.random()*999999);
-  $("seedPill").textContent = "seed: " + state.seed;
-}
-
-function initUI(){
-  $("genre").value = state.genre;
-  $("lenTpl").value = state.lenTpl;
-  $("oneLine").value = state.oneLine;
-  $("writerPersona").value = state.writerPersona;
-  $("tone").value = state.tone;
-
-  $("anthroDogs").checked = !!state.anthroDogs;
-  $("allowHumans").checked = !!state.allowHumans;
-  $("allowAnimals").checked = !!state.allowAnimals;
-  $("allowCreatures").checked = !!state.allowCreatures;
-  $("noTextInImage").checked = !!state.noTextInImage;
-  $("vertical916").checked = !!state.vertical916;
-
-  $("seedPill").textContent = "seed: " + state.seed;
-
-  buildVariantTabs();
-  buildOutTabs();
-  renderCastList();
-  renderOutput();
-  setBadge("", "대기");
-
-  // listeners
-  ["genre","lenTpl","oneLine","writerPersona","tone"].forEach(id=>{
-    $(id).addEventListener("change", ()=>{
-      state[id] = $(id).value;
-      saveState();
-    });
-    $(id).addEventListener("input", ()=>{
-      if(id==="oneLine"){
-        state.oneLine = $("oneLine").value;
-        saveState();
+  <script>
+    // ===== Utilities =====
+    const $ = (id)=>document.getElementById(id);
+    const safeText = (s)=> (s==null ? "" : String(s).replace(/\uFFFD/g,"").normalize("NFC"));
+    function secondsToSrtTime(sec){
+      sec = Math.max(0, Math.floor(sec));
+      const h = Math.floor(sec/3600);
+      const m = Math.floor((sec%3600)/60);
+      const s = sec%60;
+      const pad = (n)=>String(n).padStart(2,"0");
+      return `${pad(h)}:${pad(m)}:${pad(s)},000`;
+    }
+    async function copyToClipboard(txt){
+      const t = String(txt||"");
+      if(!t.trim()){ alert("복사할 내용이 없습니다. 먼저 생성하세요."); return; }
+      try{ await navigator.clipboard.writeText(t); alert("복사 완료!"); }
+      catch(e){
+        const ta = document.createElement("textarea");
+        ta.value = t; document.body.appendChild(ta); ta.select();
+        document.execCommand("copy"); document.body.removeChild(ta);
+        alert("복사 완료(대체 방식)!");
       }
-    });
-  });
+    }
 
-  ["anthroDogs","allowHumans","allowAnimals","allowCreatures","noTextInImage","vertical916"].forEach(id=>{
-    $(id).addEventListener("change", ()=>{
-      state[id] = $(id).checked;
-      saveState();
-    });
-  });
-
-  $("addCast").addEventListener("click", addCastFromUI);
-
-  $("generate").addEventListener("click", ()=>{
-    nowSeed();
-    generateAll();
-  });
-
-  $("validate").addEventListener("click", ()=>{
-    const report = validateAll();
-    state.outputs[state.activeVariant] = report + "\n\n" + (state.outputs[state.activeVariant]||"");
-    renderOutput();
-    saveState();
-  });
-
-  $("autofix").addEventListener("click", ()=>{
-    autoFixAll();
-    renderOutput();
-    saveState();
-  });
-
-  $("copyAll").addEventListener("click", copyAllText);
-
-  $("downloadZip").addEventListener("click", downloadZipABC);
-}
-
-function buildVariantTabs(){
-  const host = $("castTabs");
-  host.innerHTML = "";
-  ["A","B","C"].forEach(v=>{
-    const el = document.createElement("div");
-    el.className = "tab" + (state.activeVariant===v ? " on":"");
-    el.textContent = v + " 캐스팅";
-    el.onclick = ()=>{
-      state.activeVariant = v;
-      buildVariantTabs();
-      buildOutTabs();
-      renderCastList();
-      renderOutput();
-      saveState();
+    // ===== NLU: Slot Extractor (V4.5) =====
+    const LEX = {
+      world: {
+        fantasy: ["성문","성벽","문지기","수호신","룬","중세","마법","검","방패","왕국","성채","탑","던전"],
+        daily:   ["일상","아침","출근","학교","도서관","카페","공원","엘리베이터","아파트","횡단보도"],
+        scifi:   ["우주","행성","로봇","AI","우주선","기지","레이저","사이버"]
+      },
+      place: [
+        {k:["성문","성벽","성채","요새"], v:"castle_gate"},
+        {k:["도서관"], v:"library"},
+        {k:["골목"], v:"alley"},
+        {k:["학교"], v:"school"},
+        {k:["숲"], v:"forest"},
+        {k:["아파트","엘리베이터"], v:"apartment"}
+      ],
+      action: [
+        {k:["지나","통과","들어가"], v:"pass"},
+        {k:["추적","쫓","뒤따"], v:"chase"},
+        {k:["싸","전투","결투","검","칼"], v:"fight"},
+        {k:["발견","줍","단서"], v:"discover"},
+        {k:["도망"], v:"escape"},
+        {k:["증명","시험","퀴즈"], v:"prove"}
+      ],
+      entity: [
+        {k:["30대 여성","여자","여성","엄마"], v:"adult_female_30s"},
+        {k:["30대 남성","남자","남성","아빠"], v:"adult_male_30s"},
+        {k:["아이","5살","유치원","아기"], v:"child"},
+        {k:["여학생"], v:"schoolgirl"},
+        {k:["여우"], v:"fox"},
+        {k:["강아지","개","시츄","말티즈"], v:"dogs"}
+      ]
     };
-    host.appendChild(el);
-  });
-}
 
-function buildOutTabs(){
-  const host = $("outTabs");
-  host.innerHTML = "";
-  ["A","B","C"].forEach(v=>{
-    const el = document.createElement("div");
-    el.className = "tab" + (state.activeVariant===v ? " on":"");
-    el.textContent = v + " 결과";
-    el.onclick = ()=>{
-      state.activeVariant = v;
-      buildVariantTabs();
-      buildOutTabs();
-      renderCastList();
-      renderOutput();
-      saveState();
-    };
-    host.appendChild(el);
-  });
-}
-
-function addCastFromUI(){
-  const preset = $("castPreset").value;
-  const custom = $("castCustom").value.trim();
-
-  const items = presetToCastItems(preset, custom);
-  if(!items.length){
-    setBadge("warn","캐스트 입력 없음");
-    return;
-  }
-  state.casts[state.activeVariant] = state.casts[state.activeVariant].concat(items);
-  $("castCustom").value = "";
-  renderCastList();
-  saveState();
-  setBadge("good","캐스트 추가 완료");
-}
-
-function presetToCastItems(preset, custom){
-  const out = [];
-  const add = (name, type, tags=[])=>out.push({id:crypto.randomUUID(), name, type, tags});
-  switch(preset){
-    case "human_f30": add("30대 여성", "human", ["adult","female"]); break;
-    case "human_m30": add("30대 남성", "human", ["adult","male"]); break;
-    case "family_mom_dad_kids":
-      add("엄마", "human", ["adult","female","parent"]);
-      add("아빠", "human", ["adult","male","parent"]);
-      // 3~5 kids randomized later in generation; store placeholder
-      add("아이들(3~5)", "human_group", ["kids"]);
-      break;
-    case "dog_shih": add("시츄 강아지", "dog", ["small","shih-tzu"]); break;
-    case "dog_maltese": add("말티즈 강아지", "dog", ["small","maltese"]); break;
-    case "fox": add("여우", "animal", ["fox"]); break;
-    case "cow": add("소", "animal", ["cow"]); break;
-    case "pig": add("돼지", "animal", ["pig"]); break;
-    case "chicken": add("닭", "animal", ["chicken"]); break;
-    case "dino": add("공룡", "creature", ["dinosaur"]); break;
-    case "dragon": add("드래곤", "creature", ["dragon"]); break;
-    case "custom":
-      if(custom){
-        custom.split(",").map(s=>s.trim()).filter(Boolean).forEach(x=>add(x,"custom",["custom"]));
+    function pickFirst(list, text){
+      for(const item of list){
+        if(item.k.some(w => text.includes(w))) return item.v;
       }
-      break;
-  }
-  return out;
-}
+      return "";
+    }
 
-function renderCastList(){
-  const host = $("castList");
-  host.innerHTML = "";
-  const list = state.casts[state.activeVariant] || [];
-  if(!list.length){
-    const empty = document.createElement("div");
-    empty.className = "item";
-    empty.innerHTML = `<div class="meta">아직 캐스트가 없습니다. (예: 사람 30대 여성, 가족, 여우, 공룡...)<br/>※ 없어도 생성은 되지만, 캐스팅을 넣으면 더 정확해집니다.</div>`;
-    host.appendChild(empty);
-    return;
-  }
-  list.forEach((c, idx)=>{
-    const el = document.createElement("div");
-    el.className = "item";
-    el.innerHTML = `
-      <div class="top">
-        <div>
-          <div><b>${escapeHtml(c.name)}</b> <span class="badge">${escapeHtml(c.type)}</span></div>
-          <div class="meta">${escapeHtml((c.tags||[]).join(" · "))}</div>
-        </div>
-        <div class="acts">
-          <button class="btn" data-act="up">↑</button>
-          <button class="btn" data-act="down">↓</button>
-          <button class="btn bad" data-act="del">삭제</button>
-        </div>
-      </div>
-    `;
-    el.querySelectorAll("button").forEach(btn=>{
-      btn.onclick = ()=>{
-        const act = btn.getAttribute("data-act");
-        const arr = state.casts[state.activeVariant];
-        const i = idx;
-        if(act==="del"){
-          arr.splice(i,1);
-        }else if(act==="up" && i>0){
-          [arr[i-1],arr[i]]=[arr[i],arr[i-1]];
-        }else if(act==="down" && i<arr.length-1){
-          [arr[i+1],arr[i]]=[arr[i],arr[i+1]];
-        }
-        renderCastList();
-        saveState();
+    function extractSlots(line, bg, genre){
+      const t = (line||"") + " " + (bg||"");
+      const place = pickFirst(LEX.place, t);
+      const action = pickFirst(LEX.action, t);
+
+      let world = "";
+      const hasFantasy = LEX.world.fantasy.some(w=>t.includes(w));
+      const hasScifi = LEX.world.scifi.some(w=>t.includes(w));
+      if(hasFantasy || genre==="fantasy") world = "fantasy";
+      else if(hasScifi) world = "scifi";
+      else world = "daily";
+
+      const entities = [];
+      for(const e of LEX.entity){
+        if(e.k.some(w=>t.includes(w))) entities.push(e.v);
+      }
+
+      const anchors = [];
+      if(world==="fantasy"){
+        if(t.includes("성문") || t.includes("성벽")) anchors.push("ancient stone castle gate, massive stone walls");
+        if(t.includes("문지기") || t.includes("수호신")) anchors.push("colossal gatekeeper taller than the wall, intimidating presence");
+        if(t.includes("룬")) anchors.push("glowing runes carved into stone");
+        if(t.includes("검") || t.includes("칼")) anchors.push("two-handed sword, medieval armor details");
+      }
+      if(place==="library") anchors.push("quiet library exterior, tall bookshelves glimpsed through windows");
+      if(entities.includes("schoolgirl")) anchors.push("schoolgirl riding a bicycle, backpack, casual campus street");
+
+      return { world, place, action, entities, anchors };
+    }
+
+    // ===== Safety (Kinder) =====
+    let ENABLE_KINDER_MODE = true;
+    const FORBID = ["피","고어","시체","시신","사체","토막","장기","절단","훼손","트렁크","상처","절개","목이 잘린","blood","gore","corpse","dismemberment","decapitation","open trunk","dead body"];
+    function autoFixText(txt){
+      let out = String(txt||"");
+      out = out.replace(/(피|고어|시체|시신|사체|토막|장기|절단|훼손)/g, "비그래픽 단서");
+      out = out.replace(/(트렁크)/g, "차량 후미등(원경)");
+      out = out.replace(/(상처|절개|목이 잘린)/g, "부상 묘사 금지(단서로 대체)");
+      out = out.replace(/\b(blood|gore|corpse|dead body|dismemberment|decapitation|open trunk)\b/gi, "non-graphic clue");
+      return out;
+    }
+
+    // ===== World Guard (V4.5) =====
+    function worldGuard(txt, meta){
+      const m = meta || {};
+      const slots = (m.slots||{});
+      let out = String(txt||"");
+
+      if(slots.world==="fantasy"){
+        out = out.replace(/(아파트|엘리베이터|현대식|인터폰|비밀번호 키패드|복도 형광등)/g, "중세 판타지 요소로 대체");
+        out = out.replace(/\b(apartment|elevator|keypad|intercom|fluorescent corridor|modern door|modern)\b/gi, "medieval fantasy element");
+      }
+      return out;
+    }
+
+    function refreshPills(){
+      const on = ENABLE_KINDER_MODE;
+      $("pillSafety").textContent = "🛡 안전: 유치원 모드 " + (on ? "ON" : "OFF");
+    }
+
+    // ===== Beats =====
+    function getSceneCount(len){
+      len = Number(len);
+      if(len <= 20) return 5;
+      if(len <= 30) return 6;
+      if(len <= 60) return 9;
+      return 12;
+    }
+
+    function beatsFor(genre, n){
+      const base = ({
+        documentary:["오프닝","현장","단서","기록","관찰","증언","정리","추정","여운"],
+        mystery:["훅","사건 암시","단서","목격","추적","막다른 길","새 단서","반전","여운"],
+        drama:["훅","상황","감정","갈등","선택","후회","결심","변화","여운"],
+        healing:["훅","조용한 시작","따뜻한 배경","힐링 포인트","공감","포근한 행동","미소","안정","여운"],
+        fantasy:["훅","룰 공개","도전","장치","위기","각성","클라이맥스","대가","엔딩"],
+        comedy:["훅","오해","더 큰 오해","리액션","폭주","수습","반전","침묵","엔딩"]
+      })[genre] || ["훅","상황","전개","단서","전환","추적","긴장","클라이맥스","엔딩"];
+      const beats = base.slice();
+      while(beats.length < n) beats.push("추가 비트");
+      return beats.slice(0,n);
+    }
+
+    function safeBeatsReal(n){
+      const beats = [
+        "밤길 원경(사건 암시만, 인물 멀리)",
+        "놀란 얼굴 클로즈업(피/상처 없음)",
+        "떨어진 물건(리본/휴대폰) 클로즈업",
+        "경찰차·경광등 원경",
+        "증거 마킹(숫자/기호만)",
+        "젖은 도로 반사/타이어 자국",
+        "CCTV/블랙박스 화면(픽셀, 비그래픽)",
+        "멀어지는 후미등(번호판 식별 금지)",
+        "텅 빈 도로 + 여운"
+      ];
+      while(beats.length < n) beats.splice(beats.length-1,0,"추가 단서(비그래픽)");
+      return beats.slice(0,n);
+    }
+
+    // ===== Planner: Scenario Arcs (V4.5) =====
+    function arcBeats(slots, n){
+      if(slots.world==="fantasy" && (slots.place==="castle_gate" || (slots.anchors||[]).join(" ").includes("gatekeeper"))){
+        const beats = [
+          "성문 원경: 성벽보다 큰 문지기 실루엣만 보인다",
+          "문지기 클로즈업: 지나가려면 ‘증명’하라는 무언의 압박",
+          "도전자 등장: 30대 남성이 양손검을 쥐고 자세를 낮춘다",
+          "거리 좁히기: 바람, 횃불, 룬이 반짝이며 긴장이 올라간다",
+          "단서 클로즈업: 룬 문양/봉인 장치가 ‘열쇠’임을 암시한다",
+          "선택의 순간: 싸움이 아니라 ‘증명 방식’을 찾아야 한다",
+          "증명 시도: 아이/가족/동료가 힌트를 던지는 제스처",
+          "문지기 반응: 문지기가 미세하게 비켜서거나 더 막아선다",
+          "엔딩 아이컨택: 통과는 확정되지 않은 채, 멈춘 긴장으로 끝"
+        ];
+        while(beats.length < n) beats.splice(beats.length-1,0,"추가 단서(룬/봉인/열쇠)");
+        return beats.slice(0,n);
+      }
+
+      if(slots.place==="library" && (slots.entities||[]).includes("fox")){
+        const beats = [
+          "도서관 앞을 자전거로 지나가는 여학생, 이상한 정적",
+          "그림자: 책 더미 사이로 여우의 실루엣이 스친다",
+          "시선 교차: 여학생이 멈추고 뒤를 돌아본다",
+          "단서: 바닥에 떨어진 ‘책갈피/쪽지’ 클로즈업",
+          "여우 등장: 도서관 입구에서 조용히 바라본다",
+          "추적: 여학생이 천천히 따라가며 거리 유지",
+          "숨은 공간: 서가 사이, 빛이 갈라지는 틈",
+          "반전: 여우가 ‘안내’하듯 길을 연다",
+          "엔딩: 책갈피의 문구로 여운(설명 없이)"
+        ];
+        while(beats.length < n) beats.splice(beats.length-1,0,"추가 단서(비그래픽)");
+        return beats.slice(0,n);
+      }
+
+      return [];
+    }
+
+    // ===== Variant Flavor =====
+    const VAR = {
+      A:{label:"A(다큐/현장감)", lens:"documentary realism, natural lighting, handheld authenticity", cam:"관찰형 핸드헬드, 미세 줌", mood:"documentary, restrained"},
+      B:{label:"B(시네마/감정선)", lens:"cinematic lighting, soft bokeh, emotional framing", cam:"슬로우 푸시인/돌리인", mood:"cinematic, gentle tension"},
+      C:{label:"C(긴장/스릴)", lens:"high contrast cinematic, suspense framing", cam:"타이트 프레이밍, 느린 핸드헬드", mood:"suspense, tense"}
+    };
+
+    // ===== Director Output Builder (핵심) =====
+    function buildDirector(plan){
+      const m = plan.meta;
+
+      // V4.5 MUST/MUST_NOT/CAST inject (D-1)
+      const slots = m.slots || {};
+      const castSpec = safeText(m.castSpec||"").trim();
+      const worldMust = safeText(m.worldMust||"").trim();
+      const worldMustNot = safeText(m.worldMustNot||"").trim();
+      const autoAnchors = (slots.anchors && slots.anchors.length) ? slots.anchors.join(", ") : "";
+      const MUST = [autoAnchors, worldMust].filter(Boolean).join(", ");
+      const MUST_NOT = [worldMustNot].filter(Boolean).join(", ");
+
+      // 감독 룰: 60초면 9씬 고정
+      const n = (Number(m.len) === 60) ? 9 : m.n;
+      const total = Number(m.len);
+      const per = total / n;
+
+      const props = [
+        "떨어진 물건(리본/휴대폰/키 중 1개)",
+        "CCTV 화면(모니터)",
+        "봉투/쪽지/스티커(의문의 단서)"
+      ];
+      const propAt = { 2: props[0], 5: props[1], 7: props[2] };
+
+      const repeatElement = "프레임 오른쪽 15%에 항상 마이크 또는 CCTV 타임스탬프 요소 유지";
+      const charSpec = safeText(m.charSpec||"").trim();
+
+      const scenes = [];
+      for(let i=0;i<n;i++){
+        const start = Math.floor(i*per);
+        const end = Math.floor((i+1)*per);
+        const dur = Math.max(1, end-start);
+        scenes.push({idx:i+1,start,end,dur,beat:plan.beats[i]||"단서가 늘어난다",prop:propAt[i+1]||""});
+      }
+
+      function camFlow(idx){
+        return ({
+          1:"롱샷 또는 CCTV 원경(사건 한가운데에서 시작)",
+          2:"소품 ECU(초근접)",
+          3:"인물 클로즈업(눈/입 주변)",
+          4:"미디엄샷(세 캐릭터 관계)",
+          5:"소품 클로즈업",
+          6:"압박 샷(카메라가 가까워짐, 숨막힘)",
+          7:"소품 ECU",
+          8:"여운 샷(정적 유지)",
+          9:"엔딩 고정 정면 아이컨택"
+        })[idx] || "미디엄샷";
+      }
+
+      function actFlow(idx){
+        return ({
+          1:"멈춰 있는 긴장. 세 마리 모두 정지. 눈만 움직임",
+          2:"소품을 바라보는 시선. 앞발이 아주 살짝 떨림",
+          3:"은비가 천천히 고개를 듦(말 없이)",
+          4:"제리가 다른 둘을 번갈아 봄(눈으로만 질문)",
+          5:"아랑이 CCTV/단서를 가리키듯 앞발을 살짝 듦",
+          6:"세 마리 중 한 마리가 한 발 앞으로. 숨 멎는 정적",
+          7:"단서를 ‘가볍게’ 밀어놓음(의도적으로)",
+          8:"세 마리 모두 멈춤. 상황이 풀리지 않은 채 유지",
+          9:"정면 아이컨택. 감정이 닫히지 않고 멈춤"
+        })[idx] || "미세한 반응";
+      }
+
+      const mouth = "입은 닫혀 있음(발화 없음), 숨만 보일 정도";
+      const blocks = [];
+      const imgBlocks = [];
+      const vidBlocks = [];
+      const srtLines = [];
+
+      for(const sc of scenes){
+        const cam = camFlow(sc.idx);
+        const act = actFlow(sc.idx);
+
+        const nano = [
+          "세로 9:16, 실제 사진 같은 시네마틱, 만화 스타일 금지, 과장된 감정 금지.",
+          charSpec ? ("[캐릭터 고정]\n" + charSpec) : "[캐릭터 고정] 은비/제리/아랑: 사람처럼 옷 입고 행동하는 강아지 3마리(옷/색/악세서리 전 씬 동일).",
+          castSpec ? (`[CAST]\n${castSpec}`) : "",
+          MUST ? (`[WORLD MUST]\n${MUST}`) : "",
+          MUST_NOT ? (`[WORLD MUST_NOT]\n${MUST_NOT}`) : "",
+          `[반복 구도] ${repeatElement}.`,
+          `배경: ${m.bg}.`,
+          `스타일: ${m.variantLabel}. ${m.lens}. ${m.mood}.`,
+          `SCENE ${sc.idx} (${sc.start}-${sc.end}초): ${sc.beat}.`,
+          `카메라: ${cam}.`,
+          `표정/동작: ${act}.`,
+          sc.prop ? `소품: ${sc.prop} (클로즈업 강조).` : "",
+          "조명: 다큐/뉴스 현장 같은 자연스러운 조명, 리얼한 털 질감.",
+          "금지: 피/상처/고어/시체/트렁크/폭력/혐오/선정적."
+        ].filter(Boolean).join("\n");
+
+        const veo = [
+          "세로 9:16, 실제 촬영 같은 시네마틱 영상.",
+          `길이 ${sc.dur}초.`,
+          `스타일: ${m.variantLabel}.`,
+          castSpec ? (`[CAST]\n${castSpec}`) : "",
+          MUST ? (`[WORLD MUST]\n${MUST}`) : "",
+          MUST_NOT ? (`[WORLD MUST_NOT]\n${MUST_NOT}`) : "",
+          `카메라 무브: ${m.cam}.`,
+          `사운드: 말 없음. 주변 환경음/아주 작은 효과음만.`,
+          `연기: ${act}.`,
+          `입모양: ${mouth}.`,
+          sc.prop ? `소품 연출: ${sc.prop}를 화면 중심으로 잠깐 강조.` : "",
+          `[반복 구도] ${repeatElement}.`,
+          "금지: 폭력/피/상처/고어/시체/선정/혐오 연출."
+        ].filter(Boolean).join("\n");
+
+        blocks.push(
+`SCENE ${sc.idx}
+⏱ ${sc.start}–${sc.end}초 (${sc.dur}초)
+🎥 카메라: ${cam}
+🙂 표정 & 동작: ${act}
+🗣 입모양: ${mouth}
+🎬 상황 설명: ${sc.beat}
+🧩 소품: ${sc.prop || "없음"}
+🖼 나노바나나 이미지 프롬프트 (한국어)
+${nano}
+🎥 VEO3 영상 프롬프트 (한국어)
+${veo}
+`
+        );
+
+        imgBlocks.push(`SCENE ${sc.idx} (${sc.start}-${sc.end}s)\n${nano}\n`);
+        vidBlocks.push(`SCENE ${sc.idx} (${sc.start}-${sc.end}s)\n${veo}\n`);
+        srtLines.push(`${sc.idx}\n${secondsToSrtTime(sc.start)} --> ${secondsToSrtTime(sc.end)}\n${safeText(sc.beat).slice(0,42)}\n`);
+      }
+
+      const json = {
+        createdAt: new Date().toISOString(),
+        meta: {...m, n},
+        beats: plan.beats,
+        scenes
       };
-    });
-    host.appendChild(el);
-  });
-}
 
-function renderOutput(){
-  $("output").value = state.outputs[state.activeVariant] || "";
-}
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
-}
-
-/* ===== Story generation ===== */
-
-function generateAll(){
-  setBadge("", "생성 중...");
-  const baseSeed = state.seed;
-  const variants = ["A","B","C"];
-  variants.forEach((v,vi)=>{
-    const r = rng(baseSeed + (vi*1013));
-    const out = generateVariant(v, r);
-    state.outputs[v] = out;
-  });
-  renderOutput();
-  saveState();
-  setBadge("good","생성 완료");
-}
-
-function generateVariant(variant, r){
-  const cfg = getCfg();
-  const cast = expandCast(state.casts[variant]||[], r, cfg);
-  const beats = makeTemplate(cfg.lenTpl, r, cfg);
-
-  const title = makeTitle(cfg, r, cast);
-  const hook = makeHook(cfg, r, cast);
-  const rules = makeRules(cfg);
-
-  let text = "";
-  text += `🎬 [${variant}] 쇼츠 자동 시나리오\n`;
-  text += `제목(가제): ${title}\n`;
-  text += `장르: ${genreName(cfg.genre)} / 길이: ${cfg.lenTpl}s / 톤: ${toneName(cfg.tone)} / 글쓴이: ${writerName(cfg.writerPersona)}\n`;
-  text += `캐스팅: ${cast.map(c=>c.name).join(", ")}\n`;
-  text += `훅(첫 2초): ${hook}\n`;
-  text += `연출 규칙: ${rules.join(" / ")}\n`;
-  text += `\n`;
-
-  beats.forEach((b, i)=>{
-    const scene = buildScene(cfg, r, cast, b, i);
-    text += scene + "\n";
-  });
-
-  text += `\n✅ 업로드용 고정댓글(유도)\n`;
-  text += makePinnedComment(cfg, r, cast) + "\n";
-
-  text += `\n✅ 제목/설명/해시태그(초안)\n`;
-  text += makeMetaPack(cfg, r, cast, title) + "\n";
-
-  return text.trim();
-}
-
-function getCfg(){
-  return {
-    genre: $("genre").value,
-    lenTpl: $("lenTpl").value,
-    oneLine: $("oneLine").value.trim() || DEFAULTS.oneLine,
-    writerPersona: $("writerPersona").value,
-    tone: $("tone").value,
-    anthroDogs: $("anthroDogs").checked,
-    allowHumans: $("allowHumans").checked,
-    allowAnimals: $("allowAnimals").checked,
-    allowCreatures: $("allowCreatures").checked,
-    noTextInImage: $("noTextInImage").checked,
-    vertical916: $("vertical916").checked
-  };
-}
-
-function expandCast(list, r, cfg){
-  // apply allow toggles but NEVER hard-restrict to only dog+human.
-  const out = [];
-  const pushIfAllowed = (c)=>{
-    if(c.type==="human" || c.type==="human_group"){
-      if(cfg.allowHumans) out.push(c);
-    }else if(c.type==="dog"){
-      // dogs are animals but always allowed unless allowAnimals off
-      if(cfg.allowAnimals) out.push(c);
-    }else if(c.type==="animal"){
-      if(cfg.allowAnimals) out.push(c);
-    }else if(c.type==="creature"){
-      if(cfg.allowCreatures) out.push(c);
-    }else{
-      // custom is always allowed
-      out.push(c);
+      return {
+        scenes,
+        director_txt: blocks.join("\n").trim() + "\n",
+        prompts_image_txt: imgBlocks.join("\n").trim() + "\n",
+        prompts_video_txt: vidBlocks.join("\n").trim() + "\n",
+        srt_txt: srtLines.join("\n").trim() + "\n",
+        json_txt: JSON.stringify(json, null, 2)
+      };
     }
-  };
-  list.forEach(pushIfAllowed);
 
-  // if empty, auto seed based on one-line
-  if(!out.length){
-    // minimal default cast based on premise keywords
-    const ol = cfg.oneLine;
-    const hasFox = /여우|fox/i.test(ol);
-    const hasDog = /강아지|시츄|말티즈|dog/i.test(ol);
-    const hasGirl = /여학생|학생|girl|school/i.test(ol);
-    if(cfg.allowHumans && hasGirl) out.push({id:crypto.randomUUID(),name:"여학생(자전거)",type:"human",tags:["student"]});
-    if(cfg.allowAnimals && hasFox) out.push({id:crypto.randomUUID(),name:"여우",type:"animal",tags:["fox"]});
-    if(cfg.allowAnimals && hasDog) out.push({id:crypto.randomUUID(),name:"강아지",type:"dog",tags:["anthro?"]});
-    if(!out.length){
-      if(cfg.allowHumans) out.push({id:crypto.randomUUID(),name:"사람(관찰자)",type:"human",tags:["adult"]});
-      if(cfg.allowAnimals) out.push({id:crypto.randomUUID(),name:"강아지(조용한 주인공)",type:"dog",tags:["small"]});
+    function headerFor(tabKey, pack){
+      const m = pack.plan.meta;
+      const safety = (ENABLE_KINDER_MODE && m.reality === "REAL_WORLD")
+        ? `전체 안전(유치원): 금지어 예시 = ${FORBID.join(", ")}`
+        : `안전: 기본(폭력/고어 금지 유지)`;
+
+      const slotLine = m.slots ? `- slots: ${JSON.stringify(m.slots)}` : "";
+
+      return [
+        `# 은비·제리·아랑 감독 설계도 출력 (${tabKey})`,
+        `- 생성 시각: ${new Date().toLocaleString()}`,
+        `- 버전: ${m.variantLabel}`,
+        `- 길이: ${m.len}초`,
+        `- 장르: ${m.genre}`,
+        `- 톤: ${m.tone}`,
+        `- 현실/허구: ${m.reality}`,
+        `- 유치원 모드: ${m.kinderMode ? "ON" : "OFF"}`,
+        slotLine,
+        safety,
+        ``,
+        `--- 감독 설계도(복붙용) ---`,
+        pack.outs.director_txt || "",
+        `--- 이미지 프롬프트(prompts_image.txt) ---`,
+        pack.outs.prompts_image_txt || "",
+        `--- 영상 프롬프트(prompts_video.txt) ---`,
+        pack.outs.prompts_video_txt || "",
+        `--- 자막(srt.txt) ---`,
+        pack.outs.srt_txt || "",
+        `--- 계획(JSON) ---`,
+        pack.outs.json_txt || ""
+      ].filter(Boolean).join("\n");
     }
-  }
 
-  // expand kids group placeholder into 3~5 kids
-  const final = [];
-  out.forEach(c=>{
-    if(c.type==="human_group" && (c.tags||[]).includes("kids")){
-      const n = 3 + Math.floor(r()*3); // 3..5
-      for(let i=1;i<=n;i++){
-        final.push({id:crypto.randomUUID(),name:`아이${i}`,type:"human",tags:["kid"]});
+    // ===== State =====
+    const STORE_KEY = "V45_DOG_DIRECTOR_STATE";
+    const TAB_KEY = "V45_DOG_DIRECTOR_TAB";
+    let LAST = {A:null,B:null,C:null};
+    let ACTIVE_TAB = "A";
+
+    function collectUI(){
+      return {
+        line: safeText($("line").value),
+        genre: $("genre").value,
+        len: $("len").value,
+        tone: $("tone").value,
+        reality: $("reality").value,
+        bg: safeText($("bg").value),
+        kinderMode: $("kinderMode").value,
+        abcMode: $("abcMode").value,
+        autoImprov: $("autoImprov").value,
+        charSpec: safeText($("charSpec").value),
+
+        castSpec: safeText($("castSpec").value),
+        worldMust: safeText($("worldMust").value),
+        worldMustNot: safeText($("worldMustNot").value),
+      };
+    }
+
+    function saveState(){
+      try{
+        const payload = { ui: collectUI(), last: LAST, activeTab: ACTIVE_TAB };
+        localStorage.setItem(STORE_KEY, JSON.stringify(payload));
+        localStorage.setItem(TAB_KEY, ACTIVE_TAB);
+      }catch(e){}
+    }
+
+    function applyState(st){
+      if(!st || !st.ui) return;
+      const ui = st.ui;
+      if(ui.line!=null) $("line").value = ui.line;
+      if(ui.genre) $("genre").value = ui.genre;
+      if(ui.len) $("len").value = ui.len;
+      if(ui.tone) $("tone").value = ui.tone;
+      if(ui.reality) $("reality").value = ui.reality;
+      if(ui.bg!=null) $("bg").value = ui.bg;
+      if(ui.kinderMode) $("kinderMode").value = ui.kinderMode;
+      if(ui.abcMode) $("abcMode").value = ui.abcMode;
+      if(ui.autoImprov) $("autoImprov").value = ui.autoImprov;
+      if(ui.charSpec!=null) $("charSpec").value = ui.charSpec;
+
+      if(ui.castSpec!=null) $("castSpec").value = ui.castSpec;
+      if(ui.worldMust!=null) $("worldMust").value = ui.worldMust;
+      if(ui.worldMustNot!=null) $("worldMustNot").value = ui.worldMustNot;
+
+      ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
+      if(st.last) LAST = st.last;
+      if(st.activeTab) ACTIVE_TAB = st.activeTab;
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      }catch(e){ return null; }
+    }
+
+    function setActiveTab(tabKey){
+      ACTIVE_TAB = tabKey;
+      ["A","B","C"].forEach(k=>{
+        const el = $("tab"+k);
+        if(el) el.classList.toggle("active", k===tabKey);
+      });
+      renderActiveTab();
+      saveState();
+    }
+
+    function renderActiveTab(){
+      const pack = LAST[ACTIVE_TAB];
+      $("out").textContent = pack ? headerFor(ACTIVE_TAB, pack) : "";
+    }
+
+    function renderAllCombined(){
+      const blocks = [];
+      for(const k of ["A","B","C"]){
+        if(LAST[k]) blocks.push(headerFor(k, LAST[k]));
       }
-    }else{
-      final.push(c);
+      return blocks.join("\n\n\n====================\n\n\n").trim() + "\n";
     }
-  });
 
-  // dog anthropomorphic tags if enabled
-  if(cfg.anthroDogs){
-    final.forEach(c=>{
-      if(c.type==="dog"){
-        c.tags = Array.from(new Set([...(c.tags||[]), "wearing_clothes", "human_like_pose"]));
+    // ===== Generate =====
+    function generate(){
+      const ui = collectUI();
+      ENABLE_KINDER_MODE = (ui.kinderMode === "on");
+
+      if(!ui.line.trim()){
+        alert("입력을 먼저 적어주세요.");
+        return;
       }
+
+      const baseN = getSceneCount(Number(ui.len));
+      const slots = extractSlots(ui.line, ui.bg, ui.genre);
+
+      let beats = arcBeats(slots, baseN);
+      if(!beats.length){
+        beats = beatsFor(ui.genre, baseN);
+      }
+      if(ENABLE_KINDER_MODE && ui.reality === "REAL_WORLD"){
+        beats = safeBeatsReal(baseN);
+      }
+
+      const abcOn = (ui.abcMode === "on");
+      const autoOn = (ui.autoImprov === "on");
+
+      function makePlan(key){
+        const v = VAR[key];
+        const plan = {
+          meta:{
+            line: ui.line,
+            genre: ui.genre,
+            len: Number(ui.len),
+            tone: ui.tone,
+            reality: ui.reality,
+            bg: ui.bg,
+            kinderMode: ENABLE_KINDER_MODE,
+            charSpec: ui.charSpec,
+
+            slots,
+            castSpec: ui.castSpec,
+            worldMust: ui.worldMust,
+            worldMustNot: ui.worldMustNot,
+
+            variant: key,
+            variantLabel: v.label,
+            lens: autoOn ? v.lens : "realistic photo style, neutral lighting",
+            cam:  autoOn ? v.cam  : "고정 샷(최소 움직임)",
+            mood: v.mood
+          },
+          beats: beats
+        };
+        return plan;
+      }
+
+      function pack(key){
+        const plan = makePlan(key);
+        let outs = buildDirector(plan);
+
+        // safety auto-fix
+        outs.director_txt = autoFixText(outs.director_txt);
+        outs.prompts_image_txt = autoFixText(outs.prompts_image_txt);
+        outs.prompts_video_txt = autoFixText(outs.prompts_video_txt);
+        outs.srt_txt = autoFixText(outs.srt_txt);
+        outs.json_txt = autoFixText(outs.json_txt);
+
+        // world guard (D-2)
+        outs.director_txt = worldGuard(outs.director_txt, plan.meta);
+        outs.prompts_image_txt = worldGuard(outs.prompts_image_txt, plan.meta);
+        outs.prompts_video_txt = worldGuard(outs.prompts_video_txt, plan.meta);
+        outs.srt_txt = worldGuard(outs.srt_txt, plan.meta);
+        outs.json_txt = worldGuard(outs.json_txt, plan.meta);
+
+        return { plan, outs };
+      }
+
+      if(abcOn){
+        LAST.A = pack("A");
+        LAST.B = pack("B");
+        LAST.C = pack("C");
+      }else{
+        LAST.A = pack("A");
+        LAST.B = null;
+        LAST.C = null;
+      }
+
+      if(!LAST[ACTIVE_TAB]) ACTIVE_TAB = "A";
+      setActiveTab(ACTIVE_TAB);
+
+      refreshPills();
+      saveState();
+    }
+
+    function resetAll(){
+      if(!confirm("정말 초기화할까요? (입력/설정/출력/저장 데이터 삭제)")) return;
+      $("line").value = "";
+      $("genre").value = "documentary";
+      $("len").value = "60";
+      $("tone").value = "dry_serious";
+      $("reality").value = "FICTION";
+      $("bg").value = "새벽의 조용한 동네 골목";
+      $("kinderMode").value = "on";
+      $("abcMode").value = "on";
+      $("autoImprov").value = "on";
+      $("charSpec").value = "";
+
+      $("castSpec").value = "";
+      $("worldMust").value = "";
+      $("worldMustNot").value = "";
+
+      ENABLE_KINDER_MODE = true;
+      LAST = {A:null,B:null,C:null};
+      ACTIVE_TAB = "A";
+      $("out").textContent = "";
+
+      try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+      try{ localStorage.removeItem(TAB_KEY); }catch(e){}
+
+      refreshPills();
+      saveState();
+      alert("초기화 완료!");
+    }
+
+    // ===== Init =====
+    document.addEventListener("DOMContentLoaded", ()=>{
+      const st = loadState();
+      if(st) applyState(st);
+
+      ENABLE_KINDER_MODE = ($("kinderMode").value === "on");
+      refreshPills();
+
+      // tabs
+      ["A","B","C"].forEach(k=>{
+        $("tab"+k).addEventListener("click", ()=>{
+          if(!LAST[k]){ alert("이 탭은 아직 생성된 출력이 없습니다. (ABC OFF면 A만 생성)"); return; }
+          setActiveTab(k);
+        });
+      });
+
+      try{
+        const t = localStorage.getItem(TAB_KEY);
+        if(t && ["A","B","C"].includes(t)) ACTIVE_TAB = t;
+      }catch(e){}
+      setActiveTab(ACTIVE_TAB);
+
+      // events
+      $("genBtn").addEventListener("click", generate);
+      $("copyBtn").addEventListener("click", ()=> copyToClipboard($("out").textContent||""));
+      $("copyAllBtn").addEventListener("click", ()=> copyToClipboard(renderAllCombined()));
+      $("resetBtn").addEventListener("click", resetAll);
+
+      // autosave
+      ["line","genre","len","tone","reality","bg","kinderMode","abcMode","autoImprov","charSpec","castSpec","worldMust","worldMustNot"].forEach(id=>{
+        const el = $(id);
+        if(!el) return;
+        el.addEventListener("input", saveState);
+        el.addEventListener("change", ()=>{
+          if(id==="kinderMode"){
+            ENABLE_KINDER_MODE = (el.value==="on");
+            refreshPills();
+          }
+          saveState();
+        });
+      });
+
+      // ctrl+enter
+      $("line").addEventListener("keydown", (e)=>{
+        if((e.ctrlKey || e.metaKey) && e.key === "Enter") generate();
+      });
+
+      renderActiveTab();
     });
-  }
-  return final;
-}
-
-function makeTemplate(lenTpl, r, cfg){
-  const n = Number(lenTpl);
-  if(n===20){
-    return [
-      {t0:0,t1:2, beat:"hook"},
-      {t0:2,t1:8, beat:"setup"},
-      {t0:8,t1:14, beat:"twist"},
-      {t0:14,t1:20, beat:"button"}
-    ];
-  }
-  if(n===60){
-    // 8 beats
-    return [
-      {t0:0,t1:2, beat:"hook"},
-      {t0:2,t1:10, beat:"setup"},
-      {t0:10,t1:18, beat:"intrude"},
-      {t0:18,t1:26, beat:"silence"},
-      {t0:26,t1:34, beat:"clue"},
-      {t0:34,t1:44, beat:"pressure"},
-      {t0:44,t1:54, beat:"reveal"},
-      {t0:54,t1:60, beat:"end"}
-    ];
-  }
-  // 180s : 12 beats
-  return [
-    {t0:0,t1:3, beat:"hook"},
-    {t0:3,t1:18, beat:"setup"},
-    {t0:18,t1:33, beat:"intrude"},
-    {t0:33,t1:48, beat:"silence"},
-    {t0:48,t1:63, beat:"clue"},
-    {t0:63,t1:80, beat:"pressure"},
-    {t0:80,t1:98, beat:"mini_reveal"},
-    {t0:98,t1:118, beat:"escalate"},
-    {t0:118,t1:138, beat:"turn"},
-    {t0:138,t1:158, beat:"reveal"},
-    {t0:158,t1:172, beat:"after"},
-    {t0:172,t1:180, beat:"end"}
-  ];
-}
-
-function genreName(g){
-  return ({
-    daily:"일상(일상극)",
-    daily_twist:"일상+반전",
-    fantasy:"판타지",
-    sf:"SF",
-    mystery:"미스터리",
-    horror:"공포(순한맛)",
-    comedy_dry:"건조 코미디"
-  }[g]||g);
-}
-function toneName(t){
-  return ({
-    dry_serious:"건조·진지",
-    docu:"다큐",
-    cinematic:"시네마틱",
-    cute_deadpan:"귀여움+무표정"
-  }[t]||t);
-}
-function writerName(p){
-  return ({
-    f30:"30대 여성",
-    m30:"30대 남성",
-    mom5:"5아이 엄마",
-    dad5:"5아이 아빠",
-    neutral:"중립"
-  }[p]||p);
-}
-
-function makeTitle(cfg, r, cast){
-  const noun = pick(r, ["도서관","골목","횡단보도","아파트 복도","엘리베이터","편의점","비 오는 버스정류장"]);
-  const key = pick(r, ["침묵","시선","발자국","약속","거짓말","기억","신호"]);
-  const who = pick(r, cast).name;
-  if(cfg.genre==="daily") return `${noun}의 ${key} — ${who}`;
-  if(cfg.genre==="daily_twist") return `${noun}에서 ${key}가 시작됐다`;
-  if(cfg.genre==="fantasy") return `${noun}의 문이 열리던 날`;
-  if(cfg.genre==="sf") return `${noun}에 떨어진 이상 신호`;
-  if(cfg.genre==="mystery") return `${noun} 사건: 아무도 말하지 않았다`;
-  if(cfg.genre==="horror") return `${noun}… 거기서 ‘그것’을 봤다`;
-  return `${noun}에서, ${key}`;
-}
-
-function makeHook(cfg, r, cast){
-  const hooks = [
-    "카메라가 따라붙는 2초: 누군가(혹은 무언가)가 ‘정지’한다.",
-    "첫 프레임에서 이미 이상함: 평범한 풍경인데, 한 존재만 안 맞는다.",
-    "마이크가 들어오는데, 대답해야 할 존재가 ‘끝까지’ 입을 안 연다.",
-    "아주 조용한 시작… 그리고 시선이 한 곳에 꽂힌다."
-  ];
-  const ol = cfg.oneLine;
-  if(ol) return "한 줄 훅: " + ol;
-  return pick(r, hooks);
-}
-
-function makeRules(cfg){
-  const out = [];
-  if(cfg.vertical916) out.push("세로 9:16");
-  if(cfg.noTextInImage) out.push("이미지에 글자/자막/워터마크 금지");
-  out.push("첫 2초 훅");
-  out.push("정적(침묵) 구간 1회 이상");
-  out.push("마지막 1초는 ‘여운’");
-  return out;
-}
-
-function pickLocation(cfg, r){
-  const daily = ["도서관 앞 인도","조용한 골목길","아파트 단지 산책로","학교 담장 옆","작은 공원 입구","편의점 앞"];
-  const fantasy = ["도서관이 ‘문’처럼 보이는 밤","현실과 겹친 미세한 균열","빛나는 표식이 생긴 바닥","안개가 지나가는 길목"];
-  const sf = ["CCTV 사각지대","전광판 아래","드론이 스쳐 지나가는 거리","신호등이 멈춘 교차로"];
-  const horror = ["늦은 밤 도서관 그림자","불이 깜빡이는 복도","사람 없는 횡단보도"];
-  const mystery = ["사건 현장 테이프가 붙은 장소","발자국이 끊긴 자리","누군가 두고 간 물건 옆"];
-  const bank = (cfg.genre==="daily")?daily:
-               (cfg.genre==="daily_twist")?daily.concat(fantasy):
-               (cfg.genre==="fantasy")?fantasy:
-               (cfg.genre==="sf")?sf:
-               (cfg.genre==="horror")?horror:
-               (cfg.genre==="mystery")?mystery:daily;
-  return pick(r, bank);
-}
-
-function buildScene(cfg, r, cast, beat, i){
-  const t0 = beat.t0, t1 = beat.t1;
-  const dur = t1 - t0;
-  const loc = pickLocation(cfg, r);
-
-  // choose key characters
-  const protagonist = pick(r, cast);
-  const other = pick(r, cast.filter(x=>x!==protagonist).concat([protagonist]));
-  const hasDog = cast.some(c=>c.type==="dog");
-  const dog = cast.find(c=>c.type==="dog") || protagonist;
-  const fox = cast.find(c=>(c.tags||[]).includes("fox") || /여우/i.test(c.name));
-
-  const camera = pick(r, [
-    "아이레벨 정면 고정샷",
-    "슬로우 줌인(2초) 후 고정",
-    "로우앵글 클로즈업",
-    "핸드헬드 다큐 느낌(살짝 흔들림)",
-    "옆에서 따라가는 트래킹 샷"
-  ]);
-
-  const lighting = pick(r, [
-    "부드러운 자연광",
-    "흐린 날의 확산광",
-    "노을 역광(실루엣)",
-    "가로등 아래 따뜻한 조명",
-    "차가운 형광등(도서관/복도)"
-  ]);
-
-  const silence = pick(r, [
-    "대사가 끊기고, 숨소리만 들리는 2초",
-    "아무도 말하지 않는다. 눈만 움직인다.",
-    "마이크만 가까워지고… 정적",
-    "발소리/자전거 체인 소리만 남는다."
-  ]);
-
-  // actions by beat
-  let actionKo="", actionEn="", lineKo="", lineEn="", note="";
-  const ol = cfg.oneLine;
-
-  const styleDog = cfg.anthroDogs ? "사람처럼 옷을 입고 사람처럼 행동" : "자연스러운 강아지";
-  const dogWardrobe = cfg.anthroDogs ? pick(r, ["롱패딩+장갑","후드티","니트+목도리","작은 정장","한복(포인트 컷)"]) : "자연스러운 털";
-  const foxMood = pick(r, ["의심","호기심","침착","불쑥","조용한 경계"]);
-
-  const narrator = cfg.writerPersona;
-  const voiceStyle = (narrator==="mom5"||narrator==="dad5") ? "가족의 눈으로" :
-                     (narrator==="f30"||narrator==="m30") ? "관찰자의 건조한 톤으로" : "중립 톤으로";
-
-  if(beat.beat==="hook"){
-    actionKo = `${voiceStyle} 시작. ${loc}. 평범한 장면인데, ${protagonist.name}의 시선이 한 지점에 고정된다.`;
-    actionEn = `Start in a dry observational tone. ${loc}. A normal scene, but ${protagonist.name}'s gaze locks onto one spot.`;
-    lineKo = pick(r, ["(자막 없음)","(대사 없음)"]) ;
-    lineEn = pick(r, ["(no dialogue)","(silence)"]);
-    note = "훅: 2초 안에 ‘이상함’ 전달";
-  }
-  else if(beat.beat==="setup"){
-    actionKo = `상황 설명. ${ol || "일상 루틴이 흐르다가 작은 어긋남이 생긴다."} ${hasDog?`${dog.name}는 ${styleDog}로 프레임 안에 있다.`:""}`;
-    actionEn = `Setup. ${ol || "A daily routine flows, then a tiny mismatch appears."} ${hasDog?`${dog.name} is in frame, styled human-like.`:""}`;
-    lineKo = pick(r, ["진행자(나레이션): “지금… 방금 보셨죠?”","진행자: “여기서부터가 이상합니다.”"]);
-    lineEn = pick(r, ["Narrator: “You saw that… right?”","Narrator: “This is where it gets strange.”"]);
-  }
-  else if(beat.beat==="intrude"){
-    if(fox){
-      actionKo = `${loc}에 ${fox.name}가 조용히 등장한다. 시선만 주고, 절대 먼저 설명하지 않는다.`;
-      actionEn = `${fox.name} quietly enters at ${loc}. It only gives a look—no explanation.`;
-      lineKo = pick(r, ["나레이션: “왜 하필 지금?”","나레이션: “아무도 부르지 않았는데.”"]);
-      lineEn = pick(r, ["Narrator: “Why now?”","Narrator: “No one called it.”"]);
-    }else{
-      actionKo = `${loc}에 ‘낯선 존재’가 들어온다. 사람일 수도, 동물일 수도, 공룡/상상생물일 수도 있다.`;
-      actionEn = `A stranger enters at ${loc}. Could be human, animal, dinosaur, or something imagined.`;
-      lineKo = "나레이션: “여기, 규칙이 깨졌습니다.”";
-      lineEn = "Narrator: “The rule breaks here.”";
-    }
-  }
-  else if(beat.beat==="silence"){
-    actionKo = `정적 연출. ${silence} ${other.name}가 가까이 다가가지만, 아무도 핵심을 말하지 않는다.`;
-    actionEn = `Silence. ${silence} ${other.name} steps closer, but no one says the key thing.`;
-    lineKo = "(대사 없음. 눈/귀/손끝 미세 반응만)";
-    lineEn = "(no dialogue. only micro-reactions: eyes/ears/fingers)";
-    note = "리텐션 핵심: ‘곧 말할 것 같은 착각’ 유지";
-  }
-  else if(beat.beat==="clue"){
-    actionKo = `단서. 바닥에 작은 흔적/표식/냄새가 보인다. ${hasDog?`${dog.name}가 코로 확인하고 고개를 끄덕인다.`:""}`;
-    actionEn = `Clue. A tiny trace/mark/scent appears on the ground. ${hasDog?`${dog.name} sniffs and nods subtly.`:""}`;
-    lineKo = pick(r, ["나레이션: “이건… 우연이 아니에요.”","나레이션: “남겨진 의도가 있습니다.”"]);
-    lineEn = pick(r, ["Narrator: “This isn’t random.”","Narrator: “Someone left this on purpose.”"]);
-  }
-  else if(beat.beat==="pressure"){
-    actionKo = `압박. 카메라가 더 가까워진다(줌인). ${protagonist.name}에게 질문이 꽂히지만, 답은 없다.`;
-    actionEn = `Pressure. Camera pushes in. A question pins ${protagonist.name}, but there’s no answer.`;
-    lineKo = pick(r, ["진행자: “지금 여기서 ‘정확히’ 뭘 봤죠?”","진행자: “말하면 끝날 텐데… 왜 침묵하죠?”"]);
-    lineEn = pick(r, ["Reporter: “What exactly did you see?”","Reporter: “One word ends it… why stay silent?”"]);
-  }
-  else if(beat.beat==="mini_reveal"){
-    actionKo = `미니 반전. 평범한 물건이 ‘다른 의미’로 보인다. ${hasDog?`${dog.name}가 앞발로 살짝 가리킨다.`:""}`;
-    actionEn = `Mini twist. An ordinary object suddenly looks meaningful. ${hasDog?`${dog.name} points with a paw.`:""}`;
-    lineKo = "나레이션: “아… 그래서.”";
-    lineEn = "Narrator: “Ah… that’s why.”";
-  }
-  else if(beat.beat==="escalate"){
-    actionKo = `확대. 주변 인물(가족/행인/아이들)이 지나가며 긴장감이 커진다.`;
-    actionEn = `Escalation. Passersby (family/kids) cross through, tension grows.`;
-    lineKo = pick(r, ["나레이션: “이제 들키면 끝.”","나레이션: “시간이 없어요.”"]);
-    lineEn = pick(r, ["Narrator: “If they notice, it’s over.”","Narrator: “We’re out of time.”"]);
-  }
-  else if(beat.beat==="turn"){
-    actionKo = `턴. ${fox?`${fox.name}의 표정이 바뀐다. ${foxMood} → 확신.`:"누군가의 시선이 ‘결정’으로 바뀐다."}`;
-    actionEn = `Turn. ${fox?`${fox.name}'s expression shifts: from ${foxMood} to certainty.`:"A gaze turns into a decision."}`;
-    lineKo = pick(r, ["나레이션: “이제 선택만 남았어요.”","진행자: “…갈까요?”"]);
-    lineEn = pick(r, ["Narrator: “Only the choice remains.”","Reporter: “…Do we go?”"]);
-  }
-  else if(beat.beat==="reveal"){
-    actionKo = `리빌(큰 공개). 설명 대신 ‘행동’으로만 보여준다. ${hasDog?`${dog.name}가 결정적인 동작(고개 끄덕/한 걸음/손짓 같은 포즈)을 한다.`:""}`;
-    actionEn = `Reveal. No explanation—only action. ${hasDog?`${dog.name} makes the decisive move (a nod, a step, a gesture-like pose).`:""}`;
-    lineKo = pick(r, ["(대사 없음)","나레이션: “말보다 빠른 답.”"]);
-    lineEn = pick(r, ["(no dialogue)","Narrator: “An answer faster than words.”"]);
-  }
-  else if(beat.beat==="after"){
-    actionKo = `여운. 주변 소리가 다시 들어온다. 평범함이 돌아오는데, 아까의 ‘이상함’은 남아 있다.`;
-    actionEn = `Afterglow. Ambient sound returns. Normalcy comes back, but the strange feeling stays.`;
-    lineKo = pick(r, ["나레이션: “당신이라면… 믿었나요?”","나레이션: “그 선택, 기억해요.”"]);
-    lineEn = pick(r, ["Narrator: “If you were there… would you believe it?”","Narrator: “Remember that choice.”"]);
-  }
-  else { // end / button
-    actionKo = `엔딩 1초 여운. 카메라가 멈추고, 마지막 시선만 남긴다.`;
-    actionEn = `1-second lingering end. Camera stops—only the final look remains.`;
-    lineKo = "엔딩 멘트: “다음 장면… 당신이 상상해요.”";
-    lineEn = "End line: “You imagine the next scene.”";
-  }
-
-  // prompt build
-  const promptPack = buildPrompt(cfg, r, {loc, camera, lighting, protagonist, other, cast, hasDog, dog, fox, dogWardrobe});
-  const time = `${String(t0).padStart(3," ")}–${String(t1).padStart(3," ")}초 (${dur}s)`;
-
-  return [
-    `🎬 SCENE ${i+1}. ${beatTitle(beat.beat)}`,
-    `⏱ ${time}`,
-    `- 장소: ${loc}`,
-    `- 카메라: ${camera}`,
-    `- 조명: ${lighting}`,
-    `- 액션(ko): ${actionKo}`,
-    `- Action(en): ${actionEn}`,
-    `- 대사(ko): ${lineKo}`,
-    `- Line(en): ${lineEn}`,
-    note ? `- 포인트: ${note}` : ``,
-    `- 나노바나나 프롬프트(ko):`,
-    promptPack.ko,
-    `- NanoBanana Prompt(en):`,
-    promptPack.en
-  ].filter(Boolean).join("\n");
-}
-
-function beatTitle(b){
-  return ({
-    hook:"훅",
-    setup:"세팅",
-    intrude:"침입(등장)",
-    silence:"정적(침묵)",
-    clue:"단서",
-    pressure:"압박",
-    mini_reveal:"미니 반전",
-    escalate:"확대",
-    turn:"턴(결정)",
-    reveal:"리빌(행동 공개)",
-    after:"여운",
-    end:"엔딩"
-  }[b]||b);
-}
-
-function buildPrompt(cfg, r, ctx){
-  const {loc,camera,lighting,protagonist,other,cast,hasDog,dog,fox,dogWardrobe} = ctx;
-
-  // ensure 9:16 and no-text options
-  const kBase = [];
-  const eBase = [];
-  if(cfg.vertical916){
-    kBase.push("세로 9:16");
-    eBase.push("Vertical 9:16");
-  }
-  kBase.push(loc);
-  eBase.push(loc);
-
-  kBase.push(`카메라: ${camera}`);
-  eBase.push(`Camera: ${camera}`);
-
-  kBase.push(`조명: ${lighting}`);
-  eBase.push(`Lighting: ${lighting}`);
-
-  // characters in prompt: keep concise, but include key ones
-  const showChars = [];
-  showChars.push(protagonist.name);
-  if(other && other.name!==protagonist.name) showChars.push(other.name);
-  if(fox && !showChars.includes(fox.name)) showChars.push(fox.name);
-  if(hasDog && dog && !showChars.includes(dog.name)) showChars.push(dog.name);
-
-  // dog styling if anthropomorphic
-  if(cfg.anthroDogs && hasDog){
-    kBase.push(`${dog.name}는 사람처럼 옷을 입고 사람처럼 행동`);
-    kBase.push(`의상: ${dogWardrobe}`);
-    eBase.push(`${dog.name} behaves like a human, wearing clothes`);
-    eBase.push(`Outfit: ${dogWardrobe}`);
-  }
-
-  // realism + cinematic
-  kBase.push("실사 같은 시네마틱 사진 스타일");
-  eBase.push("photorealistic cinematic photography style");
-
-  // forbid text in image
-  if(cfg.noTextInImage){
-    kBase.push("이미지에 자막/글자/로고/워터마크 없음");
-    eBase.push("no captions, no text, no logo, no watermark");
-  }
-
-  // tone modifiers
-  if(cfg.tone==="dry_serious"){
-    kBase.push("감정 과장 없음, 미세한 표정 변화");
-    eBase.push("no exaggerated emotions, subtle micro-expressions");
-  }else if(cfg.tone==="docu"){
-    kBase.push("다큐멘터리 느낌, 자연스러운 순간 포착");
-    eBase.push("documentary feel, candid moment");
-  }else if(cfg.tone==="cinematic"){
-    kBase.push("얕은 심도, 분위기 강조, 영화 같은 구도");
-    eBase.push("shallow depth of field, moody cinematic framing");
-  }else{
-    kBase.push("귀엽지만 무표정, 대비감");
-    eBase.push("cute but deadpan expression, strong contrast");
-  }
-
-  // keep prompt as one paragraph
-  return {
-    ko: kBase.join(", "),
-    en: eBase.join(", ")
-  };
-}
-
-function makePinnedComment(cfg, r, cast){
-  const q = pick(r, [
-    "당신이라면 이 순간… 믿었나요?",
-    "여기서 제일 수상한 존재는 누구였나요?",
-    "이 장면, 다음에 뭐가 이어질 것 같나요?"
-  ]);
-  const vote = "1) 은비  2) 제리  3) 아랑  (댓글로 숫자만!)";
-  return `📌 ${q}\n${vote}`;
-}
-
-function makeMetaPack(cfg, r, cast, title){
-  const tags = [
-    "#강아지","#반전","#쇼츠","#shorts","#동물","#daily","#cinematic","#mystery","#kdrama",
-    "#cute","#dog","#story","#ai","#nanobanana","#veo3"
-  ];
-
-  // genre tags
-  if(cfg.genre==="daily") tags.push("#일상");
-  if(cfg.genre==="fantasy") tags.push("#판타지");
-  if(cfg.genre==="sf") tags.push("#SF");
-  if(cfg.genre==="mystery") tags.push("#미스터리");
-  if(cfg.genre==="horror") tags.push("#공포");
-
-  const pickN = (arr,n)=>Array.from(new Set(Array.from({length:n},()=>pick(r,arr)))).slice(0,n);
-  const ht = pickN(tags, 14).join(" ");
-
-  const desc = [
-    `평범한 일상 한 컷이, 갑자기 규칙을 잃었습니다.`,
-    `말보다 빠른 ‘행동’만으로 답을 보여주는 이야기.`,
-    `끝까지 보면, 왜 모두가 침묵했는지 감이 옵니다.`
-  ];
-
-  return `제목: ${title}\n설명: ${pick(r,desc)}\n해시태그: ${ht}`;
-}
-
-/* ===== Validator / Auto-fix ===== */
-
-function validateAll(){
-  const v = state.activeVariant;
-  const txt = state.outputs[v] || "";
-  const issues = [];
-
-  const mustKo = [];
-  const mustEn = [];
-  if($("vertical916").checked){
-    mustKo.push("세로 9:16");
-    mustEn.push("Vertical 9:16");
-  }
-  if($("noTextInImage").checked){
-    mustKo.push("이미지에 자막/글자/로고/워터마크 없음");
-    mustEn.push("no captions, no text, no logo, no watermark");
-  }
-
-  mustKo.forEach(m=>{
-    if(!txt.includes(m)) issues.push(`KO 누락: "${m}"`);
-  });
-  mustEn.forEach(m=>{
-    if(!txt.includes(m)) issues.push(`EN 누락: "${m}"`);
-  });
-
-  // quick checks
-  const hasScene = /SCENE\s+1\./.test(txt);
-  if(!hasScene) issues.push("씬 구조가 없습니다(SCENE 1.). 먼저 생성하세요.");
-
-  const report =
-`🧪 VALIDATOR REPORT (${v})
-- 결과: ${issues.length? "문제 발견":"정상"}
-${issues.length? issues.map(x=>`- ${x}`).join("\n"):"- OK"}
-`;
-  setBadge(issues.length? "warn":"good", issues.length? `검증: 문제 ${issues.length}개`:"검증: OK");
-  return report.trim();
-}
-
-function autoFixAll(){
-  ["A","B","C"].forEach(v=>{
-    let txt = state.outputs[v] || "";
-    if(!txt) return;
-
-    // Ensure prompt safety lines appear at least once
-    if($("vertical916").checked && !txt.includes("세로 9:16")){
-      txt = txt.replace(/나노바나나 프롬프트\(ko\):\n/g, "나노바나나 프롬프트(ko):\n세로 9:16, ");
-    }
-    if($("vertical916").checked && !txt.includes("Vertical 9:16")){
-      txt = txt.replace(/NanoBanana Prompt\(en\):\n/g, "NanoBanana Prompt(en):\nVertical 9:16, ");
-    }
-
-    if($("noTextInImage").checked && !txt.includes("이미지에 자막/글자/로고/워터마크 없음")){
-      txt = txt.replace(/실사 같은 시네마틱 사진 스타일/g, "실사 같은 시네마틱 사진 스타일, 이미지에 자막/글자/로고/워터마크 없음");
-    }
-    if($("noTextInImage").checked && !txt.includes("no captions, no text, no logo, no watermark")){
-      txt = txt.replace(/photorealistic cinematic photography style/g, "photorealistic cinematic photography style, no captions, no text, no logo, no watermark");
-    }
-
-    // normalize double commas
-    txt = txt.replace(/,\s*,/g, ", ");
-
-    state.outputs[v] = txt;
-  });
-  setBadge("good","Auto-fix 완료");
-}
-
-/* ===== Copy / ZIP ===== */
-
-async function copyAllText(){
-  const v = state.activeVariant;
-  const txt = state.outputs[v] || "";
-  if(!txt){
-    setBadge("warn","복사할 내용 없음");
-    return;
-  }
-  try{
-    await navigator.clipboard.writeText(txt);
-    setBadge("good","복사 완료");
-  }catch(e){
-    // fallback
-    $("output").focus();
-    $("output").select();
-    document.execCommand("copy");
-    setBadge("good","복사 완료(대체)");
-  }
-}
-
-async function downloadZipABC(){
-  // Load JSZip dynamically (CDN) - online required
-  try{
-    if(!window.JSZip){
-      await loadScript("https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js");
-    }
-  }catch(e){
-    alert("ZIP 기능은 인터넷이 필요합니다(JSZip CDN). 오프라인이면 ZIP만 안 됩니다.");
-    setBadge("warn","ZIP: 오프라인");
-    return;
-  }
-
-  const zip = new JSZip();
-  ["A","B","C"].forEach(v=>{
-    const folder = zip.folder(v);
-    const txt = state.outputs[v] || "";
-    folder.file("script.txt", txt);
-    folder.file("settings.json", JSON.stringify({
-      ...getCfg(),
-      variant:v,
-      seed: state.seed,
-      cast: state.casts[v]||[]
-    }, null, 2));
-  });
-
-  const blob = await zip.generateAsync({type:"blob"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `one-line-movie_v44_${state.seed}.zip`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-  setBadge("good","ZIP 다운로드 완료");
-}
-
-function loadScript(src){
-  return new Promise((res, rej)=>{
-    const s = document.createElement("script");
-    s.src = src;
-    s.onload = ()=>res();
-    s.onerror = ()=>rej(new Error("failed"));
-    document.head.appendChild(s);
-  });
-}
-
-/* ===== Boot ===== */
-(function boot(){
-  // bind to state
-  $("genre").addEventListener("change", ()=>{ state.genre = $("genre").value; saveState(); });
-  $("lenTpl").addEventListener("change", ()=>{ state.lenTpl = $("lenTpl").value; saveState(); });
-  $("oneLine").addEventListener("input", ()=>{ state.oneLine = $("oneLine").value; saveState(); });
-  $("writerPersona").addEventListener("change", ()=>{ state.writerPersona = $("writerPersona").value; saveState(); });
-  $("tone").addEventListener("change", ()=>{ state.tone = $("tone").value; saveState(); });
-
-  initUI();
-
-  // restore controls in case state had them
-  $("genre").value = state.genre;
-  $("lenTpl").value = state.lenTpl;
-  $("writerPersona").value = state.writerPersona;
-  $("tone").value = state.tone;
-
-  // keep output synced
-  $("output").addEventListener("input", ()=>{
-    state.outputs[state.activeVariant] = $("output").value;
-    saveState();
-  });
-
-})();
-</script>
+  </script>
 </body>
 </html>
+```0
